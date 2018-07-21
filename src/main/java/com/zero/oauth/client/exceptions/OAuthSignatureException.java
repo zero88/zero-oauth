@@ -9,7 +9,6 @@ public class OAuthSignatureException extends OAuthException {
     private static final String MSG = "Error while signing string: %s";
 
     /**
-     * Default constructor
      *
      * @param stringToSign plain string that gets signed (HMAC-SHA, etc)
      * @param e original exception
