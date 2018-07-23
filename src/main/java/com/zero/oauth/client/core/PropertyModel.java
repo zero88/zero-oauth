@@ -2,9 +2,6 @@ package com.zero.oauth.client.core;
 
 import java.util.Objects;
 
-import com.zero.oauth.client.core.oauth1.OAuth1RequestParams;
-import com.zero.oauth.client.core.oauth2.OAuth2AccessTokenResponse;
-import com.zero.oauth.client.core.oauth2.OAuth2RequestParams;
 import com.zero.oauth.client.type.OAuthVersion;
 
 import lombok.AccessLevel;
@@ -13,18 +10,31 @@ import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 
 /**
- * <code>PropertyModel</code> is model to define an OAuth property in HTTP request, HTTP response or HTTP header.
+ * {@code PropertyModel} is model to define an OAuth property in HTTP request, HTTP response or HTTP header.
  */
-@Getter
 @Setter(value = AccessLevel.PROTECTED)
-@RequiredArgsConstructor
-public class PropertyModel implements Cloneable {
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+public class PropertyModel implements Cloneable, IPropertyModel {
 
+    @Getter
     private final OAuthVersion version;
+    @Getter
     private final String name;
+    private Object value;
+    private Object defaultValue;
+    private Constraint constraint = Constraint.OPTIONAL;
 
-    private String value;
-    private boolean isRequired = false;
+    public boolean isRequired() {
+        return this.constraint == Constraint.REQUIRED;
+    }
+
+    public boolean isRecommendation() {
+        return this.constraint == Constraint.RECOMMENDATION;
+    }
+
+    public boolean isOptional() {
+        return this.constraint == Constraint.OPTIONAL;
+    }
 
     /**
      * Init default property value.
@@ -32,8 +42,8 @@ public class PropertyModel implements Cloneable {
      * @return Current instance
      */
     @SuppressWarnings("unchecked")
-    public <T extends PropertyModel> T defaultValue(String value) {
-        this.value = value;
+    public <T extends PropertyModel> T defaultValue(Object value) {
+        this.defaultValue = value;
         return (T) this;
     }
 
@@ -47,19 +57,34 @@ public class PropertyModel implements Cloneable {
         return (T) this;
     }
 
+    public Object getValue() {
+        return Objects.isNull(this.value) ? this.defaultValue : this.value;
+    }
+
     /**
-     * Mark property is required to validate later.
+     * Mark property is required to further error validation.
      *
      * @return Current instance
      */
     @SuppressWarnings("unchecked")
     public <T extends PropertyModel> T require() {
-        this.isRequired = true;
+        this.constraint = Constraint.REQUIRED;
         return (T) this;
     }
 
     /**
-     * @return a clone of {@link PropertyModel} instance
+     * Mark property is recommendation to further warn validation.
+     *
+     * @return Current instance
+     */
+    @SuppressWarnings("unchecked")
+    public <T extends PropertyModel> T recommend() {
+        this.constraint = Constraint.RECOMMENDATION;
+        return (T) this;
+    }
+
+    /**
+     * @return a clone of {@code PropertyModel}
      */
     public PropertyModel clone() throws CloneNotSupportedException {
         return (PropertyModel) super.clone();
@@ -67,20 +92,30 @@ public class PropertyModel implements Cloneable {
 
     /**
      * Clone current instance with overriding param value. It is helper method to
-     * generate new {@link PropertyModel} instance from builtin {@link PropertyModel}.
+     * generate new {@code PropertyModel} instance from builtin {@code PropertyModel}.
      *
      * @param value
-     *        Override param value for clone object. Any data but have to implement {@link Object#toString()}
-     * @return a clone of {@link PropertyModel} instance
+     *        Override param value for clone object.
+     * @return a clone of {@code PropertyModel}
      * @throws CloneNotSupportedException
-     * @see OAuth1RequestParams
-     * @see OAuth2RequestParams
-     * @see OAuth2AccessTokenResponse
      */
     @SuppressWarnings("unchecked")
     public <T extends PropertyModel> T clone(Object value) throws CloneNotSupportedException {
         T instance = (T) this.clone();
         instance.setValue(value);
+        return instance;
+    }
+
+    /**
+     * For internal process to extract {@code PropertyModel} to make request.
+     *
+     * @param constraint
+     * @return a clone of {@code PropertyModel}
+     * @throws CloneNotSupportedException
+     */
+    protected PropertyModel clone(Constraint constraint) throws CloneNotSupportedException {
+        PropertyModel instance = this.clone();
+        instance.setConstraint(constraint);
         return instance;
     }
 }

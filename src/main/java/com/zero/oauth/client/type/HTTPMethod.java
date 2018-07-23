@@ -9,11 +9,11 @@ public enum HTTPMethod {
     private final boolean requiresBody;
     private final boolean permitBody;
 
-    HTTPMethod(boolean requiresBody) {
+    private HTTPMethod(boolean requiresBody) {
         this(requiresBody, requiresBody);
     }
 
-    HTTPMethod(boolean requiresBody, boolean permitBody) {
+    private HTTPMethod(boolean requiresBody, boolean permitBody) {
         if (requiresBody && !permitBody) {
             throw new IllegalArgumentException();
         }

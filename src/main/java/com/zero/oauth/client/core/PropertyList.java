@@ -5,7 +5,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-public class PropertyList<P extends PropertyModel> {
+public class PropertyList<P extends IPropertyModel> {
 
     private final Map<String, P> props = new HashMap<>();
 

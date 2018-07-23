@@ -3,18 +3,20 @@ package com.zero.oauth.client.type;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 /**
- * OAuth <code>1.0a</code> signature method.
+ * OAuth {@code 1.0a} signature method.
  *
  * @see OAuthVersion#V1
  */
 @Getter
-@RequiredArgsConstructor(access = AccessLevel.MODULE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@ToString(doNotUseGetters = true, includeFieldNames = false, onlyExplicitlyIncluded = true)
 public enum SignatureMethod {
 
     /**
-     * <code>HMAC-SHA1</code> signature algorithm where the Signature Base String is the text and the key is the
+     * {@code HMAC-SHA1} signature algorithm where the Signature Base String is the text and the key is the
      * concatenated values (each first encoded per Parameter Encoding) of the Consumer Secret and Token Secret,
      * separated by an '&' character (ASCII code 38) even if empty.
      * <ul>
@@ -25,7 +27,7 @@ public enum SignatureMethod {
     HMAC_SHA1("HMAC-SHA1"),
 
     /**
-     * <code>RSA-SHA1</code> signature method uses the RSASSA-PKCS1-v1_5 signature algorithm as defined in [RFC3447]
+     * {@code RSA-SHA1} signature method uses the RSASSA-PKCS1-v1_5 signature algorithm as defined in [RFC3447]
      * section 8.2 (more simply known as PKCS#1), using SHA-1 as the hash function for EMSA-PKCS1-v1_5. It is assumed
      * that the
      * Consumer has provided its RSA public key in a verified way to the Service Provider, in a manner which is beyond
@@ -46,5 +48,6 @@ public enum SignatureMethod {
      */
     PLAIN_TEXT("PLAINTEXT");
 
+    @ToString.Include
     private final String name;
 }

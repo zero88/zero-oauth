@@ -4,9 +4,11 @@ import lombok.AccessLevel;
 import lombok.Getter;
 
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
 
 @Getter
-@RequiredArgsConstructor(access = AccessLevel.MODULE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@ToString(doNotUseGetters = true, includeFieldNames = false, onlyExplicitlyIncluded = true)
 public enum OAuthVersion {
 
     /**
@@ -39,6 +41,7 @@ public enum OAuthVersion {
      */
     ALL("");
 
+    @ToString.Include
     private final String version;
 
     public boolean isV1() {
