@@ -1,30 +1,34 @@
 pipeline {
     agent {
         docker { 
-            image 'gradle:4.8.1-jdk8-slim'
+            image "gradle:4.8.1-jre8"
         }
     }
 
     stages {
 
+        stage("Prepare") {
+            steps {
+                sh "gradle clean check"
+            }
+        }
+
         stage("Build") {
             steps {
-                echo "Build"
-                sh 'gradle clean check'
+                sh "gradle clean check"
             }
         }
 
         stage("Test") {
             steps {
-                echo "Test"
-                sh 'gradle test jacocoTestReport'
+                sh "gradle test jacocoTestReport"
             }
         }
 
         stage("Analysis") {
             steps {
-                echo "Analysis"
-                sh "gradle sonarqube -Dsonar.organization=zero-88-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${env.SONAR_TOKEN}"
+                sh "set +x"
+                sh "gradle sonarqube -Dsonar.organization=zero-88-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_TOKEN}"
             }
         }
 
