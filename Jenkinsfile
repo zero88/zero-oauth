@@ -10,7 +10,14 @@ pipeline {
         stage("Build") {
             steps {
                 echo "Build"
-                sh 'gradle clean install'
+                sh 'gradle clean check'
+            }
+        }
+
+        stage("Test") {
+            steps {
+                echo "Test"
+                sh 'gradle test'
             }
         }
 
