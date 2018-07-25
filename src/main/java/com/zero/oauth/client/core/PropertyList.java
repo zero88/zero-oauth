@@ -16,12 +16,14 @@ public class PropertyList<P extends IPropertyModel> {
         return (L) this;
     }
 
-    public void delProp(String propName) {
-        this.props.remove(propName);
+    public void setPropValue(String propName, Object value) {
+        P prop = this.getProp(propName);
+        Objects.requireNonNull(prop, "Not found propery name: " + propName);
+        prop.setValue(value);
     }
 
-    public void delProp(P prop) {
-        this.props.remove(prop.getName());
+    public void delProp(String propName) {
+        this.props.remove(propName);
     }
 
     public void clear() {

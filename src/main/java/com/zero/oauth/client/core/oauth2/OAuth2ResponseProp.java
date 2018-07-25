@@ -138,16 +138,17 @@ public class OAuth2ResponseProp extends OAuth2PropertyModel implements IResponse
     /**
      * Error reason.
      */
-    public static final OAuth2ResponseProp ERROR = new OAuth2ResponseProp("error").error();
+    public static final OAuth2ResponseProp ERROR = (new OAuth2ResponseProp("error").error()).constraint(Constraint.REQUIRED);
     /**
      * A great place to link to your API documentation for information about how to correct the
      * specific error that was encountered.
      */
-    public static final OAuth2ResponseProp ERROR_URI = new OAuth2ResponseProp("error_uri").error();
+    public static final OAuth2ResponseProp ERROR_URI = (new OAuth2ResponseProp("error_uri").error()).constraint(Constraint.OPTIONAL);
     /**
      * A sentence or two at most describing the circumstance of the error
      */
-    public static final OAuth2ResponseProp ERROR_DESCRIPTION = new OAuth2ResponseProp("error_description").error();
+    public static final OAuth2ResponseProp ERROR_DESCRIPTION = new OAuth2ResponseProp("error_description").error()
+                                                                                                          .constraint(Constraint.OPTIONAL);
 
     private boolean error = false;
 

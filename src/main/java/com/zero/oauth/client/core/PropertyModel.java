@@ -5,20 +5,21 @@ import java.util.Objects;
 import com.zero.oauth.client.type.OAuthVersion;
 
 import lombok.AccessLevel;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.Setter;
 
 /**
  * {@code PropertyModel} is model to define an OAuth property in HTTP request, HTTP response or HTTP header.
  */
-@Setter(value = AccessLevel.PROTECTED)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class PropertyModel implements Cloneable, IPropertyModel {
 
     @Getter
     private final OAuthVersion version;
     @Getter
+    @EqualsAndHashCode.Include
     private final String name;
     private Object value;
     private Object defaultValue;
@@ -53,7 +54,7 @@ public class PropertyModel implements Cloneable, IPropertyModel {
      */
     @SuppressWarnings("unchecked")
     public <T extends PropertyModel> T setValue(Object value) {
-        this.value = Objects.isNull(value) ? "" : value.toString();
+        this.value = value;
         return (T) this;
     }
 
@@ -115,7 +116,14 @@ public class PropertyModel implements Cloneable, IPropertyModel {
      */
     protected PropertyModel clone(Constraint constraint) throws CloneNotSupportedException {
         PropertyModel instance = this.clone();
-        instance.setConstraint(constraint);
+        instance.constraint(constraint);
         return instance;
     }
+
+    @SuppressWarnings("unchecked")
+    protected <T extends PropertyModel> T constraint(Constraint constraint) {
+        this.constraint = Objects.requireNonNull(constraint);
+        return (T) this;
+    }
+
 }
