@@ -36,7 +36,7 @@ pipeline {
         always {
             junit 'build/test-results/**/*.xml'
             sh 'mkdir dist'
-            archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
+            archiveArtifacts artifacts: "build/libs/*.jar", fingerprint: true
             zip archive: true, dir: "build/libs", glob: "*.jar", zipFile: "dist/artifact.zip"
             zip archive: true, dir: "build/reports", zipFile: "dist/test-reports.zip"
         }
