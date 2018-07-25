@@ -41,3 +41,5 @@ gradle-app.setting
 .project
 .classpath
 .settings/
+
+bin/

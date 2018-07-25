@@ -5,6 +5,8 @@ branches:
   only:
   - master
   - /^(feature|bugfix)\/.*$/
+before_install:
+ - chmod +x gradlew
 script: ./gradlew check
 jobs:
   include:
