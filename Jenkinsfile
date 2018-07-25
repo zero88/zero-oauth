@@ -9,7 +9,7 @@ pipeline {
 
         stage("Build") {
             steps {
-                sh "gradle clean check"
+                sh "gradle clean assemble"
             }
         }
 
@@ -37,7 +37,7 @@ pipeline {
             junit 'build/test-results/**/*.xml'
             sh 'mkdir dist'
             archiveArtifacts artifacts: "build/libs/*.jar", fingerprint: true
-            zip archive: true, dir: "build/libs", glob: "*.jar", zipFile: "dist/artifact.zip"
+            archiveArtifacts artifacts: "build/distributions/*", fingerprint: true
             zip archive: true, dir: "build/reports", zipFile: "dist/test-reports.zip"
         }
         failure {
