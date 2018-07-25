@@ -7,12 +7,6 @@ pipeline {
 
     stages {
 
-        stage("Prepare") {
-            steps {
-                sh "gradle clean check"
-            }
-        }
-
         stage("Build") {
             steps {
                 sh "gradle clean check"
