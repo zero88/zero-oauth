@@ -11,5 +11,5 @@ script: ./gradlew check
 jobs:
   include:
     - stage: test
-      script: ./gradlew test
+      script: ./gradlew test jacocoTestReport
   

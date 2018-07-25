@@ -17,13 +17,26 @@ pipeline {
         stage("Test") {
             steps {
                 echo "Test"
-                sh 'gradle test'
+                sh 'gradle test jacocoTestReport'
+            }
+        }
+
+        stage("Analysis") {
+            steps {
+                echo "Analysis"
+                sh "gradle sonarqube -Dsonar.organization=zero-88-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${env.SONAR_TOKEN}"
             }
         }
 
     }
 
     post {
+        always {
+            junit 'build/test-results/**/*.xml'
+            archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
+            zip archive: true, dir: "build/libs", glob: "**/*.jar", zipFile: "dist/artifact.zip"
+            zip archive: true, dir: "build/reports", zipFile: "dist/test-reports.zip"
+        }
         failure {
             script {
                 def committerEmail = sh (script: 'git --no-pager show -s --format=\'%ae\'', returnStdout: true).trim()
