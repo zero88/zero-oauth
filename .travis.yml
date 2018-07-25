@@ -1,0 +1,13 @@
+language: java
+jdk:
+  - oraclejdk8
+branches:
+  only:
+  - master
+  - /^(feature|bugfix)\/.*$/
+script: ./gradlew check
+jobs:
+  include:
+    - stage: test
+      script: ./gradlew test
+  
