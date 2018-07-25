@@ -30,15 +30,22 @@ pipeline {
             }
         }
 
+        stage("Publish") {
+            when { tag "v*" }
+            steps {
+                // TODO: Update later
+                echo "Deploy"
+            }
+        }
+
     }
 
     post {
         always {
             junit 'build/test-results/**/*.xml'
-            sh 'mkdir dist'
             archiveArtifacts artifacts: "build/libs/*.jar", fingerprint: true
             archiveArtifacts artifacts: "build/distributions/*", fingerprint: true
-            zip archive: true, dir: "build/reports", zipFile: "dist/test-reports.zip"
+            zip archive: true, dir: "build/reports", zipFile: "build/distributions/test-reports.zip"
         }
         failure {
             script {
