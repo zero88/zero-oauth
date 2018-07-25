@@ -21,8 +21,12 @@ pipeline {
 
         stage("Analysis") {
             steps {
-                sh "set +x"
-                sh "gradle sonarqube -Dsonar.organization=zero-88-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_TOKEN}"
+                script {
+                    withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
+                        sh "set +x"
+                        sh "gradle sonarqube -Dsonar.organization=zero-88-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_TOKEN}"
+                    }
+                }
             }
         }
 
@@ -31,8 +35,9 @@ pipeline {
     post {
         always {
             junit 'build/test-results/**/*.xml'
+            sh 'mkdir dist'
             archiveArtifacts artifacts: 'build/libs/**/*.jar', fingerprint: true
-            zip archive: true, dir: "build/libs", glob: "**/*.jar", zipFile: "dist/artifact.zip"
+            zip archive: true, dir: "build/libs", glob: "*.jar", zipFile: "dist/artifact.zip"
             zip archive: true, dir: "build/reports", zipFile: "dist/test-reports.zip"
         }
         failure {
