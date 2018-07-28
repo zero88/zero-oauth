@@ -18,8 +18,10 @@ pipeline {
                 }  
             }
             post {
-                archiveArtifacts artifacts: "build/libs/*.jar", fingerprint: true
-                archiveArtifacts artifacts: "build/distributions/*", fingerprint: true
+                success {
+                    archiveArtifacts artifacts: "build/libs/*.jar", fingerprint: true
+                    archiveArtifacts artifacts: "build/distributions/*", fingerprint: true
+                }
             }
         }
 
@@ -28,8 +30,10 @@ pipeline {
                 sh "gradle test jacocoTestReport"
             }
             post {
-                junit 'build/test-results/**/*.xml'
-                zip archive: true, dir: "build/reports", zipFile: "build/distributions/test-reports.zip"
+                always {
+                    junit 'build/test-results/**/*.xml'
+                    zip archive: true, dir: "build/reports", zipFile: "build/distributions/test-reports.zip"
+                }
             }
         }
 
