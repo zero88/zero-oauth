@@ -5,9 +5,7 @@ library identifier: 'notifications@master', retriever: modernSCM(
 
 pipeline {
     agent {
-        docker { 
-            image "gradle:4.8.1-jdk8"
-        }
+        docker "gradle:4.8.1-jdk8"
     }
 
     stages {
@@ -19,11 +17,19 @@ pipeline {
                     VERSION = sh("gradle properties | grep 'version:' | awk '{print \$2}'", returnStdout: true).trim()
                 }  
             }
+            post {
+                archiveArtifacts artifacts: "build/libs/*.jar", fingerprint: true
+                archiveArtifacts artifacts: "build/distributions/*", fingerprint: true
+            }
         }
 
         stage("Test") {
             steps {
                 sh "gradle test jacocoTestReport"
+            }
+            post {
+                junit 'build/test-results/**/*.xml'
+                zip archive: true, dir: "build/reports", zipFile: "build/distributions/test-reports.zip"
             }
         }
 
@@ -49,11 +55,7 @@ pipeline {
     }
 
     post {
-        always {
-            junit 'build/test-results/**/*.xml'
-            archiveArtifacts artifacts: "build/libs/*.jar", fingerprint: true
-            archiveArtifacts artifacts: "build/distributions/*", fingerprint: true
-            zip archive: true, dir: "build/reports", zipFile: "build/distributions/test-reports.zip"
+        always {            
             emailNotifications VERSION
         }
     }
