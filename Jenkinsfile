@@ -16,7 +16,7 @@ pipeline {
             steps {
                 sh "gradle clean assemble"
                 script {
-                    VERSION = sh("gradle properties | grep 'version:' | awk '{print $2}'", returnStdout: true).trim()
+                    VERSION = sh("gradle properties | grep 'version:' | awk '{print \$2}'", returnStdout: true).trim()
                 }  
             }
         }
