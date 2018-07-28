@@ -1,0 +1,67 @@
+# Java Gradle CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-java/ for more details
+#
+version: 2
+workflows:
+  version: 2
+  build-n-test:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only:
+                - /^(master|(feature|bugfix)\/.*)$/
+      - test:
+          filters:
+            branches:
+              only:
+                - /^(master|(feature|bugfix)\/.*)$/
+          requires:
+            - build
+jobs:
+  build:
+    working_directory: ~/oauth-apis-client
+    docker:
+      - image: circleci/openjdk:8-jdk
+    environment:
+      # Customize the JVM maximum heap limit
+      JVM_OPTS: -Xmx3200m
+      TERM: dumb
+    steps:
+      - checkout
+      # Download and cache dependencies
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-oauth-apis-client
+      - run: ./gradlew clean assemble
+      - save_cache:
+          paths:
+            - ~/.gradle
+          key: v1-dependencies-{{ checksum "build.gradle" }}
+      - store_artifacts:
+          path: ~/build/distributions
+  test:
+    working_directory: ~/oauth-apis-client
+    docker:
+      - image: circleci/openjdk:8-jdk
+    steps:
+      - checkout
+      - restore_cache:
+          keys:
+          - v1-dependencies-{{ checksum "build.gradle" }}
+          # fallback to using the latest cache if no exact match is found
+          - v1-dependencies-oauth-apis-client
+      - run: ./gradlew test jacocoTestReport
+      - run:
+          name: Save test results
+          command: |
+            mkdir -p ~/junit/
+            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
+          when: always
+      - store_test_results:
+          path: ~/junit
+      - store_artifacts:
+          path: ~/junit

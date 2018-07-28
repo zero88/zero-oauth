@@ -1,3 +1,8 @@
+
+library identifier: 'notifications@master', retriever: modernSCM(
+  [$class: 'GitSCMSource',
+   remote: 'https://github.com/zero-88/jenkins-pipeline-shared.git'])
+
 pipeline {
     agent {
         docker { 
@@ -10,6 +15,9 @@ pipeline {
         stage("Build") {
             steps {
                 sh "gradle clean assemble"
+                script {
+                    VERSION = sh("gradle properties | grep 'version:' | awk '{print $2}'", returnStdout: true).trim()
+                }  
             }
         }
 
@@ -46,28 +54,7 @@ pipeline {
             archiveArtifacts artifacts: "build/libs/*.jar", fingerprint: true
             archiveArtifacts artifacts: "build/distributions/*", fingerprint: true
             zip archive: true, dir: "build/reports", zipFile: "build/distributions/test-reports.zip"
-        }
-        failure {
-            script {
-                def committerEmail = sh (script: 'git --no-pager show -s --format=\'%ae\'', returnStdout: true).trim()
-                def committer = sh (script: 'git --no-pager show -s --format=\'%an\'', returnStdout: true).trim()
-                def content = """
-                    - Job Name: ${env.JOB_NAME}
-                    - Build URL: ${env.BUILD_URL}
-                    - Changes:
-                        - ${committer} <${committerEmail}>
-                        - ${env.GIT_COMMIT}
-                        - ${env.GIT_BRANCH}
-                        - ${env.GIT_URL}
-                """
-                emailext (
-                    recipientProviders: [[$class: "DevelopersRecipientProvider"]],
-                    subject: "[Jenkins] ${env.JOB_NAME}-#${env.BUILD_NUMBER} [${currentBuild.result}]",
-                    body: "${content}",
-                    attachLog: true,
-                    compressLog: true
-                )
-            }
+            emailNotifications VERSION
         }
     }
 }
