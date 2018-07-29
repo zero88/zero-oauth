@@ -4,12 +4,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
-import com.zero.oauth.client.core.PropertyModel;
+import com.zero.oauth.client.core.properties.PropertyModel;
+import com.zero.oauth.client.exceptions.OAuthParameterException;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.GrantType;
 import com.zero.oauth.client.type.OAuthVersion;
 
-class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropFilter {
+class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropertyMatcher {
 
     private final Map<GrantType, Map<FlowStep, Constraint>> mapping = new HashMap<>();
 
@@ -17,43 +18,15 @@ class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropFilter {
         super(OAuthVersion.V2, name);
     }
 
-    /**
-     * Declare required parameter is used in which {@code GrantType} and {@code FlowStep}.
-     *
-     * @param grantType
-     *        {@link GrantType}
-     * @param step
-     *        {@link FlowStep}
-     * @return current instance
-     * @see GrantType
-     * @see FlowStep
-     */
-    public <T extends OAuth2PropertyModel> T declare(GrantType grantType, FlowStep step) {
-        return declare(grantType, step, Constraint.REQUIRED);
-    }
-
-    /**
-     * Declare parameter is used in the given {@code GrantType} and {@code FlowStep}.
-     *
-     * @param grantType
-     *        {@link GrantType}
-     * @param step
-     *        {@link FlowStep}
-     * @param propConstraint
-     *        Requires value or not
-     * @return current instance
-     * @see GrantType
-     * @see FlowStep
-     */
     @SuppressWarnings("unchecked")
-    public <T extends OAuth2PropertyModel> T declare(GrantType grantType, FlowStep step, Constraint propConstraint) {
+    public <T extends OAuth2PropertyModel> T declare(GrantType grantType, FlowStep step, Constraint constraint) {
         validate(grantType, step);
         Map<FlowStep, Constraint> flows = this.mapping.get(grantType);
         if (flows == null) {
             flows = new HashMap<>();
             this.mapping.put(grantType, flows);
         }
-        flows.put(step, propConstraint);
+        flows.put(step, constraint);
         return (T) this;
     }
 
@@ -66,7 +39,7 @@ class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropFilter {
      *        {@link FlowStep}
      * @return Custom Property Model
      */
-    public PropertyModel check(GrantType grantType, FlowStep step) {
+    public PropertyModel match(GrantType grantType, FlowStep step) {
         validate(grantType, step);
         Map<FlowStep, Constraint> flows = this.mapping.get(grantType);
         if (flows == null) {
@@ -82,22 +55,17 @@ class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropFilter {
         }
     }
 
-    // @Override
-    // public <T extends OAuth2PropertyModel> T by(GrantType grantType) {
-    // return this.mapping.containsKey(grantType) ? this : null;
-    // }
-
     @SuppressWarnings("unchecked")
     @Override
-    public OAuth2PropertyModel by(GrantType grantType) {
+    public OAuth2PropertyModel match(GrantType grantType) {
         return this.mapping.containsKey(grantType) ? this : null;
     }
 
     /**
-     * Required value depends on grant type and step.
-     * It is not capable to use this method.
+     * Required value depends on grant type and step. It is not capable to use this method.
      *
-     * @deprecated Use {@link #check(GrantType, FlowStep)}
+     * @deprecated Use {@link #declare(GrantType, FlowStep)}
+     * @throws UnsupportedOperationException
      */
     @Override
     public <T extends PropertyModel> T require() {
@@ -105,10 +73,10 @@ class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropFilter {
     }
 
     /**
-     * Recommendation value depends on grant type and step.
-     * It is not capable to use this method.
+     * Recommendation value depends on grant type and step. It is not capable to use this method.
      *
-     * @deprecated Use {@link #check(GrantType, FlowStep)}
+     * @deprecated Use {@link #declare(GrantType, FlowStep, Constraint)}
+     * @throws UnsupportedOperationException
      */
     @Override
     public <T extends PropertyModel> T recommend() {
@@ -119,12 +87,10 @@ class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropFilter {
         Objects.requireNonNull(grantType, "OAuth v2.0 grant type cannot be null");
         Objects.requireNonNull(step, "OAuth v2.0 flow step cannot be null");
         if (!grantType.getSteps().contains(step)) {
-            throw new IllegalArgumentException("Grant type " + grantType.name() +
-                                               " isn't supported in OAuth flow step " + step);
+            throw new OAuthParameterException("Grant type " + grantType.name() + " isn't supported in OAuth flow step " + step);
         }
         if (!this.getVersion().isEqual(step.getVersion())) {
-            throw new IllegalArgumentException("Step " + step.name() + " isn't supported in OAuth v" + this
-                                                                                                           .getVersion());
+            throw new OAuthParameterException("Step " + step.name() + " isn't supported in OAuth v" + this.getVersion());
         }
     }
 }

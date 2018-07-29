@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.zero.oauth.client.core.IPropertyModel;
+import com.zero.oauth.client.core.properties.IPropertyModel;
+import com.zero.oauth.client.exceptions.OAuthParameterException;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.GrantType;
 
@@ -26,7 +27,7 @@ public class OAuth2ImplicitPropTest {
         responseProperties = OAuth2ResponseProperties.init(GrantType.IMPLICIT);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = OAuthParameterException.class)
     public void testRequestParams_FilterBy_Init() {
         requestProperties.by(FlowStep.INIT);
     }
@@ -45,7 +46,7 @@ public class OAuth2ImplicitPropTest {
         assertThat(param_names, hasItems("access_token", "token_type", "expires_in", "scope"));
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = OAuthParameterException.class)
     public void testRequestParams_FilterBy_AccessToken() {
         requestProperties.by(FlowStep.ACCESS_TOKEN);
     }
@@ -53,8 +54,15 @@ public class OAuth2ImplicitPropTest {
     @Test
     public void testRequestParams_Implicit_Value() {
         OAuth2RequestProperties params = OAuth2RequestProperties.init(GrantType.IMPLICIT);
-        OAuth2RequestProp customValue2 = params.getProp(OAuth2RequestProp.RESPONSE_TYPE.getName());
+        OAuth2RequestProp customValue2 = params.get(OAuth2RequestProp.RESPONSE_TYPE.getName());
         assertNotSame(OAuth2RequestProp.RESPONSE_TYPE, customValue2);
         assertEquals("token", customValue2.getValue());
+    }
+
+    @Test
+    public void test_RequestProp_FilterBy_AccessResource() {
+        List<IPropertyModel> by = requestProperties.by(FlowStep.ACCESS_RESOURCE);
+        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(param_names, hasItems("access_token"));
     }
 }

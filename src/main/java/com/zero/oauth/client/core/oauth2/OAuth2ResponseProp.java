@@ -1,7 +1,7 @@
 package com.zero.oauth.client.core.oauth2;
 
-import com.zero.oauth.client.core.IPropertyModel;
-import com.zero.oauth.client.core.IResponsePropModel;
+import com.zero.oauth.client.core.properties.IPropertyModel;
+import com.zero.oauth.client.core.properties.IResponsePropModel;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.GrantType;
 
@@ -147,12 +147,11 @@ public class OAuth2ResponseProp extends OAuth2PropertyModel implements IResponse
     /**
      * A sentence or two at most describing the circumstance of the error
      */
-    public static final OAuth2ResponseProp ERROR_DESCRIPTION = new OAuth2ResponseProp("error_description").error()
-                                                                                                          .constraint(Constraint.OPTIONAL);
+    public static final OAuth2ResponseProp ERROR_DESCRIPTION = new OAuth2ResponseProp("error_description").error().constraint(Constraint.OPTIONAL);
 
     private boolean error = false;
 
-    OAuth2ResponseProp(String name) {
+    public OAuth2ResponseProp(String name) {
         super(name);
     }
 

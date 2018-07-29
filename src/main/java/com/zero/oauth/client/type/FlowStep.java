@@ -18,7 +18,7 @@ public enum FlowStep {
      *
      * @see OAuthVersion#V1
      */
-    INIT(OAuthVersion.V1, HTTPMethod.GET),
+    INIT(OAuthVersion.V1, HttpMethod.GET),
 
     /**
      * The Client obtains Resource Owner authorization from Authorization server.
@@ -40,7 +40,7 @@ public enum FlowStep {
      * @see OAuthVersion#V2
      * @see GrantType
      */
-    AUTHORIZE(OAuthVersion.ALL, HTTPMethod.GET),
+    AUTHORIZE(OAuthVersion.ALL, HttpMethod.GET),
 
     /**
      * The Client exchange some informations with Authorization server to receive the Access Token.
@@ -51,7 +51,7 @@ public enum FlowStep {
      * @see OAuthVersion#V1
      * @see OAuthVersion#V2
      */
-    ACCESS_TOKEN(OAuthVersion.ALL, HTTPMethod.POST),
+    ACCESS_TOKEN(OAuthVersion.ALL, HttpMethod.POST),
 
     /**
      * The client attempts to acquire an access token every few seconds (at a rate specified by interval) by POSTing to
@@ -59,12 +59,12 @@ public enum FlowStep {
      *
      * @see GrantType#DEVICE_CODE
      */
-    POLLING(OAuthVersion.V2, HTTPMethod.POST),
+    POLLING(OAuthVersion.V2, HttpMethod.POST),
 
     /**
      *
      */
-    REVOKE_TOKEN(OAuthVersion.ALL, HTTPMethod.POST),
+    REVOKE_TOKEN(OAuthVersion.ALL, HttpMethod.POST),
 
     /**
      * The Client request the protected resource from the Resource server and authenticates by presenting the access
@@ -73,5 +73,5 @@ public enum FlowStep {
     ACCESS_RESOURCE(OAuthVersion.ALL, null);
 
     private final OAuthVersion version;
-    private final HTTPMethod method;
+    private final HttpMethod method;
 }

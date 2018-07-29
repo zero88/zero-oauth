@@ -19,7 +19,7 @@ public final class OAuth2ResponseProperties extends OAuth2Properties<OAuth2Respo
         super(grantType);
         for (OAuth2ResponseProp prop : ReflectionUtils.getConstants(OAuth2ResponseProp.class)) {
             if (prop.isError()) {
-                this.addProp(prop);
+                this.add(prop);
             }
         }
         this.error = error;

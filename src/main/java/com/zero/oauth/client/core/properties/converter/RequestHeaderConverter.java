@@ -1,5 +1,6 @@
-package com.zero.oauth.client.core;
+package com.zero.oauth.client.core.properties.converter;
 
+import com.zero.oauth.client.core.properties.IPropertiesFilter;
 import com.zero.oauth.client.type.FlowStep;
 
 public class RequestHeaderConverter implements IPropertiesConverter {

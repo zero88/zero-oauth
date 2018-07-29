@@ -3,7 +3,7 @@ package com.zero.oauth.client.type;
 import java.util.Arrays;
 import java.util.List;
 
-import org.apache.logging.log4j.util.Strings;
+import com.zero.oauth.client.utils.Strings;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -22,40 +22,43 @@ public enum GrantType {
      */
     AUTH_CODE("code", "authorization_code", Arrays.asList(FlowStep.AUTHORIZE,
                                                           FlowStep.ACCESS_TOKEN,
-                                                          FlowStep.REVOKE_TOKEN)),
+                                                          FlowStep.REVOKE_TOKEN,
+                                                          FlowStep.ACCESS_RESOURCE)),
 
     /**
      *
      */
-    IMPLICIT("token", null, Arrays.asList(FlowStep.AUTHORIZE, FlowStep.REVOKE_TOKEN)),
+    IMPLICIT("token", null, Arrays.asList(FlowStep.AUTHORIZE, FlowStep.REVOKE_TOKEN, FlowStep.ACCESS_RESOURCE)),
     /**
      *
      */
     IMPLICIT_DEPRECATED("token", "authorization_code", Arrays.asList(FlowStep.AUTHORIZE,
                                                                      FlowStep.ACCESS_TOKEN,
-                                                                     FlowStep.REVOKE_TOKEN)),
+                                                                     FlowStep.REVOKE_TOKEN,
+                                                                     FlowStep.ACCESS_RESOURCE)),
 
     /**
      *
      */
-    PASSWORD(null, "password", Arrays.asList(FlowStep.ACCESS_TOKEN, FlowStep.REVOKE_TOKEN)),
+    PASSWORD(null, "password", Arrays.asList(FlowStep.ACCESS_TOKEN, FlowStep.REVOKE_TOKEN, FlowStep.ACCESS_RESOURCE)),
 
     /**
      *
      */
-    CLIENT_CREDENTIALS(null, "client_credentials", Arrays.asList(FlowStep.ACCESS_TOKEN, FlowStep.REVOKE_TOKEN)),
+    CLIENT_CREDENTIALS(null, "client_credentials", Arrays.asList(FlowStep.ACCESS_TOKEN, FlowStep.REVOKE_TOKEN, FlowStep.ACCESS_RESOURCE)),
 
     /**
      *
      */
-    REFRESH_TOKEN(null, "refresh_token", Arrays.asList(FlowStep.ACCESS_TOKEN, FlowStep.REVOKE_TOKEN)),
+    REFRESH_TOKEN(null, "refresh_token", Arrays.asList(FlowStep.ACCESS_TOKEN, FlowStep.REVOKE_TOKEN, FlowStep.ACCESS_RESOURCE)),
 
     /**
      * <a href="https://oauth.net/2/grant-types/device-code/">
      */
     DEVICE_CODE("device_code", "urn:ietf:params:oauth:grant-type:device_code", Arrays.asList(FlowStep.ACCESS_TOKEN,
                                                                                              FlowStep.POLLING,
-                                                                                             FlowStep.REVOKE_TOKEN));
+                                                                                             FlowStep.REVOKE_TOKEN,
+                                                                                             FlowStep.ACCESS_RESOURCE));
 
     private final String responseType;
     private final String grantType;

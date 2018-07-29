@@ -1,6 +1,6 @@
 package com.zero.oauth.client.core.oauth2;
 
-import com.zero.oauth.client.core.PropertyModel;
+import com.zero.oauth.client.core.properties.PropertyModel;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.GrantType;
 
@@ -8,10 +8,11 @@ import com.zero.oauth.client.type.GrantType;
  * It is model to define an OAuth parameter when sending request OAuth server.
  *
  * @see PropertyModel
+ * @see OAuth2PropertyModel
  */
 public class OAuth2RequestProp extends OAuth2PropertyModel {
 
-    OAuth2RequestProp(String name) {
+    public OAuth2RequestProp(String name) {
         super(name);
     }
 
@@ -122,13 +123,14 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
     // @formatter:on
 
     /**
-     * This parameter is the authorization code that the client previously received from the authorization server.
+     * This parameter is the authorization code that the client previously received from the authorization server. It
+     * will be used to exchange for {@code access token}
      */
     // @formatter:off
     public static final OAuth2RequestProp CODE = new OAuth2RequestProp("code")
-                                                                            .declare(GrantType.AUTH_CODE, FlowStep.ACCESS_TOKEN)
-                                                                            .declare(GrantType.DEVICE_CODE, FlowStep.POLLING)
-                                                                            .declare(GrantType.REFRESH_TOKEN, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL);
+                                                                        .declare(GrantType.AUTH_CODE, FlowStep.ACCESS_TOKEN)
+                                                                        .declare(GrantType.DEVICE_CODE, FlowStep.POLLING)
+                                                                        .declare(GrantType.REFRESH_TOKEN, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL);
     // @formatter:on
 
     /**
@@ -139,4 +141,15 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
                                                                             .declare(GrantType.REFRESH_TOKEN, FlowStep.ACCESS_TOKEN);
     // @formatter:on
 
+    /**
+     * Access token is added in request that call to resource server
+     */
+    // @formatter:off
+    public static final OAuth2RequestProp TOKEN = new OAuth2RequestProp("access_token")
+                                                                            .declare(GrantType.AUTH_CODE, FlowStep.ACCESS_RESOURCE)
+                                                                            .declare(GrantType.IMPLICIT, FlowStep.ACCESS_RESOURCE)
+                                                                            .declare(GrantType.PASSWORD, FlowStep.ACCESS_RESOURCE)
+                                                                            .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_RESOURCE)
+                                                                            .declare(GrantType.DEVICE_CODE, FlowStep.ACCESS_RESOURCE);
+    // @formatter:on
 }

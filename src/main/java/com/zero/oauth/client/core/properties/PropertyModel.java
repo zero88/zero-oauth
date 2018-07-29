@@ -1,28 +1,37 @@
-package com.zero.oauth.client.core;
+package com.zero.oauth.client.core.properties;
 
 import java.util.Objects;
 
+import com.zero.oauth.client.exceptions.OAuthParameterException;
 import com.zero.oauth.client.type.OAuthVersion;
+import com.zero.oauth.client.utils.Strings;
 
 import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * {@code PropertyModel} is model to define an OAuth property in HTTP request, HTTP response or HTTP header.
  */
+@Log4j2
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@ToString(doNotUseGetters = true, onlyExplicitlyIncluded = true)
 public class PropertyModel implements Cloneable, IPropertyModel {
 
     @Getter
+    @ToString.Include
     private final OAuthVersion version;
     @Getter
     @EqualsAndHashCode.Include
+    @ToString.Include
     private final String name;
     private Object value;
     private Object defaultValue;
+    @ToString.Include
     private Constraint constraint = Constraint.OPTIONAL;
 
     public boolean isRequired() {
@@ -48,10 +57,6 @@ public class PropertyModel implements Cloneable, IPropertyModel {
         return (T) this;
     }
 
-    /**
-     * @param value
-     *        Any value but have to implement {@link Object#toString()}
-     */
     @SuppressWarnings("unchecked")
     public <T extends PropertyModel> T setValue(Object value) {
         this.value = value;
@@ -60,6 +65,20 @@ public class PropertyModel implements Cloneable, IPropertyModel {
 
     public Object getValue() {
         return Objects.isNull(this.value) ? this.defaultValue : this.value;
+    }
+
+    @Override
+    public Object validate() {
+        if (Objects.isNull(this.getValue()) || Strings.isBlank(this.getValue().toString())) {
+            if (this.isRequired()) {
+                throw new OAuthParameterException("Missing required of property name: " + this.getName());
+            }
+            if (this.isRecommendation()) {
+                log.warn("It is recommendation to add property '{}' when sending OAuth request. Check REST API docs for more details.",
+                         this.getName());
+            }
+        }
+        return this.getValue();
     }
 
     /**
@@ -103,8 +122,7 @@ public class PropertyModel implements Cloneable, IPropertyModel {
     @SuppressWarnings("unchecked")
     public <T extends PropertyModel> T clone(Object value) throws CloneNotSupportedException {
         T instance = (T) this.clone();
-        instance.setValue(value);
-        return instance;
+        return instance.setValue(value);
     }
 
     /**
@@ -115,9 +133,7 @@ public class PropertyModel implements Cloneable, IPropertyModel {
      * @throws CloneNotSupportedException
      */
     protected PropertyModel clone(Constraint constraint) throws CloneNotSupportedException {
-        PropertyModel instance = this.clone();
-        instance.constraint(constraint);
-        return instance;
+        return this.clone().constraint(constraint);
     }
 
     @SuppressWarnings("unchecked")
@@ -125,5 +141,4 @@ public class PropertyModel implements Cloneable, IPropertyModel {
         this.constraint = Objects.requireNonNull(constraint);
         return (T) this;
     }
-
 }

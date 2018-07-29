@@ -17,9 +17,9 @@ public final class OAuth2RequestProperties extends OAuth2Properties<OAuth2Reques
         OAuth2RequestProperties props = new OAuth2RequestProperties(grantType);
         try {
             if (Objects.nonNull(grantType.getResponseType())) {
-                props.addProp(OAuth2RequestProp.RESPONSE_TYPE.clone(grantType.getResponseType()));
+                props.add(OAuth2RequestProp.RESPONSE_TYPE.clone(grantType.getResponseType()));
             }
-            props.addProp(OAuth2RequestProp.GRANT_TYPE.clone(grantType.getGrantType()));
+            props.add(OAuth2RequestProp.GRANT_TYPE.clone(grantType.getGrantType()));
         } catch (CloneNotSupportedException e) {
             log.debug(e);
         }

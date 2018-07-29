@@ -16,9 +16,10 @@ import org.junit.Test;
 import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
-import com.zero.oauth.client.core.IPropertyModel;
-import com.zero.oauth.client.core.JsonConverter;
-import com.zero.oauth.client.core.RequestParamConverter;
+import com.zero.oauth.client.core.properties.IPropertyModel;
+import com.zero.oauth.client.core.properties.converter.JsonConverter;
+import com.zero.oauth.client.core.properties.converter.RequestParamConverter;
+import com.zero.oauth.client.exceptions.OAuthParameterException;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.GrantType;
 
@@ -43,7 +44,7 @@ public class OAuth2AuthCodePropTest {
         errorProperties = OAuth2ResponseProperties.initError(GrantType.AUTH_CODE);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = OAuthParameterException.class)
     public void testRequest_FilterBy_Init() {
         requestProperties.by(FlowStep.INIT);
     }
@@ -78,14 +79,14 @@ public class OAuth2AuthCodePropTest {
 
     @Test
     public void test_RequestProp_ResponseType() {
-        OAuth2RequestProp customValue = requestProperties.getProp(OAuth2RequestProp.RESPONSE_TYPE.getName());
+        OAuth2RequestProp customValue = requestProperties.get(OAuth2RequestProp.RESPONSE_TYPE.getName());
         assertNotSame(OAuth2RequestProp.RESPONSE_TYPE, customValue);
         assertEquals("code", customValue.getValue());
     }
 
     @Test
     public void test_RequestProp_GrantType() {
-        OAuth2RequestProp customValue2 = requestProperties.getProp(OAuth2RequestProp.GRANT_TYPE.getName());
+        OAuth2RequestProp customValue2 = requestProperties.get(OAuth2RequestProp.GRANT_TYPE.getName());
         assertNotSame(OAuth2RequestProp.GRANT_TYPE, customValue2);
         assertEquals("authorization_code", customValue2.getValue());
     }
@@ -93,22 +94,20 @@ public class OAuth2AuthCodePropTest {
     @Test
     public void test_ResponseProp_Error() {
         assertTrue("Error repsonse must be marked as `error=True`", errorProperties.isError());
-        assertTrue("Error repsonse must have `error` prop key", errorProperties.hasProp("error"));
-        assertTrue("`error` prop key must be required", errorProperties.getProp("error").isRequired());
-        assertTrue("Error repsonse must have `error_description` prop key",
-                   errorProperties.hasProp("error_description"));
-        assertTrue("`error_description` prop key must be optional",
-                   errorProperties.getProp("error_description").isOptional());
-        assertTrue("Error repsonse must have `error_uri` prop key", errorProperties.hasProp("error_uri"));
-        assertTrue("`error_uri` prop key must be optional", errorProperties.getProp("error_uri").isOptional());
+        assertTrue("Error repsonse must have `error` prop key", errorProperties.has("error"));
+        assertTrue("`error` prop key must be required", errorProperties.get("error").isRequired());
+        assertTrue("Error repsonse must have `error_description` prop key", errorProperties.has("error_description"));
+        assertTrue("`error_description` prop key must be optional", errorProperties.get("error_description").isOptional());
+        assertTrue("Error repsonse must have `error_uri` prop key", errorProperties.has("error_uri"));
+        assertTrue("`error_uri` prop key must be optional", errorProperties.get("error_uri").isOptional());
     }
 
     @Test
     public void test_RequestProp_Convert_To_Parameters() {
-        requestProperties.setPropValue("client_id", CLIENT_ID);
-        requestProperties.setPropValue("redirect_uri", REDIRECT_URI);
-        requestProperties.setPropValue("scope", SCOPE);
-        requestProperties.setPropValue("state", STATE);
+        requestProperties.update("client_id", CLIENT_ID);
+        requestProperties.update("redirect_uri", REDIRECT_URI);
+        requestProperties.update("scope", SCOPE);
+        requestProperties.update("state", STATE);
         String parameters = new RequestParamConverter().serialize(requestProperties, FlowStep.AUTHORIZE);
         assertThat(Arrays.asList(parameters.split("\\&")),
                    hasItems("response_type=code",
@@ -120,21 +119,27 @@ public class OAuth2AuthCodePropTest {
 
     @Test
     public void test_RequestProp_Convert_To_Json() throws JSONException {
-        requestProperties.setPropValue("client_id", CLIENT_ID);
-        requestProperties.setPropValue("redirect_uri", REDIRECT_URI);
-        requestProperties.setPropValue("client_secret", CLIENT_SECRET);
-        requestProperties.setPropValue("code", TOKEN_CODE);
+        requestProperties.update("client_id", CLIENT_ID);
+        requestProperties.update("redirect_uri", REDIRECT_URI);
+        requestProperties.update("client_secret", CLIENT_SECRET);
+        requestProperties.update("code", TOKEN_CODE);
         String body = new JsonConverter().serialize(requestProperties, FlowStep.ACCESS_TOKEN);
         String expected = "{\"code\": \"265759c709be\",\n" + "  \"grant_type\": \"authorization_code\",\n" +
-                          "  \"client_secret\": \"072d8702a86fe8b86bb4b670\",\n" +
-                          "  \"redirect_uri\": \"http://localhost:8080/oauth/callback\",\n" +
+                          "  \"client_secret\": \"072d8702a86fe8b86bb4b670\",\n" + "  \"redirect_uri\": \"http://localhost:8080/oauth/callback\",\n" +
                           "  \"client_id\": \"91599da341f8\"\n" + "}";
         JSONAssert.assertEquals(expected, body, JSONCompareMode.NON_EXTENSIBLE);
     }
 
-    @Test
+    @Test(expected = OAuthParameterException.class)
     public void test_RequestProp_Convert_To_Parameters_MissingValue() {
         String parameters = new RequestParamConverter().serialize(requestProperties, FlowStep.AUTHORIZE);
         assertEquals("response_type=code", parameters);
+    }
+
+    @Test
+    public void test_RequestProp_FilterBy_AccessResource() {
+        List<IPropertyModel> by = requestProperties.by(FlowStep.ACCESS_RESOURCE);
+        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(param_names, hasItems("access_token"));
     }
 }

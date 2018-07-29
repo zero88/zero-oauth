@@ -11,7 +11,8 @@ import java.util.stream.Collectors;
 import org.junit.Before;
 import org.junit.Test;
 
-import com.zero.oauth.client.core.IPropertyModel;
+import com.zero.oauth.client.core.properties.IPropertyModel;
+import com.zero.oauth.client.exceptions.OAuthParameterException;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.GrantType;
 
@@ -26,12 +27,12 @@ public class OAuth2DeviceCodePropTest {
         responseProperties = OAuth2ResponseProperties.init(GrantType.DEVICE_CODE);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = OAuthParameterException.class)
     public void testRequestParams_FilterBy_Init() {
         requestProperties.by(FlowStep.INIT);
     }
 
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = OAuthParameterException.class)
     public void testRequestParams_FilterBy_Authorize() {
         requestProperties.by(FlowStep.AUTHORIZE);
     }
@@ -67,11 +68,18 @@ public class OAuth2DeviceCodePropTest {
     @Test
     public void testRequestParams_Value() {
         OAuth2RequestProperties params = OAuth2RequestProperties.init(GrantType.DEVICE_CODE);
-        OAuth2RequestProp customValue = params.getProp(OAuth2RequestProp.RESPONSE_TYPE.getName());
+        OAuth2RequestProp customValue = params.get(OAuth2RequestProp.RESPONSE_TYPE.getName());
         assertNotSame(OAuth2RequestProp.RESPONSE_TYPE, customValue);
         assertEquals("device_code", customValue.getValue());
-        OAuth2RequestProp customValue2 = params.getProp(OAuth2RequestProp.GRANT_TYPE.getName());
+        OAuth2RequestProp customValue2 = params.get(OAuth2RequestProp.GRANT_TYPE.getName());
         assertNotSame(OAuth2RequestProp.GRANT_TYPE, customValue2);
         assertEquals("urn:ietf:params:oauth:grant-type:device_code", customValue2.getValue());
+    }
+
+    @Test
+    public void test_RequestProp_FilterBy_AccessResource() {
+        List<IPropertyModel> by = requestProperties.by(FlowStep.ACCESS_RESOURCE);
+        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(param_names, hasItems("access_token"));
     }
 }
