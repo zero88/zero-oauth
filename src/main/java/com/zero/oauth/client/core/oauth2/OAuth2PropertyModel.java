@@ -1,5 +1,6 @@
 package com.zero.oauth.client.core.oauth2;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -16,6 +17,11 @@ class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropertyMatche
 
     OAuth2PropertyModel(String name) {
         super(OAuthVersion.V2, name);
+    }
+
+    OAuth2PropertyModel(String name, Map<GrantType, Map<FlowStep, Constraint>> mapping) {
+        super(OAuthVersion.V2, name);
+        this.mapping.putAll(mapping);
     }
 
     @SuppressWarnings("unchecked")
@@ -37,7 +43,7 @@ class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropertyMatche
      *        {@link GrantType}
      * @param step
      *        {@link FlowStep}
-     * @return Custom Property Model
+     * @return Property Model
      */
     public PropertyModel match(GrantType grantType, FlowStep step) {
         validate(grantType, step);
@@ -48,11 +54,7 @@ class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropertyMatche
         if (!flows.containsKey(step)) {
             return null;
         }
-        try {
-            return this.clone(flows.get(step));
-        } catch (CloneNotSupportedException e) {
-            throw new RuntimeException(e);
-        }
+        return this.clone(flows.get(step));
     }
 
     @SuppressWarnings("unchecked")
@@ -92,5 +94,9 @@ class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropertyMatche
         if (!this.getVersion().isEqual(step.getVersion())) {
             throw new OAuthParameterException("Step " + step.name() + " isn't supported in OAuth v" + this.getVersion());
         }
+    }
+
+    Map<GrantType, Map<FlowStep, Constraint>> getMapping() {
+        return Collections.unmodifiableMap(this.mapping);
     }
 }

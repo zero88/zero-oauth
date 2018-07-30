@@ -36,9 +36,9 @@ public final class OAuthEncoder {
         } catch (UnsupportedEncodingException uee) {
             throw new OAuthException("Charset not found while encoding string: " + StandardCharsets.UTF_8, uee);
         }
-        // for (Map.Entry<String, String> rule : ENCODING_RULES.entrySet()) {
-        // encoded = applyRule(encoded, rule.getKey(), rule.getValue());
-        // }
+        for (Map.Entry<String, String> rule : ENCODING_RULES.entrySet()) {
+            encoded = applyRule(encoded, rule.getKey(), rule.getValue());
+        }
         return encoded;
     }
 

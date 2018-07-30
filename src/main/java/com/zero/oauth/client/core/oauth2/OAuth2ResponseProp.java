@@ -7,6 +7,8 @@ import com.zero.oauth.client.type.GrantType;
 
 import lombok.Getter;
 
+import java.util.Map;
+
 /**
  * It is model to define an OAuth parameter when sending request OAuth server.
  *
@@ -36,11 +38,11 @@ public class OAuth2ResponseProp extends OAuth2PropertyModel implements IResponse
      */
  // @formatter:off
     public static final OAuth2ResponseProp ACCESS_TOKEN = new OAuth2ResponseProp("access_token")
-                                                                        .declare(GrantType.AUTH_CODE, FlowStep.ACCESS_TOKEN)
+                                                                        .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN)
                                                                         .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE)
-                                                                        .declare(GrantType.PASSWORD, FlowStep.ACCESS_TOKEN)
-                                                                        .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_TOKEN)
-                                                                        .declare(GrantType.REFRESH_TOKEN, FlowStep.ACCESS_TOKEN)
+                                                                        .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN)
+                                                                        .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN)
+                                                                        .declare(GrantType.REFRESH_TOKEN, FlowStep.EXCHANGE_TOKEN)
                                                                         .declare(GrantType.DEVICE_CODE, FlowStep.POLLING);
  // @formatter:on
 
@@ -49,11 +51,11 @@ public class OAuth2ResponseProp extends OAuth2PropertyModel implements IResponse
      */
  // @formatter:off
     public static final OAuth2ResponseProp TOKEN_TYPE = new OAuth2ResponseProp("token_type")
-                                                                        .declare(GrantType.AUTH_CODE, FlowStep.ACCESS_TOKEN)
+                                                                        .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN)
                                                                         .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE)
-                                                                        .declare(GrantType.PASSWORD, FlowStep.ACCESS_TOKEN)
-                                                                        .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_TOKEN)
-                                                                        .declare(GrantType.REFRESH_TOKEN, FlowStep.ACCESS_TOKEN)
+                                                                        .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN)
+                                                                        .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN)
+                                                                        .declare(GrantType.REFRESH_TOKEN, FlowStep.EXCHANGE_TOKEN)
                                                                         .declare(GrantType.DEVICE_CODE, FlowStep.POLLING).defaultValue("bearer");
  // @formatter:on
 
@@ -62,12 +64,12 @@ public class OAuth2ResponseProp extends OAuth2PropertyModel implements IResponse
      */
  // @formatter:off
     public static final OAuth2ResponseProp EXPIRES_IN = new OAuth2ResponseProp("expires_in")
-                                                                        .declare(GrantType.AUTH_CODE, FlowStep.ACCESS_TOKEN, Constraint.RECOMMENDATION)
+                                                                        .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN, Constraint.RECOMMENDATION)
                                                                         .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE, Constraint.RECOMMENDATION)
-                                                                        .declare(GrantType.PASSWORD, FlowStep.ACCESS_TOKEN, Constraint.RECOMMENDATION)
-                                                                        .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_TOKEN, Constraint.RECOMMENDATION)
-                                                                        .declare(GrantType.REFRESH_TOKEN, FlowStep.ACCESS_TOKEN, Constraint.RECOMMENDATION)
-                                                                        .declare(GrantType.DEVICE_CODE, FlowStep.ACCESS_TOKEN)
+                                                                        .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN, Constraint.RECOMMENDATION)
+                                                                        .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN, Constraint.RECOMMENDATION)
+                                                                        .declare(GrantType.REFRESH_TOKEN, FlowStep.EXCHANGE_TOKEN, Constraint.RECOMMENDATION)
+                                                                        .declare(GrantType.DEVICE_CODE, FlowStep.EXCHANGE_TOKEN)
                                                                         .declare(GrantType.DEVICE_CODE, FlowStep.POLLING, Constraint.RECOMMENDATION);
  // @formatter:on
     /**
@@ -77,10 +79,10 @@ public class OAuth2ResponseProp extends OAuth2PropertyModel implements IResponse
      */
  // @formatter:off
     public static final OAuth2ResponseProp REFRESH_TOKEN = new OAuth2ResponseProp("refresh_token")
-                                                                        .declare(GrantType.AUTH_CODE, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL)
-                                                                        .declare(GrantType.PASSWORD, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL)
-                                                                        .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL)
-                                                                        .declare(GrantType.REFRESH_TOKEN, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL)
+                                                                        .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
+                                                                        .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
+                                                                        .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
+                                                                        .declare(GrantType.REFRESH_TOKEN, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
                                                                         .declare(GrantType.DEVICE_CODE, FlowStep.POLLING, Constraint.OPTIONAL);
  // @formatter:on
 
@@ -91,11 +93,11 @@ public class OAuth2ResponseProp extends OAuth2PropertyModel implements IResponse
      */
  // @formatter:off
     public static final OAuth2ResponseProp SCOPE = new OAuth2ResponseProp("scope")
-                                                                        .declare(GrantType.AUTH_CODE, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL)
+                                                                        .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
                                                                         .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE, Constraint.OPTIONAL)
-                                                                        .declare(GrantType.PASSWORD, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL)
-                                                                        .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL)
-                                                                        .declare(GrantType.REFRESH_TOKEN, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL)
+                                                                        .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
+                                                                        .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
+                                                                        .declare(GrantType.REFRESH_TOKEN, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
                                                                         .declare(GrantType.DEVICE_CODE, FlowStep.POLLING, Constraint.OPTIONAL);
  // @formatter:on
 
@@ -106,7 +108,7 @@ public class OAuth2ResponseProp extends OAuth2PropertyModel implements IResponse
      */
  // @formatter:off
     public static final OAuth2ResponseProp DEVICE_CODE = new OAuth2ResponseProp("device_code")
-                                                                        .declare(GrantType.DEVICE_CODE, FlowStep.ACCESS_TOKEN);
+                                                                        .declare(GrantType.DEVICE_CODE, FlowStep.EXCHANGE_TOKEN);
  // @formatter:on
 
     /**
@@ -115,7 +117,7 @@ public class OAuth2ResponseProp extends OAuth2PropertyModel implements IResponse
      */
  // @formatter:off
     public static final OAuth2ResponseProp USER_CODE = new OAuth2ResponseProp("user_code")
-                                                                        .declare(GrantType.DEVICE_CODE, FlowStep.ACCESS_TOKEN);
+                                                                        .declare(GrantType.DEVICE_CODE, FlowStep.EXCHANGE_TOKEN);
  // @formatter:on
 
     /**
@@ -124,7 +126,7 @@ public class OAuth2ResponseProp extends OAuth2PropertyModel implements IResponse
      */
  // @formatter:off
     public static final OAuth2ResponseProp VERIFICATION_URL = new OAuth2ResponseProp("verification_url")
-                                                                        .declare(GrantType.DEVICE_CODE, FlowStep.ACCESS_TOKEN);
+                                                                        .declare(GrantType.DEVICE_CODE, FlowStep.EXCHANGE_TOKEN);
  // @formatter:on
 
     /**
@@ -132,7 +134,7 @@ public class OAuth2ResponseProp extends OAuth2PropertyModel implements IResponse
      */
  // @formatter:off
     public static final OAuth2ResponseProp INTERVAL = new OAuth2ResponseProp("interval")
-                                                                        .declare(GrantType.DEVICE_CODE, FlowStep.ACCESS_TOKEN);
+                                                                        .declare(GrantType.DEVICE_CODE, FlowStep.EXCHANGE_TOKEN);
  // @formatter:on
 
     /**
@@ -155,11 +157,25 @@ public class OAuth2ResponseProp extends OAuth2PropertyModel implements IResponse
         super(name);
     }
 
+    OAuth2ResponseProp(String name, Map<GrantType, Map<FlowStep, Constraint>> mapping) {
+        super(name, mapping);
+    }
+
     @SuppressWarnings("unchecked")
     @Override
     public OAuth2ResponseProp error() {
         this.error = true;
         return this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public OAuth2ResponseProp duplicate() {
+        OAuth2ResponseProp prop = new OAuth2ResponseProp(this.getName(), this.getMapping()).setValue(this.getValue());
+        if (this.isError()) {
+            prop.error();
+        }
+        return prop;
     }
 
     @Override

@@ -1,27 +1,38 @@
 package com.zero.oauth.client.core.properties.converter;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
+import com.zero.oauth.client.core.properties.IPropertiesFilter;
+import com.zero.oauth.client.core.properties.IPropertyModel;
+import com.zero.oauth.client.core.properties.PropertyStore;
+import com.zero.oauth.client.type.FlowStep;
+import lombok.RequiredArgsConstructor;
+
 import java.util.Map;
 import java.util.stream.Collectors;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
-import com.zero.oauth.client.core.properties.IPropertiesFilter;
-import com.zero.oauth.client.core.properties.IPropertyModel;
-import com.zero.oauth.client.type.FlowStep;
+@RequiredArgsConstructor
+public class JsonConverter<T extends IPropertiesFilter> implements IPropertiesConverter<T> {
 
-public class JsonConverter implements IPropertiesConverter {
+    private final T properties;
 
     @Override
-    public <T extends IPropertiesFilter> String serialize(T properties, FlowStep flowStep) {
+    public T getPropertyStore() {
+        return this.properties;
+    }
+
+    @Override
+    public PropertyStore<IPropertyModel> deserialize(String properties, FlowStep step) {
         Gson gson = new GsonBuilder().create();
-        Map<String, Object> map = properties.by(flowStep).stream().collect(Collectors.toMap(IPropertyModel::getName,
-                                                                                            IPropertyModel::validate));
+        Map<String, Object> map = gson.fromJson(properties, new TypeToken<Map<String, Object>>() {}.getType());
+        return this.deserialize(map, step);
+    }
+
+    public String serialize(FlowStep step) {
+        Gson gson = new GsonBuilder().create();
+        Map<String, Object> map = this.getPropertyStore().by(step).stream()
+                .collect(Collectors.toMap(IPropertyModel::getName, IPropertyModel::validate));
         return gson.toJson(map);
     }
-
-    @Override
-    public <T extends IPropertiesFilter> T deserialize(String properties, FlowStep flowStep) {
-        return null;
-    }
-
 }

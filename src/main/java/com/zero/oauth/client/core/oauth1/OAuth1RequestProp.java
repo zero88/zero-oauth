@@ -1,7 +1,10 @@
 package com.zero.oauth.client.core.oauth1;
 
+import java.util.Map;
+
 import com.zero.oauth.client.core.properties.PropertyModel;
 import com.zero.oauth.client.type.FlowStep;
+
 import lombok.Getter;
 
 /**
@@ -16,9 +19,9 @@ public final class OAuth1RequestProp extends OAuth1PropertyModel {
      * Realm
      */
  // @formatter:off
-    public static final OAuth1RequestProp REALM = new OAuth1RequestProp("realm").declare(FlowStep.INIT, Constraint.OPTIONAL)
+    public static final OAuth1RequestProp REALM = new OAuth1RequestProp("realm").declare(FlowStep.REQUEST, Constraint.OPTIONAL)
                                                                                 .declare(FlowStep.AUTHORIZE, Constraint.OPTIONAL)
-                                                                                .declare(FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL)
+                                                                                .declare(FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
                                                                                 .declare(FlowStep.ACCESS_RESOURCE, Constraint.OPTIONAL);
  // @formatter:on
 
@@ -26,14 +29,14 @@ public final class OAuth1RequestProp extends OAuth1PropertyModel {
      * An absolute URI back to which the server will redirect the resource owner when the Resource Owner Authorization
      * step is completed.
      */
-    public static final OAuth1RequestProp REDIRECT_URI = new OAuth1RequestProp("oauth_callback").declare(FlowStep.INIT);
+    public static final OAuth1RequestProp REDIRECT_URI = new OAuth1RequestProp("oauth_callback").declare(FlowStep.REQUEST);
 
     /**
      * The public identifier for the application, obtained when the developer first registered the application.
      */
  // @formatter:off
-    public static final OAuth1RequestProp CONSUMER_KEY = new OAuth1RequestProp("oauth_consumer_key").declare(FlowStep.INIT)
-                                                                                                    .declare(FlowStep.ACCESS_TOKEN)
+    public static final OAuth1RequestProp CONSUMER_KEY = new OAuth1RequestProp("oauth_consumer_key").declare(FlowStep.REQUEST)
+                                                                                                    .declare(FlowStep.EXCHANGE_TOKEN)
                                                                                                     .declare(FlowStep.ACCESS_RESOURCE);
  // @formatter:on
 
@@ -41,14 +44,15 @@ public final class OAuth1RequestProp extends OAuth1PropertyModel {
      * The name of the signature method used by the client to sign the request.
      */
  // @formatter:off
-    public static final OAuth1RequestProp SIGNATURE_METHOD = new OAuth1RequestProp("oauth_signature_method").declare(FlowStep.INIT)
-                                                                                                            .declare(FlowStep.ACCESS_TOKEN)
+    public static final OAuth1RequestProp SIGNATURE_METHOD = new OAuth1RequestProp("oauth_signature_method").declare(FlowStep.REQUEST)
+                                                                                                            .declare(FlowStep.EXCHANGE_TOKEN)
                                                                                                             .declare(FlowStep.ACCESS_RESOURCE);
  // @formatter:on
     /**
      * The client generates a signature and use it together with {@link #SIGNATURE_METHOD}.
      */
-    public static final OAuth1RequestProp SIGNATURE = new OAuth1RequestProp("oauth_signature").declare(FlowStep.INIT).declare(FlowStep.ACCESS_TOKEN)
+    public static final OAuth1RequestProp SIGNATURE = new OAuth1RequestProp("oauth_signature").declare(FlowStep.REQUEST).declare(
+                                                                                                                                 FlowStep.EXCHANGE_TOKEN)
                                                                                               .declare(FlowStep.ACCESS_RESOURCE);
 
     /**
@@ -57,8 +61,8 @@ public final class OAuth1RequestProp extends OAuth1PropertyModel {
      * requests.
      */
  // @formatter:off
-    public static final OAuth1RequestProp TIMESTAMP = new OAuth1RequestProp("oauth_timestamp").declare(FlowStep.INIT)
-                                                                                              .declare(FlowStep.ACCESS_TOKEN)
+    public static final OAuth1RequestProp TIMESTAMP = new OAuth1RequestProp("oauth_timestamp").declare(FlowStep.REQUEST)
+                                                                                              .declare(FlowStep.EXCHANGE_TOKEN)
                                                                                               .declare(FlowStep.ACCESS_RESOURCE);
  // @formatter:on
 
@@ -68,8 +72,8 @@ public final class OAuth1RequestProp extends OAuth1PropertyModel {
      * non-secure channel.
      */
  // @formatter:off
-    public static final OAuth1RequestProp NONCE = new OAuth1RequestProp("oauth_nonce").declare(FlowStep.INIT)
-                                                                                      .declare(FlowStep.ACCESS_TOKEN)
+    public static final OAuth1RequestProp NONCE = new OAuth1RequestProp("oauth_nonce").declare(FlowStep.REQUEST)
+                                                                                      .declare(FlowStep.EXCHANGE_TOKEN)
                                                                                       .declare(FlowStep.ACCESS_RESOURCE);
  // @formatter:on
 
@@ -77,8 +81,8 @@ public final class OAuth1RequestProp extends OAuth1PropertyModel {
      * If present, value MUST be {@code 1.0}
      */
  // @formatter:off
-    public static final OAuth1RequestProp VERSION = new OAuth1RequestProp("oauth_version").declare(FlowStep.INIT, Constraint.OPTIONAL)
-                                                                                          .declare(FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL)
+    public static final OAuth1RequestProp VERSION = new OAuth1RequestProp("oauth_version").declare(FlowStep.REQUEST, Constraint.OPTIONAL)
+                                                                                          .declare(FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
                                                                                           .declare(FlowStep.ACCESS_RESOURCE, Constraint.OPTIONAL)
                                                                                           .defaultValue("1.0");
  // @formatter:on
@@ -90,7 +94,7 @@ public final class OAuth1RequestProp extends OAuth1PropertyModel {
      */
  // @formatter:off
     public static final OAuth1RequestProp TOKEN = new OAuth1RequestProp("oauth_token").declare(FlowStep.AUTHORIZE)
-                                                                                      .declare(FlowStep.ACCESS_TOKEN)
+                                                                                      .declare(FlowStep.EXCHANGE_TOKEN)
                                                                                       .declare(FlowStep.ACCESS_RESOURCE);
  // @formatter:on
 
@@ -99,11 +103,20 @@ public final class OAuth1RequestProp extends OAuth1PropertyModel {
      */
  // @formatter:off
     public static final OAuth1RequestProp OAUTH_VERIFIER = new OAuth1RequestProp("oauth_verifier").declare(FlowStep.AUTHORIZE)
-                                                                                                  .declare(FlowStep.ACCESS_TOKEN);
+                                                                                                  .declare(FlowStep.EXCHANGE_TOKEN);
  // @formatter:on
 
     public OAuth1RequestProp(String name) {
         super(name);
     }
 
+    OAuth1RequestProp(String name, Map<FlowStep, Constraint> steps) {
+        super(name, steps);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public OAuth1RequestProp duplicate() {
+        return new OAuth1RequestProp(this.getName(), this.getMapping()).setValue(this.getValue());
+    }
 }

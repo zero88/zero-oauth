@@ -28,8 +28,8 @@ public class OAuth2ClientCredentialPropTest {
     }
 
     @Test(expected = OAuthParameterException.class)
-    public void testRequestParams_FilterBy_Init() {
-        requestProperties.by(FlowStep.INIT);
+    public void testRequestParams_RequestToken() {
+        requestProperties.by(FlowStep.REQUEST);
     }
 
     @Test(expected = OAuthParameterException.class)
@@ -38,15 +38,15 @@ public class OAuth2ClientCredentialPropTest {
     }
 
     @Test
-    public void testRequestParams_FilterBy_AccessToken() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.ACCESS_TOKEN);
+    public void testRequestParams_FilterBy_ExchangeToken() {
+        List<IPropertyModel> by = requestProperties.by(FlowStep.EXCHANGE_TOKEN);
         List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
         assertThat(param_names, hasItems("grant_type", "scope", "client_id", "client_secret"));
     }
 
     @Test
-    public void testResponseParams_FilterBy_AccessToken() {
-        List<IPropertyModel> by = responseProperties.by(FlowStep.ACCESS_TOKEN);
+    public void testResponseParams_FilterBy_ExchangeToken() {
+        List<IPropertyModel> by = responseProperties.by(FlowStep.EXCHANGE_TOKEN);
         List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
         assertThat(param_names, hasItems("access_token", "token_type", "expires_in", "refresh_token", "scope"));
     }

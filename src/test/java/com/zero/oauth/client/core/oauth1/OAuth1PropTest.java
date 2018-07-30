@@ -24,8 +24,8 @@ public class OAuth1PropTest {
     }
 
     @Test
-    public void testRequest_FilterBy_Init() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.INIT);
+    public void testRequest_RequestToken() {
+        List<IPropertyModel> by = requestProperties.by(FlowStep.REQUEST);
         List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
         assertThat(param_names,
                    hasItems("realm",
@@ -39,8 +39,8 @@ public class OAuth1PropTest {
     }
 
     @Test
-    public void testResponse_FilterBy_Init() {
-        List<IPropertyModel> by = responseProperties.by(FlowStep.INIT);
+    public void testResponse_RequestToken() {
+        List<IPropertyModel> by = responseProperties.by(FlowStep.REQUEST);
         List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
         assertThat(param_names, hasItems("oauth_token", "oauth_token_secret", "oauth_callback_confirmed"));
     }
@@ -60,8 +60,8 @@ public class OAuth1PropTest {
     }
 
     @Test
-    public void test_RequestProp_FilterBy_AccessToken() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.ACCESS_TOKEN);
+    public void test_RequestProp_FilterBy_ExchangeToken() {
+        List<IPropertyModel> by = requestProperties.by(FlowStep.EXCHANGE_TOKEN);
         List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
         assertThat(param_names,
                    hasItems("realm",
@@ -76,8 +76,8 @@ public class OAuth1PropTest {
     }
 
     @Test
-    public void test_ResponseProp_FilterBy_AccessToken() {
-        List<IPropertyModel> by = responseProperties.by(FlowStep.ACCESS_TOKEN);
+    public void test_ResponseProp_FilterBy_ExchangeToken() {
+        List<IPropertyModel> by = responseProperties.by(FlowStep.EXCHANGE_TOKEN);
         List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
         assertThat(param_names, hasItems("oauth_token", "oauth_token_secret"));
     }
@@ -96,4 +96,5 @@ public class OAuth1PropTest {
                             "oauth_nonce",
                             "oauth_version"));
     }
+
 }

@@ -4,6 +4,8 @@ import com.zero.oauth.client.core.properties.PropertyModel;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.GrantType;
 
+import java.util.Map;
+
 /**
  * It is model to define an OAuth parameter when sending request OAuth server.
  *
@@ -11,10 +13,6 @@ import com.zero.oauth.client.type.GrantType;
  * @see OAuth2PropertyModel
  */
 public class OAuth2RequestProp extends OAuth2PropertyModel {
-
-    public OAuth2RequestProp(String name) {
-        super(name);
-    }
 
     /**
      * This tells the authorization server that the application is initiating which OAuth grant flow.
@@ -25,7 +23,7 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
     public static final OAuth2RequestProp RESPONSE_TYPE = new OAuth2RequestProp("response_type")
                                                                             .declare(GrantType.AUTH_CODE, FlowStep.AUTHORIZE)
                                                                             .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE)
-                                                                            .declare(GrantType.DEVICE_CODE, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL);
+                                                                            .declare(GrantType.DEVICE_CODE, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL);
     // @formatter:on
 
     /**
@@ -34,10 +32,10 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
     // @formatter:off
     public static final OAuth2RequestProp REDIRECT_URI = new OAuth2RequestProp("redirect_uri")
                                                                             .declare(GrantType.AUTH_CODE, FlowStep.AUTHORIZE)
-                                                                            .declare(GrantType.AUTH_CODE, FlowStep.ACCESS_TOKEN)
+                                                                            .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN)
                                                                             .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE)
-                                                                            .declare(GrantType.PASSWORD, FlowStep.ACCESS_TOKEN)
-                                                                            .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_TOKEN);
+                                                                            .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN)
+                                                                            .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN);
     // @formatter:on
 
     /**
@@ -48,10 +46,10 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
     public static final OAuth2RequestProp SCOPE = new OAuth2RequestProp("scope")
                                                                             .declare(GrantType.AUTH_CODE, FlowStep.AUTHORIZE)
                                                                             .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE)
-                                                                            .declare(GrantType.PASSWORD, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL)
-                                                                            .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_TOKEN)
-                                                                            .declare(GrantType.DEVICE_CODE, FlowStep.ACCESS_TOKEN)
-                                                                            .declare(GrantType.REFRESH_TOKEN, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL);
+                                                                            .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
+                                                                            .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN)
+                                                                            .declare(GrantType.DEVICE_CODE, FlowStep.EXCHANGE_TOKEN)
+                                                                            .declare(GrantType.REFRESH_TOKEN, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL);
     // @formatter:on
 
     /**
@@ -63,8 +61,8 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
     public static final OAuth2RequestProp STATE = new OAuth2RequestProp("state")
                                                                             .declare(GrantType.AUTH_CODE, FlowStep.AUTHORIZE, Constraint.RECOMMENDATION)
                                                                             .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE, Constraint.RECOMMENDATION)
-                                                                            .declare(GrantType.PASSWORD, FlowStep.ACCESS_TOKEN, Constraint.RECOMMENDATION)
-                                                                            .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_TOKEN, Constraint.RECOMMENDATION);
+                                                                            .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN, Constraint.RECOMMENDATION)
+                                                                            .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN, Constraint.RECOMMENDATION);
     // @formatter:on
 
     /**
@@ -73,11 +71,11 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
     // @formatter:off
     public static final OAuth2RequestProp CLIENT_ID = new OAuth2RequestProp("client_id")
                                                                             .declare(GrantType.AUTH_CODE, FlowStep.AUTHORIZE)
-                                                                            .declare(GrantType.AUTH_CODE, FlowStep.ACCESS_TOKEN)
+                                                                            .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN)
                                                                             .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE)
-                                                                            .declare(GrantType.PASSWORD, FlowStep.ACCESS_TOKEN)
-                                                                            .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_TOKEN)
-                                                                            .declare(GrantType.DEVICE_CODE, FlowStep.ACCESS_TOKEN)
+                                                                            .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN)
+                                                                            .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN)
+                                                                            .declare(GrantType.DEVICE_CODE, FlowStep.EXCHANGE_TOKEN)
                                                                             .declare(GrantType.DEVICE_CODE, FlowStep.POLLING);
     // @formatter:on
 
@@ -88,9 +86,9 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
      */
     // @formatter:off
     public static final OAuth2RequestProp CLIENT_SECRET = new OAuth2RequestProp("client_secret")
-                                                                            .declare(GrantType.AUTH_CODE, FlowStep.ACCESS_TOKEN)
-                                                                            .declare(GrantType.PASSWORD, FlowStep.ACCESS_TOKEN)
-                                                                            .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_TOKEN)
+                                                                            .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN)
+                                                                            .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN)
+                                                                            .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN)
                                                                             .declare(GrantType.DEVICE_CODE, FlowStep.POLLING);
     // @formatter:on
 
@@ -99,11 +97,11 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
      */
     // @formatter:off
     public static final OAuth2RequestProp GRANT_TYPE = new OAuth2RequestProp("grant_type")
-                                                                            .declare(GrantType.AUTH_CODE, FlowStep.ACCESS_TOKEN)
-                                                                            .declare(GrantType.PASSWORD, FlowStep.ACCESS_TOKEN)
-                                                                            .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_TOKEN)
+                                                                            .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN)
+                                                                            .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN)
+                                                                            .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN)
                                                                             .declare(GrantType.DEVICE_CODE, FlowStep.POLLING)
-                                                                            .declare(GrantType.REFRESH_TOKEN, FlowStep.ACCESS_TOKEN);
+                                                                            .declare(GrantType.REFRESH_TOKEN, FlowStep.EXCHANGE_TOKEN);
     // @formatter:on
 
     /**
@@ -111,7 +109,7 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
      */
     // @formatter:off
     public static final OAuth2RequestProp USERNAME = new OAuth2RequestProp("username")
-                                                                            .declare(GrantType.PASSWORD, FlowStep.ACCESS_TOKEN);
+                                                                            .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN);
     // @formatter:on
 
     /**
@@ -119,7 +117,7 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
      */
     // @formatter:off
     public static final OAuth2RequestProp PASSWORD = new OAuth2RequestProp("password")
-                                                                            .declare(GrantType.PASSWORD, FlowStep.ACCESS_TOKEN);
+                                                                            .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN);
     // @formatter:on
 
     /**
@@ -128,9 +126,9 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
      */
     // @formatter:off
     public static final OAuth2RequestProp CODE = new OAuth2RequestProp("code")
-                                                                        .declare(GrantType.AUTH_CODE, FlowStep.ACCESS_TOKEN)
+                                                                        .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN)
                                                                         .declare(GrantType.DEVICE_CODE, FlowStep.POLLING)
-                                                                        .declare(GrantType.REFRESH_TOKEN, FlowStep.ACCESS_TOKEN, Constraint.OPTIONAL);
+                                                                        .declare(GrantType.REFRESH_TOKEN, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL);
     // @formatter:on
 
     /**
@@ -138,7 +136,7 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
      */
     // @formatter:off
     public static final OAuth2RequestProp REFRESH_TOKEN = new OAuth2RequestProp("refresh_token")
-                                                                            .declare(GrantType.REFRESH_TOKEN, FlowStep.ACCESS_TOKEN);
+                                                                            .declare(GrantType.REFRESH_TOKEN, FlowStep.EXCHANGE_TOKEN);
     // @formatter:on
 
     /**
@@ -152,4 +150,18 @@ public class OAuth2RequestProp extends OAuth2PropertyModel {
                                                                             .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_RESOURCE)
                                                                             .declare(GrantType.DEVICE_CODE, FlowStep.ACCESS_RESOURCE);
     // @formatter:on
+
+    public OAuth2RequestProp(String name) {
+        super(name);
+    }
+
+    OAuth2RequestProp(String name, Map<GrantType, Map<FlowStep, Constraint>> mapping) {
+        super(name, mapping);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public OAuth2RequestProp duplicate() {
+        return new OAuth2RequestProp(this.getName(), this.getMapping()).setValue(this.getValue());
+    }
 }

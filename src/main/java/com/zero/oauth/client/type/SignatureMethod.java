@@ -3,7 +3,6 @@ package com.zero.oauth.client.type;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
-import lombok.ToString;
 
 /**
  * OAuth {@code 1.0a} signature method.
@@ -12,7 +11,6 @@ import lombok.ToString;
  */
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
-@ToString(doNotUseGetters = true, includeFieldNames = false, onlyExplicitlyIncluded = true)
 public enum SignatureMethod {
 
     /**
@@ -48,6 +46,10 @@ public enum SignatureMethod {
      */
     PLAIN_TEXT("PLAINTEXT");
 
-    @ToString.Include
     private final String name;
+
+    @Override
+    public String toString() {
+        return this.name;
+    }
 }

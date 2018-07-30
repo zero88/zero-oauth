@@ -3,16 +3,9 @@ package com.zero.oauth.client.core.properties;
 import com.zero.oauth.client.exceptions.OAuthParameterException;
 
 /**
- * Define property that is used in request parameter, request header, response.
+ * Defines an OAuth property in HTTP request, HTTP response or HTTP header.
  */
 public interface IPropertyModel {
-
-    /**
-     * Property constraint
-     */
-    public enum Constraint {
-        OPTIONAL, REQUIRED, RECOMMENDATION;
-    }
 
     /**
      * Property's name is mandatory and unique, that declares a key in HTTP Request/Response parameters/header or body.
@@ -32,16 +25,28 @@ public interface IPropertyModel {
      * Validate before serialize or after deserialize.
      *
      * @return {@code property's value}
-     * @throws OAuthParameterException
-     *         If property is marked as {@link Constraint#REQUIRED} but {@code value} is {@code null} or {@code empty}
+     * @throws OAuthParameterException If property is marked as {@link Constraint#REQUIRED} but {@code value} is {@code null} or {@code empty}
      */
     public Object validate();
 
     /**
-     * @param value
-     *        Any value but have to implement {@link Object#toString()}
+     * Set value
+     *
+     * @param value Any value but have to implement {@link Object#toString()}
+     * @return
      */
     public <T extends PropertyModel> T setValue(Object value);
+
+    public <T extends PropertyModel> T duplicate();
+
+    /**
+     * Clone current instance with overriding property value. It is helper method to
+     * generate new {@code PropertyModel} instance from builtin {@code PropertyModel}.
+     *
+     * @param value Any value but have to implement {@link Object#toString()}
+     * @return New instance
+     */
+    public <T extends PropertyModel> T duplicate(Object value);
 
     /**
      * Check property is required or not.
@@ -63,5 +68,12 @@ public interface IPropertyModel {
      * @return {@code True} if it is marked as {@link Constraint#OPTIONAL}
      */
     public boolean isOptional();
+
+    /**
+     * Property constraint
+     */
+    public enum Constraint {
+        OPTIONAL, REQUIRED, RECOMMENDATION
+    }
 
 }

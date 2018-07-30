@@ -28,8 +28,8 @@ public class OAuth2ImplicitPropTest {
     }
 
     @Test(expected = OAuthParameterException.class)
-    public void testRequestParams_FilterBy_Init() {
-        requestProperties.by(FlowStep.INIT);
+    public void testRequestParams_RequestToken() {
+        requestProperties.by(FlowStep.REQUEST);
     }
 
     @Test
@@ -40,15 +40,15 @@ public class OAuth2ImplicitPropTest {
     }
 
     @Test
-    public void testResponseParams_FilterBy_AccessToken() {
+    public void testResponseParams_FilterBy_ExchangeToken() {
         List<IPropertyModel> by = responseProperties.by(FlowStep.AUTHORIZE);
         List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
         assertThat(param_names, hasItems("access_token", "token_type", "expires_in", "scope"));
     }
 
     @Test(expected = OAuthParameterException.class)
-    public void testRequestParams_FilterBy_AccessToken() {
-        requestProperties.by(FlowStep.ACCESS_TOKEN);
+    public void testRequestParams_FilterBy_ExchangeToken() {
+        requestProperties.by(FlowStep.EXCHANGE_TOKEN);
     }
 
     @Test

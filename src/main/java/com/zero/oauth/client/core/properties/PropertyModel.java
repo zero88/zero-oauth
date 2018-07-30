@@ -6,7 +6,6 @@ import com.zero.oauth.client.exceptions.OAuthParameterException;
 import com.zero.oauth.client.type.OAuthVersion;
 import com.zero.oauth.client.utils.Strings;
 
-import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -14,13 +13,13 @@ import lombok.ToString;
 import lombok.extern.log4j.Log4j2;
 
 /**
- * {@code PropertyModel} is model to define an OAuth property in HTTP request, HTTP response or HTTP header.
+ * Default Property
  */
 @Log4j2
-@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 @ToString(doNotUseGetters = true, onlyExplicitlyIncluded = true)
-public class PropertyModel implements Cloneable, IPropertyModel {
+public class PropertyModel implements IPropertyModel {
 
     @Getter
     @ToString.Include
@@ -106,22 +105,12 @@ public class PropertyModel implements Cloneable, IPropertyModel {
     /**
      * @return a clone of {@code PropertyModel}
      */
-    public PropertyModel clone() throws CloneNotSupportedException {
-        return (PropertyModel) super.clone();
+    public <T extends PropertyModel> T duplicate() {
+        return new PropertyModel(getVersion(), getName()).constraint(this.constraint).setValue(this.getValue());
     }
 
-    /**
-     * Clone current instance with overriding param value. It is helper method to
-     * generate new {@code PropertyModel} instance from builtin {@code PropertyModel}.
-     *
-     * @param value
-     *        Override param value for clone object.
-     * @return a clone of {@code PropertyModel}
-     * @throws CloneNotSupportedException
-     */
-    @SuppressWarnings("unchecked")
-    public <T extends PropertyModel> T clone(Object value) throws CloneNotSupportedException {
-        T instance = (T) this.clone();
+    public <T extends PropertyModel> T duplicate(Object value) {
+        T instance = this.duplicate();
         return instance.setValue(value);
     }
 
@@ -130,10 +119,9 @@ public class PropertyModel implements Cloneable, IPropertyModel {
      *
      * @param constraint
      * @return a clone of {@code PropertyModel}
-     * @throws CloneNotSupportedException
      */
-    protected PropertyModel clone(Constraint constraint) throws CloneNotSupportedException {
-        return this.clone().constraint(constraint);
+    protected PropertyModel clone(Constraint constraint) {
+        return this.duplicate().constraint(constraint);
     }
 
     @SuppressWarnings("unchecked")

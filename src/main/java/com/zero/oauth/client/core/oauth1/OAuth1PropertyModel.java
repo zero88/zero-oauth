@@ -1,5 +1,6 @@
 package com.zero.oauth.client.core.oauth1;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -15,6 +16,11 @@ class OAuth1PropertyModel extends PropertyModel implements IOAuth1PropertyMatche
 
     OAuth1PropertyModel(String name) {
         super(OAuthVersion.V1, name);
+    }
+
+    OAuth1PropertyModel(String name, Map<FlowStep, Constraint> steps) {
+        super(OAuthVersion.V1, name);
+        this.steps.putAll(steps);
     }
 
     @SuppressWarnings("unchecked")
@@ -52,5 +58,9 @@ class OAuth1PropertyModel extends PropertyModel implements IOAuth1PropertyMatche
     @Override
     public <T extends PropertyModel> T recommend() {
         throw new UnsupportedOperationException("Recommendation value depends on grant type and step.");
+    }
+
+    Map<FlowStep, Constraint> getMapping(){
+        return Collections.unmodifiableMap(this.steps);
     }
 }

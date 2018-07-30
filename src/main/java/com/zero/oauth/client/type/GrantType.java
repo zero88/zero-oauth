@@ -21,7 +21,7 @@ public enum GrantType {
      *
      */
     AUTH_CODE("code", "authorization_code", Arrays.asList(FlowStep.AUTHORIZE,
-                                                          FlowStep.ACCESS_TOKEN,
+                                                          FlowStep.EXCHANGE_TOKEN,
                                                           FlowStep.REVOKE_TOKEN,
                                                           FlowStep.ACCESS_RESOURCE)),
 
@@ -33,29 +33,29 @@ public enum GrantType {
      *
      */
     IMPLICIT_DEPRECATED("token", "authorization_code", Arrays.asList(FlowStep.AUTHORIZE,
-                                                                     FlowStep.ACCESS_TOKEN,
+                                                                     FlowStep.EXCHANGE_TOKEN,
                                                                      FlowStep.REVOKE_TOKEN,
                                                                      FlowStep.ACCESS_RESOURCE)),
 
     /**
      *
      */
-    PASSWORD(null, "password", Arrays.asList(FlowStep.ACCESS_TOKEN, FlowStep.REVOKE_TOKEN, FlowStep.ACCESS_RESOURCE)),
+    PASSWORD(null, "password", Arrays.asList(FlowStep.EXCHANGE_TOKEN, FlowStep.REVOKE_TOKEN, FlowStep.ACCESS_RESOURCE)),
 
     /**
      *
      */
-    CLIENT_CREDENTIALS(null, "client_credentials", Arrays.asList(FlowStep.ACCESS_TOKEN, FlowStep.REVOKE_TOKEN, FlowStep.ACCESS_RESOURCE)),
+    CLIENT_CREDENTIALS(null, "client_credentials", Arrays.asList(FlowStep.EXCHANGE_TOKEN, FlowStep.REVOKE_TOKEN, FlowStep.ACCESS_RESOURCE)),
 
     /**
      *
      */
-    REFRESH_TOKEN(null, "refresh_token", Arrays.asList(FlowStep.ACCESS_TOKEN, FlowStep.REVOKE_TOKEN, FlowStep.ACCESS_RESOURCE)),
+    REFRESH_TOKEN(null, "refresh_token", Arrays.asList(FlowStep.EXCHANGE_TOKEN, FlowStep.REVOKE_TOKEN, FlowStep.ACCESS_RESOURCE)),
 
     /**
      * <a href="https://oauth.net/2/grant-types/device-code/">
      */
-    DEVICE_CODE("device_code", "urn:ietf:params:oauth:grant-type:device_code", Arrays.asList(FlowStep.ACCESS_TOKEN,
+    DEVICE_CODE("device_code", "urn:ietf:params:oauth:grant-type:device_code", Arrays.asList(FlowStep.EXCHANGE_TOKEN,
                                                                                              FlowStep.POLLING,
                                                                                              FlowStep.REVOKE_TOKEN,
                                                                                              FlowStep.ACCESS_RESOURCE));

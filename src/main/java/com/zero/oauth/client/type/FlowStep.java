@@ -17,8 +17,9 @@ public enum FlowStep {
      * This step is only applied in OAuth version 1.0/1.0a
      *
      * @see OAuthVersion#V1
+     * @see HttpMethod#GET
      */
-    INIT(OAuthVersion.V1, HttpMethod.GET),
+    REQUEST(OAuthVersion.V1, HttpMethod.GET),
 
     /**
      * The Client obtains Resource Owner authorization from Authorization server.
@@ -38,31 +39,33 @@ public enum FlowStep {
      *
      * @see OAuthVersion#V1
      * @see OAuthVersion#V2
-     * @see GrantType
+     * @see HttpMethod#GET
      */
     AUTHORIZE(OAuthVersion.ALL, HttpMethod.GET),
 
     /**
-     * The Client exchange some informations with Authorization server to receive the Access Token.
+     * The Client exchange some informations with Authorization server to receive the {@code Access Token}.
      * <ul>
      * <li>{@code OAuth v1.0a}: More <a href="https://oauth.net/core/1.0a/#auth_step3">details</a></li>
      * <li>{@code OAuth v2.0}: More details</a></li>
      *
      * @see OAuthVersion#V1
      * @see OAuthVersion#V2
+     * @see HttpMethod#POST
      */
-    ACCESS_TOKEN(OAuthVersion.ALL, HttpMethod.POST),
+    EXCHANGE_TOKEN(OAuthVersion.ALL, HttpMethod.POST),
 
     /**
      * The client attempts to acquire an access token every few seconds (at a rate specified by interval) by POSTing to
      * the access token endpoint on the authorization server.
      *
      * @see GrantType#DEVICE_CODE
+     * @see HttpMethod#POST
      */
     POLLING(OAuthVersion.V2, HttpMethod.POST),
 
     /**
-     *
+     * @see HttpMethod#POST
      */
     REVOKE_TOKEN(OAuthVersion.ALL, HttpMethod.POST),
 

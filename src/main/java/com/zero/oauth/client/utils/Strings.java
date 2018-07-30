@@ -14,6 +14,10 @@ public final class Strings {
         return !isBlank(text);
     }
 
+    public static String requireNotBlank(String text) {
+        return requireNotBlank(text, "");
+    }
+
     public static String requireNotBlank(String text, String message) {
         if (isBlank(text)) {
             throw new IllegalArgumentException(message);
