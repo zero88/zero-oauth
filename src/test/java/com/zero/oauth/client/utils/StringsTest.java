@@ -45,4 +45,5 @@ public class StringsTest {
     public void testRequireNotBlank_shouldSuccess() {
         assertEquals("abc", Strings.requireNotBlank(" abc "));
     }
+
 }

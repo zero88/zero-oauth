@@ -1,7 +1,7 @@
 package com.zero.oauth.client.exceptions;
 
 /**
- * Specialized exception that represents a problem in the parameter
+ * Specialized exception that represents a problem in the parameter.
  */
 public class OAuthParameterException extends OAuthException {
 
@@ -18,4 +18,5 @@ public class OAuthParameterException extends OAuthException {
     public OAuthParameterException(Exception e) {
         super(e);
     }
+
 }

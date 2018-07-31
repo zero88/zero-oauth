@@ -25,13 +25,11 @@ class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropertyMatche
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends OAuth2PropertyModel> T declare(GrantType grantType, FlowStep step, Constraint constraint) {
+    public <T extends OAuth2PropertyModel> T declare(GrantType grantType, FlowStep step,
+                                                     Constraint constraint) {
         validate(grantType, step);
-        Map<FlowStep, Constraint> flows = this.mapping.get(grantType);
-        if (flows == null) {
-            flows = new HashMap<>();
-            this.mapping.put(grantType, flows);
-        }
+        Map<FlowStep, Constraint> flows =
+                this.mapping.computeIfAbsent(grantType, g -> new HashMap<>());
         flows.put(step, constraint);
         return (T) this;
     }
@@ -39,10 +37,9 @@ class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropertyMatche
     /**
      * Check this is matched with the given {@code GrantType} and {@code FlowStep}.
      *
-     * @param grantType
-     *        {@link GrantType}
-     * @param step
-     *        {@link FlowStep}
+     * @param grantType {@link GrantType}
+     * @param step      {@link FlowStep}
+     *
      * @return Property Model
      */
     public PropertyModel match(GrantType grantType, FlowStep step) {
@@ -63,13 +60,28 @@ class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropertyMatche
         return this.mapping.containsKey(grantType) ? this : null;
     }
 
+    private void validate(GrantType grantType, FlowStep step) {
+        Objects.requireNonNull(grantType, "OAuth v2.0 grant type cannot be null");
+        Objects.requireNonNull(step, "OAuth v2.0 flow step cannot be null");
+        if (!this.getVersion().isEqual(step.getVersion())) {
+            throw new OAuthParameterException(
+                    "Step " + step.name() + " isn't supported in OAuth v" + this.getVersion());
+        }
+        if (!grantType.getSteps().contains(step)) {
+            throw new OAuthParameterException(
+                    "Grant type " + grantType.name() + " isn't supported in OAuth flow step " +
+                    step);
+        }
+    }
+
     /**
      * Required value depends on grant type and step. It is not capable to use this method.
      *
+     * @throws UnsupportedOperationException Raise exception
      * @deprecated Use {@link #declare(GrantType, FlowStep)}
-     * @throws UnsupportedOperationException
      */
     @Override
+    @Deprecated
     public <T extends PropertyModel> T require() {
         throw new UnsupportedOperationException("Required value depends on grant type and step.");
     }
@@ -77,26 +89,18 @@ class OAuth2PropertyModel extends PropertyModel implements IOAuth2PropertyMatche
     /**
      * Recommendation value depends on grant type and step. It is not capable to use this method.
      *
+     * @throws UnsupportedOperationException Raise exception
      * @deprecated Use {@link #declare(GrantType, FlowStep, Constraint)}
-     * @throws UnsupportedOperationException
      */
     @Override
+    @Deprecated
     public <T extends PropertyModel> T recommend() {
-        throw new UnsupportedOperationException("Recommendation value depends on grant type and step.");
-    }
-
-    private void validate(GrantType grantType, FlowStep step) {
-        Objects.requireNonNull(grantType, "OAuth v2.0 grant type cannot be null");
-        Objects.requireNonNull(step, "OAuth v2.0 flow step cannot be null");
-        if (!grantType.getSteps().contains(step)) {
-            throw new OAuthParameterException("Grant type " + grantType.name() + " isn't supported in OAuth flow step " + step);
-        }
-        if (!this.getVersion().isEqual(step.getVersion())) {
-            throw new OAuthParameterException("Step " + step.name() + " isn't supported in OAuth v" + this.getVersion());
-        }
+        throw new UnsupportedOperationException(
+                "Recommendation value depends on grant type and step.");
     }
 
     Map<GrantType, Map<FlowStep, Constraint>> getMapping() {
         return Collections.unmodifiableMap(this.mapping);
     }
+
 }

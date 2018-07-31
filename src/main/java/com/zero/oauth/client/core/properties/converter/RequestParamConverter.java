@@ -1,17 +1,19 @@
 package com.zero.oauth.client.core.properties.converter;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import com.zero.oauth.client.core.properties.IPropertiesFilter;
 import com.zero.oauth.client.core.properties.IPropertyModel;
 import com.zero.oauth.client.core.properties.PropertyStore;
 import com.zero.oauth.client.exceptions.OAuthParameterException;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.utils.OAuthEncoder;
-import lombok.RequiredArgsConstructor;
+import com.zero.oauth.client.utils.Strings;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.stream.Collectors;
+import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 public class RequestParamConverter<T extends IPropertiesFilter> implements IPropertiesConverter<T> {
@@ -21,13 +23,9 @@ public class RequestParamConverter<T extends IPropertiesFilter> implements IProp
     private final T properties;
 
     @Override
-    public T getPropertyStore() {
-        return this.properties;
-    }
-
-    @Override
     public String serialize(FlowStep step) {
-        return this.properties.by(step).stream().map(this::combine).filter(Objects::nonNull).collect(Collectors.joining(SEPARATE));
+        return this.properties.by(step).stream().map(this::compute).filter(Objects::nonNull)
+                              .collect(Collectors.joining(SEPARATE));
     }
 
     @Override
@@ -36,18 +34,27 @@ public class RequestParamConverter<T extends IPropertiesFilter> implements IProp
         for (String property : properties.split("\\" + SEPARATE)) {
             String[] keyValues = property.split("\\" + EQUAL);
             if (keyValues.length != 2) {
-                throw new OAuthParameterException("Property doesn't conform the syntax: `key`" + EQUAL + "`value`");
+                throw new OAuthParameterException(
+                        "Property doesn't conform the syntax: `key`" + EQUAL + "`value`");
             }
             map.put(OAuthEncoder.decode(keyValues[0]), OAuthEncoder.decode(keyValues[1]));
         }
         return this.deserialize(map, step);
     }
 
-    private String combine(IPropertyModel property) {
+    @Override
+    public T getPropertyStore() {
+        return this.properties;
+    }
+
+    private String compute(IPropertyModel property) {
+        String key = OAuthEncoder.encode(Strings.requireNotBlank(property.getName()));
         Object value = property.validate();
         if (Objects.isNull(value)) {
             return null;
         }
-        return new StringBuilder(OAuthEncoder.encode(property.getName())).append(EQUAL).append(OAuthEncoder.encode(value.toString())).toString();
+        return new StringBuilder(key).append(EQUAL).append(OAuthEncoder.encode(value.toString()))
+                                     .toString();
     }
+
 }

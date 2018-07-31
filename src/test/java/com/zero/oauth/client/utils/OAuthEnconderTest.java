@@ -114,4 +114,5 @@ public class OAuthEnconderTest {
         assertEquals(encoded, OAuthEncoder.encode(plain));
         assertEquals(plain, OAuthEncoder.decode(encoded));
     }
+
 }

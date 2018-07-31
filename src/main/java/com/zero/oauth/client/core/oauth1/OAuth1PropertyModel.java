@@ -27,7 +27,8 @@ class OAuth1PropertyModel extends PropertyModel implements IOAuth1PropertyMatche
     public <T extends OAuth1PropertyModel> T declare(FlowStep step, Constraint constraint) {
         Objects.requireNonNull(step, "OAuth flow step cannot be null");
         if (!this.getVersion().isEqual(step.getVersion())) {
-            throw new OAuthParameterException("Step " + step.name() + " isn't supported in OAuth v" + this.getVersion());
+            throw new OAuthParameterException(
+                    "Step " + step.name() + " isn't supported in OAuth v" + this.getVersion());
         }
         this.steps.put(step, constraint);
         return (T) this;
@@ -41,10 +42,11 @@ class OAuth1PropertyModel extends PropertyModel implements IOAuth1PropertyMatche
     /**
      * Required value depends on OAuth flow step. It is not capable to use this method.
      *
+     * @throws UnsupportedOperationException Raise exception
      * @deprecated Use {@link #declare(FlowStep)}
-     * @throws UnsupportedOperationException
      */
     @Override
+    @Deprecated
     public <T extends PropertyModel> T require() {
         throw new UnsupportedOperationException("Required value depends on grant type and step.");
     }
@@ -52,15 +54,18 @@ class OAuth1PropertyModel extends PropertyModel implements IOAuth1PropertyMatche
     /**
      * Recommendation value depends on OAuth flow step. It is not capable to use this method.
      *
+     * @throws UnsupportedOperationException Raise exception
      * @deprecated Use {@link #declare(FlowStep, Constraint)}
-     * @throws UnsupportedOperationException
      */
     @Override
+    @Deprecated
     public <T extends PropertyModel> T recommend() {
-        throw new UnsupportedOperationException("Recommendation value depends on grant type and step.");
+        throw new UnsupportedOperationException(
+                "Recommendation value depends on grant type and step.");
     }
 
-    Map<FlowStep, Constraint> getMapping(){
+    Map<FlowStep, Constraint> getMapping() {
         return Collections.unmodifiableMap(this.steps);
     }
+
 }

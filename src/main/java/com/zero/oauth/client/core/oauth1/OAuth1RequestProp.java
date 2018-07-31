@@ -16,101 +16,104 @@ import lombok.Getter;
 public final class OAuth1RequestProp extends OAuth1PropertyModel {
 
     /**
-     * Realm
+     * Realm.
      */
- // @formatter:off
-    public static final OAuth1RequestProp REALM = new OAuth1RequestProp("realm").declare(FlowStep.REQUEST, Constraint.OPTIONAL)
-                                                                                .declare(FlowStep.AUTHORIZE, Constraint.OPTIONAL)
-                                                                                .declare(FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
-                                                                                .declare(FlowStep.ACCESS_RESOURCE, Constraint.OPTIONAL);
- // @formatter:on
+    public static final OAuth1RequestProp REALM =
+            new OAuth1RequestProp("realm").declare(FlowStep.REQUEST, Constraint.OPTIONAL)
+                                          .declare(FlowStep.AUTHORIZE, Constraint.OPTIONAL)
+                                          .declare(FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
+                                          .declare(FlowStep.ACCESS_RESOURCE, Constraint.OPTIONAL);
 
     /**
-     * An absolute URI back to which the server will redirect the resource owner when the Resource Owner Authorization
-     * step is completed.
+     * An absolute URI back to which the server will redirect the resource owner when the Resource
+     * Owner Authorization step is completed.
      */
-    public static final OAuth1RequestProp REDIRECT_URI = new OAuth1RequestProp("oauth_callback").declare(FlowStep.REQUEST);
+    public static final OAuth1RequestProp REDIRECT_URI =
+            new OAuth1RequestProp("oauth_callback").declare(FlowStep.REQUEST);
 
     /**
-     * The public identifier for the application, obtained when the developer first registered the application.
+     * The public identifier for the application, obtained when the developer first registered the
+     * application.
      */
- // @formatter:off
-    public static final OAuth1RequestProp CONSUMER_KEY = new OAuth1RequestProp("oauth_consumer_key").declare(FlowStep.REQUEST)
-                                                                                                    .declare(FlowStep.EXCHANGE_TOKEN)
-                                                                                                    .declare(FlowStep.ACCESS_RESOURCE);
- // @formatter:on
+    public static final OAuth1RequestProp CONSUMER_KEY =
+            new OAuth1RequestProp("oauth_consumer_key").declare(FlowStep.REQUEST)
+                                                       .declare(FlowStep.EXCHANGE_TOKEN)
+                                                       .declare(FlowStep.ACCESS_RESOURCE);
 
     /**
      * The name of the signature method used by the client to sign the request.
      */
- // @formatter:off
-    public static final OAuth1RequestProp SIGNATURE_METHOD = new OAuth1RequestProp("oauth_signature_method").declare(FlowStep.REQUEST)
-                                                                                                            .declare(FlowStep.EXCHANGE_TOKEN)
-                                                                                                            .declare(FlowStep.ACCESS_RESOURCE);
- // @formatter:on
+    public static final OAuth1RequestProp SIGNATURE_METHOD =
+            new OAuth1RequestProp("oauth_signature_method").declare(FlowStep.REQUEST)
+                                                           .declare(FlowStep.EXCHANGE_TOKEN)
+                                                           .declare(FlowStep.ACCESS_RESOURCE);
+
     /**
      * The client generates a signature and use it together with {@link #SIGNATURE_METHOD}.
      */
-    public static final OAuth1RequestProp SIGNATURE = new OAuth1RequestProp("oauth_signature").declare(FlowStep.REQUEST).declare(
-                                                                                                                                 FlowStep.EXCHANGE_TOKEN)
-                                                                                              .declare(FlowStep.ACCESS_RESOURCE);
+    public static final OAuth1RequestProp SIGNATURE =
+            new OAuth1RequestProp("oauth_signature").declare(FlowStep.REQUEST)
+                                                    .declare(FlowStep.EXCHANGE_TOKEN)
+                                                    .declare(FlowStep.ACCESS_RESOURCE);
 
     /**
-     * The timestamp is expressed in the number of seconds since January 1, 1970 00:00:00 GMT. The timestamp value MUST
-     * be a positive integer and MUST be equal or greater than the timestamp used in previous
-     * requests.
+     * The timestamp is expressed in the number of seconds since January 1, 1970 00:00:00 GMT. The
+     * timestamp value MUST be a positive integer and MUST be equal or greater than the timestamp
+     * used in previous requests.
      */
- // @formatter:off
-    public static final OAuth1RequestProp TIMESTAMP = new OAuth1RequestProp("oauth_timestamp").declare(FlowStep.REQUEST)
-                                                                                              .declare(FlowStep.EXCHANGE_TOKEN)
-                                                                                              .declare(FlowStep.ACCESS_RESOURCE);
- // @formatter:on
+
+    public static final OAuth1RequestProp TIMESTAMP =
+            new OAuth1RequestProp("oauth_timestamp").declare(FlowStep.REQUEST)
+                                                    .declare(FlowStep.EXCHANGE_TOKEN)
+                                                    .declare(FlowStep.ACCESS_RESOURCE);
 
     /**
-     * A nonce is a random string, uniquely with that {@link #TIMESTAMP} generated by the client to allow the server to
-     * verify that a request has never been made before and helps prevent replay attacks when requests are made over a
-     * non-secure channel.
+     * A nonce is a random string, uniquely with that {@link #TIMESTAMP} generated by the client to
+     * allow the server to verify that a request has never been made before and helps prevent replay
+     * attacks when requests are made over a non-secure channel.
      */
- // @formatter:off
-    public static final OAuth1RequestProp NONCE = new OAuth1RequestProp("oauth_nonce").declare(FlowStep.REQUEST)
-                                                                                      .declare(FlowStep.EXCHANGE_TOKEN)
-                                                                                      .declare(FlowStep.ACCESS_RESOURCE);
- // @formatter:on
+
+    public static final OAuth1RequestProp NONCE =
+            new OAuth1RequestProp("oauth_nonce").declare(FlowStep.REQUEST)
+                                                .declare(FlowStep.EXCHANGE_TOKEN)
+                                                .declare(FlowStep.ACCESS_RESOURCE);
 
     /**
-     * If present, value MUST be {@code 1.0}
+     * If present, value MUST be {@code 1.0}.
      */
- // @formatter:off
-    public static final OAuth1RequestProp VERSION = new OAuth1RequestProp("oauth_version").declare(FlowStep.REQUEST, Constraint.OPTIONAL)
-                                                                                          .declare(FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
-                                                                                          .declare(FlowStep.ACCESS_RESOURCE, Constraint.OPTIONAL)
-                                                                                          .defaultValue("1.0");
- // @formatter:on
+
+    public static final OAuth1RequestProp VERSION =
+            new OAuth1RequestProp("oauth_version").declare(FlowStep.REQUEST, Constraint.OPTIONAL)
+                                                  .declare(FlowStep.EXCHANGE_TOKEN,
+                                                           Constraint.OPTIONAL)
+                                                  .declare(FlowStep.ACCESS_RESOURCE,
+                                                           Constraint.OPTIONAL).defaultValue("1.0");
 
     /**
-     * <li>{@code Request Token}: The temporary credentials token to exchange it for {@code Access Token}.</li>
-     * <li>{@code Access Token}: Used by the Consumer(client) to access the Protected Resources on behalf of the
-     * Resource Owner.</li>
+     * <li>{@code Request Token}: The temporary credentials token to exchange it for
+     * {@code Access Token}.</li>
+     * <li>{@code Access Token}: Used by the Consumer(client) to access the Protected Resources on
+     * behalf of the Resource Owner.</li>
      */
- // @formatter:off
-    public static final OAuth1RequestProp TOKEN = new OAuth1RequestProp("oauth_token").declare(FlowStep.AUTHORIZE)
-                                                                                      .declare(FlowStep.EXCHANGE_TOKEN)
-                                                                                      .declare(FlowStep.ACCESS_RESOURCE);
- // @formatter:on
+
+    public static final OAuth1RequestProp TOKEN =
+            new OAuth1RequestProp("oauth_token").declare(FlowStep.AUTHORIZE)
+                                                .declare(FlowStep.EXCHANGE_TOKEN)
+                                                .declare(FlowStep.ACCESS_RESOURCE);
 
     /**
      * The verification code.
      */
- // @formatter:off
-    public static final OAuth1RequestProp OAUTH_VERIFIER = new OAuth1RequestProp("oauth_verifier").declare(FlowStep.AUTHORIZE)
-                                                                                                  .declare(FlowStep.EXCHANGE_TOKEN);
- // @formatter:on
+
+    public static final OAuth1RequestProp OAUTH_VERIFIER =
+            new OAuth1RequestProp("oauth_verifier").declare(FlowStep.AUTHORIZE)
+                                                   .declare(FlowStep.EXCHANGE_TOKEN);
 
     public OAuth1RequestProp(String name) {
         super(name);
     }
 
-    OAuth1RequestProp(String name, Map<FlowStep, Constraint> steps) {
+    private OAuth1RequestProp(String name, Map<FlowStep, Constraint> steps) {
         super(name, steps);
     }
 
@@ -119,4 +122,5 @@ public final class OAuth1RequestProp extends OAuth1PropertyModel {
     public OAuth1RequestProp duplicate() {
         return new OAuth1RequestProp(this.getName(), this.getMapping()).setValue(this.getValue());
     }
+
 }

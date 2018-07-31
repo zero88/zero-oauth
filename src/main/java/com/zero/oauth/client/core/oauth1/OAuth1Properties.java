@@ -1,5 +1,9 @@
 package com.zero.oauth.client.core.oauth1;
 
+import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
+
 import com.zero.oauth.client.core.properties.IPropertiesFilter;
 import com.zero.oauth.client.core.properties.IPropertyModel;
 import com.zero.oauth.client.core.properties.PropertyStore;
@@ -7,11 +11,8 @@ import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.OAuthVersion;
 import com.zero.oauth.client.utils.ReflectionUtils;
 
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
-class OAuth1Properties<P extends IOAuth1PropertyMatcher> extends PropertyStore<P> implements IPropertiesFilter {
+class OAuth1Properties<P extends IOAuth1PropertyMatcher> extends PropertyStore<P>
+        implements IPropertiesFilter {
 
     protected OAuth1Properties(Class<P> clazz) {
         this.init(ReflectionUtils.getConstants(clazz));
@@ -19,7 +20,8 @@ class OAuth1Properties<P extends IOAuth1PropertyMatcher> extends PropertyStore<P
 
     @Override
     public final List<IPropertyModel> by(FlowStep step) {
-        return this.properties().stream().map(prop -> prop.match(step)).filter(Objects::nonNull).collect(Collectors.toList());
+        return this.properties().stream().map(prop -> prop.match(step)).filter(Objects::nonNull)
+                   .collect(Collectors.toList());
     }
 
     @SuppressWarnings("unchecked")
@@ -33,4 +35,5 @@ class OAuth1Properties<P extends IOAuth1PropertyMatcher> extends PropertyStore<P
     public final OAuthVersion getVersion() {
         return OAuthVersion.V1;
     }
+
 }

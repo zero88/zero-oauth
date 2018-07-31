@@ -2,7 +2,6 @@ package com.zero.oauth.client.type;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
@@ -24,8 +23,7 @@ public enum OAuthVersion {
      */
     V1("1.0a"),
     /**
-     * OAuth version 2.0
-     * <a href="https://tools.ietf.org/html/rfc6749">[RFC 6749]</a>
+     * OAuth version 2.0 <a href="https://tools.ietf.org/html/rfc6749">[RFC 6749]</a>
      * <p>
      * Specifications:
      * </p>
@@ -37,7 +35,7 @@ public enum OAuthVersion {
      */
     V2("2.0"),
     /**
-     * Just for programmatic
+     * Just for programmatic.
      */
     ALL("");
 

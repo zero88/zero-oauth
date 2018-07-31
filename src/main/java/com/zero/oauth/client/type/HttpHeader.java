@@ -3,6 +3,9 @@ package com.zero.oauth.client.type;
 import java.util.Arrays;
 import java.util.Optional;
 
+import lombok.RequiredArgsConstructor;
+
+@RequiredArgsConstructor
 public enum HttpHeader {
 
     /**
@@ -42,15 +45,11 @@ public enum HttpHeader {
 
     private final String name;
 
-    HttpHeader(final String name) {
-        this.name = name;
-    }
-
     /**
      * Returns a {@code HttpHeader} from a given string representation.
      *
-     * @param name
-     *        the string representation.
+     * @param name the string representation.
+     *
      * @return the HttpHeader.
      */
     public static Optional<HttpHeader> fromName(final String name) {

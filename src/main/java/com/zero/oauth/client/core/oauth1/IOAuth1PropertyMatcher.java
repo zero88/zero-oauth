@@ -8,33 +8,34 @@ interface IOAuth1PropertyMatcher extends IPropertyModel {
     /**
      * Declare required property belongs to given {@code FlowStep}.
      *
-     * @param step
-     *        OAuth flow step
+     * @param step OAuth flow step
+     *
      * @return Current instance
+     *
      * @see FlowStep
      */
-    public default <T extends OAuth1PropertyModel> T declare(FlowStep step) {
+    default <T extends OAuth1PropertyModel> T declare(FlowStep step) {
         return declare(step, Constraint.REQUIRED);
     }
 
     /**
      * Declare property belongs to given {@code FlowStep} and its constraint.
      *
-     * @param step
-     *        OAuth Flow step contains property
-     * @param constraint
-     *        Property constraint
+     * @param step       OAuth Flow step contains property
+     * @param constraint Property constraint
+     *
      * @return Current instance
+     *
      * @see FlowStep
      * @see Constraint
      */
-    public <T extends OAuth1PropertyModel> T declare(FlowStep step, Constraint constraint);
+    <T extends OAuth1PropertyModel> T declare(FlowStep step, Constraint constraint);
 
     /**
      * Check this is matched with the given {@code FlowStep}.
      *
-     * @param step
-     *        {@link FlowStep}
+     * @param step {@link FlowStep}
+     *
      * @return {@code null} if this property doesn't conform given {@code FlowStep}
      */
     IPropertyModel match(FlowStep step);

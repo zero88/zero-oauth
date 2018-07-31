@@ -1,7 +1,7 @@
 package com.zero.oauth.client.exceptions;
 
 /**
- * Represents a problem in the OAuth signing process
+ * Represents a problem in the OAuth signing process.
  */
 public class OAuthException extends RuntimeException {
 
@@ -18,4 +18,5 @@ public class OAuthException extends RuntimeException {
     public OAuthException(Exception e) {
         super(e);
     }
+
 }

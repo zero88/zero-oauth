@@ -24,4 +24,5 @@ public final class Strings {
         }
         return text.trim();
     }
+
 }

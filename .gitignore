@@ -43,4 +43,6 @@ gradle-app.setting
 .settings/
 # IntelliJ
 .idea
+*.iml
 bin/
+out/

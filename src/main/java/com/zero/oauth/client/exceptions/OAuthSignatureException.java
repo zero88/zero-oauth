@@ -1,7 +1,9 @@
 package com.zero.oauth.client.exceptions;
 
+import com.zero.oauth.client.type.SignatureMethod;
+
 /**
- * Specialized exception that represents a problem in the signature
+ * Specialized exception that represents a problem in the signature.
  */
 public class OAuthSignatureException extends OAuthException {
 
@@ -9,12 +11,15 @@ public class OAuthSignatureException extends OAuthException {
     private static final String MSG = "Error while signing string: %s";
 
     /**
+     * Constructor for signature exception.
      *
-     * @param stringToSign plain string that gets signed (HMAC-SHA, etc)
-     * @param e original exception
+     * @param signature Signature gets signed (HMAC-SHA, etc)
+     * @param e         original exception
+     *
+     * @see SignatureMethod
      */
-    public OAuthSignatureException(String stringToSign, Exception e) {
-        super(String.format(MSG, stringToSign), e);
+    public OAuthSignatureException(SignatureMethod signature, Exception e) {
+        super(String.format(MSG, signature), e);
     }
 
 }

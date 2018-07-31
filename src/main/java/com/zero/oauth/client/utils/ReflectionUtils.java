@@ -35,9 +35,11 @@ public final class ReflectionUtils {
             try {
                 consts.add((P) f.get(null));
             } catch (IllegalArgumentException | IllegalAccessException e) {
-                log.warn(new StringFormattedMessage("Failed to get field constant {}", f.getName()), e);
+                log.warn(new StringFormattedMessage("Failed to get field constant {}", f.getName()),
+                         e);
             }
         }
         return consts;
     }
+
 }

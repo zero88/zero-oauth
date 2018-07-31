@@ -10,12 +10,12 @@ public final class OAuth2ResponseProperties extends OAuth2Properties<OAuth2Respo
 
     private final boolean error;
 
-    OAuth2ResponseProperties(GrantType grantType) {
+    private OAuth2ResponseProperties(GrantType grantType) {
         super(grantType, OAuth2ResponseProp.class);
         this.error = false;
     }
 
-    OAuth2ResponseProperties(GrantType grantType, boolean error) {
+    private OAuth2ResponseProperties(GrantType grantType, boolean error) {
         super(grantType);
         for (OAuth2ResponseProp prop : ReflectionUtils.getConstants(OAuth2ResponseProp.class)) {
             if (prop.isError()) {
@@ -32,4 +32,5 @@ public final class OAuth2ResponseProperties extends OAuth2Properties<OAuth2Respo
     public static OAuth2ResponseProperties initError(GrantType grantType) {
         return new OAuth2ResponseProperties(grantType, true);
     }
+
 }

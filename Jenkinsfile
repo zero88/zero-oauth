@@ -1,7 +1,6 @@
-
 library identifier: 'notifications@master', retriever: modernSCM(
-  [$class: 'GitSCMSource',
-   remote: 'https://github.com/zero-88/jenkins-pipeline-shared.git'])
+        [$class: 'GitSCMSource',
+         remote: 'https://github.com/zero-88/jenkins-pipeline-shared.git'])
 
 pipeline {
     agent {
@@ -15,7 +14,7 @@ pipeline {
                 sh "gradle clean assemble"
                 script {
                     VERSION = sh(script: "gradle properties | grep 'version:' | awk '{print \$2}'", returnStdout: true).trim()
-                }  
+                }
             }
             post {
                 success {
@@ -59,7 +58,7 @@ pipeline {
     }
 
     post {
-        always {            
+        always {
             emailNotifications VERSION
         }
     }
