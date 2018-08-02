@@ -24,14 +24,14 @@ public final class Urls {
      * @see <a href="https://tools.ietf.org/html/rfc3986#section-3.2">Authority syntax</a>
      */
     public static final String AUTHORITY_PATTERN =
-            "(www\\.)?(([\\w-]+\\.)+[\\w]{2,63}|[\\w-]+)(:[1-9]\\d{1,4})?/?";
+        "(www\\.)?(([\\w-]+\\.)+[\\w]{2,63}|[\\w-]+)(:[1-9]\\d{1,4})?/?";
     /**
      * Path syntax.
      *
      * @see <a href="https://tools.ietf.org/html/rfc3986#section-3.3">Path syntax</a>
      */
     public static final String PATH_PATTERN =
-            "(/([\\w\\$\\-\\.\\+\\!\\*\\'\\(\\)\\,\\;\\:\\@\\&\\=]|(\\%[a-f0-9]{2}))*)*";
+        "(/([\\w\\$\\-\\.\\+\\!\\*\\'\\(\\)\\,\\;\\:\\@\\&\\=]|(\\%[a-f0-9]{2}))*)*";
     /**
      * URL syntax. In this application case, any {@code query} or {@code fragment} will be not accepted.
      *

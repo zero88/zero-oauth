@@ -54,8 +54,8 @@ public class OAuth2ImplicitPropTest {
     @Test
     public void testRequestParams_Implicit_Value() {
         OAuth2RequestProperties params = OAuth2RequestProperties.init(GrantType.IMPLICIT);
-        OAuth2RequestProp customValue2 = params.get(OAuth2RequestProp.RESPONSE_TYPE.getName());
-        assertNotSame(OAuth2RequestProp.RESPONSE_TYPE, customValue2);
+        OAuth2RequestProperty customValue2 = params.get(OAuth2RequestProperty.RESPONSE_TYPE.getName());
+        assertNotSame(OAuth2RequestProperty.RESPONSE_TYPE, customValue2);
         assertEquals("token", customValue2.getValue());
     }
 

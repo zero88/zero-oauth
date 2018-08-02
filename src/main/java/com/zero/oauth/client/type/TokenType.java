@@ -9,6 +9,7 @@ import lombok.ToString;
  * OAuth Token type in version {@code 2.0}.
  *
  * @see OAuthVersion#V2
+ * @since 1.0.0
  */
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)

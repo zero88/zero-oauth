@@ -10,17 +10,12 @@ import com.zero.oauth.client.type.HttpMethod;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+@Getter
 @RequiredArgsConstructor
 public class OAuth1Client<T extends OAuth1Api> implements OAuthClient<T> {
 
     private final T api;
-    @Getter
     private CallbackHandler callback;
-
-    @Override
-    public T getOAuthApi() {
-        return this.api;
-    }
 
     @Override
     public <P extends IResponsePropModel> IPropertyStore<P> generateAuthorizeRedirect() {
@@ -39,7 +34,7 @@ public class OAuth1Client<T extends OAuth1Api> implements OAuthClient<T> {
 
     @Override
     public <P extends IResponsePropModel, R extends IPropertyModel> IPropertyStore<P> request(
-            HttpMethod method, String url, IPropertyStore<R> payload) {
+        HttpMethod method, String url, IPropertyStore<R> payload) {
         return null;
     }
 

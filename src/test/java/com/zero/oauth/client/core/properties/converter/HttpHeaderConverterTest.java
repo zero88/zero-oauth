@@ -9,8 +9,8 @@ import java.util.Arrays;
 import org.junit.Test;
 
 import com.zero.oauth.client.core.oauth1.OAuth1RequestProperties;
-import com.zero.oauth.client.core.oauth1.OAuth1ResponseProp;
 import com.zero.oauth.client.core.oauth1.OAuth1ResponseProperties;
+import com.zero.oauth.client.core.oauth1.OAuth1ResponseProperty;
 import com.zero.oauth.client.core.oauth2.OAuth2RequestProperties;
 import com.zero.oauth.client.core.properties.IPropertyModel;
 import com.zero.oauth.client.core.properties.IPropertyStore;
@@ -19,7 +19,7 @@ import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.GrantType;
 import com.zero.oauth.client.type.SignatureMethod;
 
-public class HeaderConverterTest {
+public class HttpHeaderConverterTest {
 
     private static final String CLIENT_ID = "0oaftyjk6bi1jgGFN0h7";
     private static final String REDIRECT_URI = "http://localhost:8080/oauth/callback";
@@ -42,7 +42,7 @@ public class HeaderConverterTest {
         requestProperties.update("redirect_uri", REDIRECT_URI);
         requestProperties.update("scope", SCOPE);
         requestProperties.update("state", STATE);
-        String headers = new RequestHeaderConverter<>(requestProperties).serialize(FlowStep.AUTHORIZE);
+        String headers = new HttpHeaderConverter<>(requestProperties).serialize(FlowStep.AUTHORIZE);
         System.out.println("Serialize: " + headers);
         assertThat(Arrays.asList(headers.split("\\,")),
                    hasItems("response_type=\"code\"", "client_id=\"" + CLIENT_ID + "\"",
@@ -52,8 +52,8 @@ public class HeaderConverterTest {
 
     @Test(expected = OAuthParameterException.class)
     public void test_RequestProp_ParameterConvert_MissingValue() {
-        new RequestHeaderConverter<>(OAuth2RequestProperties.init(GrantType.AUTH_CODE))
-                .serialize(FlowStep.AUTHORIZE);
+        new HttpHeaderConverter<>(OAuth2RequestProperties.init(GrantType.AUTH_CODE))
+            .serialize(FlowStep.AUTHORIZE);
     }
 
     @Test
@@ -65,7 +65,7 @@ public class HeaderConverterTest {
         requestProperties.update("oauth_signature", SIGNATURE);
         requestProperties.update("oauth_timestamp", TIMESTAMP);
         requestProperties.update("oauth_nonce", NONCE);
-        String headers = new RequestHeaderConverter<>(requestProperties).serialize(FlowStep.REQUEST);
+        String headers = new HttpHeaderConverter<>(requestProperties).serialize(FlowStep.REQUEST);
         System.out.println("Serialize: " + headers);
         assertThat(Arrays.asList(headers.split(",")), hasItems("oauth_consumer_key=\"" + CLIENT_ID + "\"",
                                                                "oauth_callback=\"" + REDIRECT_URI_ENCODE +
@@ -81,17 +81,18 @@ public class HeaderConverterTest {
         String headers = "oauth_token=\"" + TOKEN + "\"," + "oauth_token_secret=\"" + TOKEN_SECRET + "\"," +
                          "oauth_callback_confirmed=\"" + TOKEN_CONFIRMED + "\"";
         System.out.println("Deserialize: " + headers);
-        IPropertyStore<IPropertyModel> store = new RequestHeaderConverter<>(new OAuth1ResponseProperties())
-                .deserialize(headers, FlowStep.REQUEST);
-        assertEquals(TOKEN, store.get(OAuth1ResponseProp.TOKEN.getName()).getValue());
-        assertEquals(TOKEN_SECRET, store.get(OAuth1ResponseProp.TOKEN_SECRET.getName()).getValue());
-        assertEquals(TOKEN_CONFIRMED, store.get(OAuth1ResponseProp.CALLBACK_CONFIRMED.getName()).getValue());
+        IPropertyStore<IPropertyModel> store = new HttpHeaderConverter<>(new OAuth1ResponseProperties())
+            .deserialize(headers, FlowStep.REQUEST);
+        assertEquals(TOKEN, store.get(OAuth1ResponseProperty.TOKEN.getName()).getValue());
+        assertEquals(TOKEN_SECRET, store.get(OAuth1ResponseProperty.TOKEN_SECRET.getName()).getValue());
+        assertEquals(TOKEN_CONFIRMED,
+                     store.get(OAuth1ResponseProperty.CALLBACK_CONFIRMED.getName()).getValue());
     }
 
     @Test(expected = OAuthParameterException.class)
     public void test_ResponseProp_ParameterConvert_WrongSyntax() {
         String headers = "oauth_token==\"" + TOKEN + "\",";
-        new RequestHeaderConverter<>(new OAuth1ResponseProperties()).deserialize(headers, FlowStep.REQUEST);
+        new HttpHeaderConverter<>(new OAuth1ResponseProperties()).deserialize(headers, FlowStep.REQUEST);
     }
 
 }

@@ -13,19 +13,28 @@ import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.utils.OAuthEncoder;
 import com.zero.oauth.client.utils.Strings;
 
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * HTTP Query converter.
+ *
+ * @param <T> Type of {@code OAuthProperties}
+ * @see <a href="https://tools.ietf.org/html/rfc3986#section-3.4">Query syntax</a>
+ * @see OAuthProperties
+ */
 @RequiredArgsConstructor
-public class RequestParamConverter<T extends OAuthProperties> implements PropertiesConverter<T> {
+@Getter
+public class HttpQueryConverter<T extends OAuthProperties> implements PropertiesConverter<T> {
 
     private static final String EQUAL = "=";
     private static final String SEPARATE = "&";
-    private final T properties;
+    private final T propertyStore;
 
     @Override
     public String serialize(FlowStep step) {
-        return this.properties.by(step).stream().map(this::compute).filter(Objects::nonNull)
-                              .collect(Collectors.joining(SEPARATE));
+        return this.propertyStore.by(step).stream().map(this::compute).filter(Objects::nonNull)
+                                 .collect(Collectors.joining(SEPARATE));
     }
 
     @Override
@@ -35,16 +44,11 @@ public class RequestParamConverter<T extends OAuthProperties> implements Propert
             String[] keyValues = property.split("\\" + EQUAL);
             if (keyValues.length != 2) {
                 throw new OAuthParameterException(
-                        "Property doesn't conform the syntax: `key`" + EQUAL + "`value`");
+                    "Property doesn't conform the syntax: `key`" + EQUAL + "`value`");
             }
             map.put(OAuthEncoder.decode(keyValues[0]), OAuthEncoder.decode(keyValues[1]));
         }
         return this.deserialize(map, step);
-    }
-
-    @Override
-    public T getPropertyStore() {
-        return this.properties;
     }
 
     private String compute(IPropertyModel property) {

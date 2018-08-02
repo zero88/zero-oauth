@@ -66,15 +66,17 @@ public class OAuth2AuthCodePropTest {
 
     @Test
     public void test_RequestProp_ResponseType() {
-        OAuth2RequestProp customValue = requestProperties.get(OAuth2RequestProp.RESPONSE_TYPE.getName());
-        assertNotSame(OAuth2RequestProp.RESPONSE_TYPE, customValue);
+        OAuth2RequestProperty customValue =
+            requestProperties.get(OAuth2RequestProperty.RESPONSE_TYPE.getName());
+        assertNotSame(OAuth2RequestProperty.RESPONSE_TYPE, customValue);
         assertEquals("code", customValue.getValue());
     }
 
     @Test
     public void test_RequestProp_GrantType() {
-        OAuth2RequestProp customValue2 = requestProperties.get(OAuth2RequestProp.GRANT_TYPE.getName());
-        assertNotSame(OAuth2RequestProp.GRANT_TYPE, customValue2);
+        OAuth2RequestProperty customValue2 =
+            requestProperties.get(OAuth2RequestProperty.GRANT_TYPE.getName());
+        assertNotSame(OAuth2RequestProperty.GRANT_TYPE, customValue2);
         assertEquals("authorization_code", customValue2.getValue());
     }
 

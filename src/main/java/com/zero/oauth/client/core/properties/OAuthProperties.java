@@ -7,6 +7,8 @@ import com.zero.oauth.client.type.OAuthVersion;
 
 /**
  * OAuth Properties. It contains a set of method to filter properties in {@code property store}.
+ *
+ * @since 1.0.0
  */
 public interface OAuthProperties {
 

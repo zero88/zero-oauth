@@ -10,8 +10,8 @@ public class OAuth1ApiTest {
     @Test
     public void init() {
         OAuthApi api =
-                OAuthApi.init("clientId", "clientSecret", "requestTokenUrl", "authorizeUrl", "accessTokenUrl")
-                        .registerApiBaseUrl("apiBaseUrl");
+            OAuthApi.init("clientId", "clientSecret", "requestTokenUrl", "authorizeUrl", "accessTokenUrl")
+                    .registerApiBaseUrl("apiBaseUrl");
         Assert.assertEquals("clientId", api.getClientId());
         Assert.assertEquals("clientSecret", api.getClientSecret());
         Assert.assertEquals("requestTokenUrl", api.getRequestTokenUrl());

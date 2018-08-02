@@ -1,7 +1,7 @@
 package com.zero.oauth.client.client;
 
-import com.zero.oauth.client.core.oauth1.OAuth1RequestProp;
 import com.zero.oauth.client.core.oauth1.OAuth1RequestProperties;
+import com.zero.oauth.client.core.oauth1.OAuth1RequestProperty;
 import com.zero.oauth.client.utils.Strings;
 
 import lombok.Getter;
@@ -35,8 +35,8 @@ public class OAuth1Api implements OAuthApi {
         this.authorizeUrl = Strings.requireNotBlank(authorizeUrl);
         this.accessTokenUrl = Strings.requireNotBlank(accessTokenUrl);
         this.defaultPayload = new OAuth1RequestProperties();
-        this.defaultPayload.update(OAuth1RequestProp.CONSUMER_KEY.getName(), clientId);
-        this.defaultPayload.update(OAuth1RequestProp.CONSUMER_SECRET.getName(), clientSecret);
+        this.defaultPayload.update(OAuth1RequestProperty.CONSUMER_KEY.getName(), clientId);
+        this.defaultPayload.update(OAuth1RequestProperty.CONSUMER_SECRET.getName(), clientSecret);
     }
 
     @SuppressWarnings("unchecked")

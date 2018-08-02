@@ -55,8 +55,8 @@ public class OAuth2ClientCredentialPropTest {
     @Test
     public void testRequestParams_Value() {
         OAuth2RequestProperties params = OAuth2RequestProperties.init(GrantType.CLIENT_CREDENTIALS);
-        OAuth2RequestProp customValue2 = params.get(OAuth2RequestProp.GRANT_TYPE.getName());
-        assertNotSame(OAuth2RequestProp.GRANT_TYPE, customValue2);
+        OAuth2RequestProperty customValue2 = params.get(OAuth2RequestProperty.GRANT_TYPE.getName());
+        assertNotSame(OAuth2RequestProperty.GRANT_TYPE, customValue2);
         assertEquals("client_credentials", customValue2.getValue());
     }
 

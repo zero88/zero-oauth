@@ -35,6 +35,7 @@ public class PropertyModel implements IPropertyModel {
     /**
      * Mark property is required to further error validation.
      *
+     * @param <T> Any type of {@code Property Model}
      * @return Current instance
      */
     @SuppressWarnings("unchecked")
@@ -46,6 +47,7 @@ public class PropertyModel implements IPropertyModel {
     /**
      * Mark property is recommendation to further warn validation.
      *
+     * @param <T> Any type of {@code Property Model}
      * @return Current instance
      */
     @SuppressWarnings("unchecked")
@@ -112,8 +114,8 @@ public class PropertyModel implements IPropertyModel {
     }
 
     protected <T extends IPropertyModel> T duplicate() {
-        return new PropertyModel(getVersion(), getName()).constraint(this.constraint).setValue(
-            this.getValue());
+        return new PropertyModel(getVersion(), getName()).constraint(this.constraint)
+                                                         .setValue(this.getValue());
     }
 
 }

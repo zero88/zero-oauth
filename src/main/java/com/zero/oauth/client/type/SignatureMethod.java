@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
  * OAuth {@code 1.0a} signature method.
  *
  * @see OAuthVersion#V1
+ * @since 1.0.0
  */
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -16,7 +17,7 @@ public enum SignatureMethod {
     /**
      * {@code HMAC-SHA1} signature algorithm where the Signature Base String is the text and the key is the
      * concatenated values (each first encoded per Parameter Encoding) of the Consumer Secret and Token
-     * Secret, separated by an '&' character (ASCII code 38) even if empty.
+     * Secret, separated by an '&amp;' character (ASCII code 38) even if empty.
      * <ul>
      * <li>More in <a href="https://oauth.net/core/1.0a/#anchor15">OAuth HMAC-SHA1</a></li>
      * <li>More in <a href="https://oauth.net/core/1.0a/#RFC2104">[RFC2104]</a></li>

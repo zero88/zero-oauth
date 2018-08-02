@@ -6,18 +6,18 @@ import com.zero.oauth.client.utils.Reflections;
 import lombok.Getter;
 
 @Getter
-public final class OAuth2ResponseProperties extends OAuth2Properties<OAuth2ResponseProp> {
+public final class OAuth2ResponseProperties extends OAuth2Properties<OAuth2ResponseProperty> {
 
     private final boolean error;
 
     private OAuth2ResponseProperties(GrantType grantType) {
-        super(grantType, OAuth2ResponseProp.class);
+        super(grantType, OAuth2ResponseProperty.class);
         this.error = false;
     }
 
     private OAuth2ResponseProperties(GrantType grantType, boolean error) {
         super(grantType);
-        for (OAuth2ResponseProp prop : Reflections.getConstants(OAuth2ResponseProp.class)) {
+        for (OAuth2ResponseProperty prop : Reflections.getConstants(OAuth2ResponseProperty.class)) {
             if (prop.isError()) {
                 this.add(prop);
             }

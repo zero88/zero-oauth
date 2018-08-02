@@ -69,11 +69,11 @@ public class OAuth2DeviceCodePropTest {
     @Test
     public void testRequestParams_Value() {
         OAuth2RequestProperties params = OAuth2RequestProperties.init(GrantType.DEVICE_CODE);
-        OAuth2RequestProp customValue = params.get(OAuth2RequestProp.RESPONSE_TYPE.getName());
-        assertNotSame(OAuth2RequestProp.RESPONSE_TYPE, customValue);
+        OAuth2RequestProperty customValue = params.get(OAuth2RequestProperty.RESPONSE_TYPE.getName());
+        assertNotSame(OAuth2RequestProperty.RESPONSE_TYPE, customValue);
         assertEquals("device_code", customValue.getValue());
-        OAuth2RequestProp customValue2 = params.get(OAuth2RequestProp.GRANT_TYPE.getName());
-        assertNotSame(OAuth2RequestProp.GRANT_TYPE, customValue2);
+        OAuth2RequestProperty customValue2 = params.get(OAuth2RequestProperty.GRANT_TYPE.getName());
+        assertNotSame(OAuth2RequestProperty.GRANT_TYPE, customValue2);
         assertEquals("urn:ietf:params:oauth:grant-type:device_code", customValue2.getValue());
     }
 

@@ -13,6 +13,7 @@ import lombok.RequiredArgsConstructor;
  * Defines OAuth 2.0 authorization grant type.
  *
  * @see OAuthVersion#V2
+ * @since 1.0.0
  */
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
@@ -34,7 +35,7 @@ public enum GrantType {
              Arrays.asList(FlowStep.AUTHORIZE, FlowStep.REVOKE_TOKEN, FlowStep.ACCESS_RESOURCE)),
 
     /**
-     * The {@code deprecated implicit} grant type
+     * The {@code deprecated implicit} grant type.
      */
     IMPLICIT_DEPRECATED("token", "authorization_code", Arrays
         .asList(FlowStep.AUTHORIZE, FlowStep.EXCHANGE_TOKEN, FlowStep.REVOKE_TOKEN,

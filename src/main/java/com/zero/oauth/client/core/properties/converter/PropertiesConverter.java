@@ -15,6 +15,7 @@ import com.zero.oauth.client.type.FlowStep;
  *
  * @param <T> Property store type that implemented {@link PropertiesConverter}
  * @see IPropertyStore
+ * @since 1.0.0
  */
 public interface PropertiesConverter<T extends OAuthProperties> {
 

@@ -5,6 +5,11 @@ import java.util.Optional;
 
 import lombok.RequiredArgsConstructor;
 
+/**
+ * HTTP Header common for authorization.
+ *
+ * @since 1.0.0
+ */
 @RequiredArgsConstructor
 public enum HttpHeader {
 

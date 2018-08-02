@@ -5,6 +5,11 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import lombok.ToString;
 
+/**
+ * Defines OAuth versions.
+ *
+ * @since 1.0.0
+ */
 @Getter
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @ToString(doNotUseGetters = true, includeFieldNames = false, onlyExplicitlyIncluded = true)

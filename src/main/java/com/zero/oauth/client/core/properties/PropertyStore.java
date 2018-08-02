@@ -32,10 +32,10 @@ public class PropertyStore<P extends IPropertyModel> implements IPropertyStore<P
 
     protected Collection<P> properties() {
         Collector<Entry<String, P>, ?, Map<String, P>> map =
-                Collectors.toMap(Entry::getKey, Entry::getValue, (actual, prop) -> actual);
+            Collectors.toMap(Entry::getKey, Entry::getValue, (actual, prop) -> actual);
         Map<String, P> properties =
-                Stream.of(this.actualProps, this.defaultProps).map(Map::entrySet).flatMap(Collection::stream)
-                      .collect(map);
+            Stream.of(this.actualProps, this.defaultProps).map(Map::entrySet).flatMap(Collection::stream)
+                  .collect(map);
         return properties.values();
     }
 

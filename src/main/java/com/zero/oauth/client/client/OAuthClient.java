@@ -13,13 +13,20 @@ import com.zero.oauth.client.type.HttpMethod;
  *
  * @param <T> The type of {@code OAuth API} that is maintained by {@code OAuth client}
  * @see OAuthApi
+ * @since 1.0.0
  */
 public interface OAuthClient<T extends OAuthApi> {
 
     /**
      * Create an instance of OAuth v1.0a client.
      *
+     * @param clientId        Consumer key is required value, which you get from registration.
+     * @param clientSecret    Consumer Secrets required value, which you get from registration.
+     * @param requestTokenUrl Request Token endpoint for OAuth v1, it is required value.
+     * @param authorizeUrl    Endpoint for user authorization of OAuth v1, it is required value.
+     * @param accessTokenUrl  Access Token endpoint for OAuth v1, it is required value.
      * @return OAuth client version 1
+     * @throws IllegalArgumentException if any missing required value.
      * @see OAuthApi#init(String, String, String, String, String)
      * @see OAuth1Api
      */
@@ -32,7 +39,14 @@ public interface OAuthClient<T extends OAuthApi> {
     /**
      * Create an instance of OAuth v2 client.
      *
+     * @param clientId       Client ID is required value, which you get from client registration.
+     * @param clientSecret   Client Secret is required value, which you get from registration.
+     * @param authorizeUrl   Endpoint for user authorization of OAuth v2, it is required value.
+     * @param accessTokenUrl RAccess Token endpoint for OAuth v2, it is required value.
+     * @param grantType      Define client use which OAuth v2 grant type, it is required value.
      * @return OAuth client version 2
+     * @throws IllegalArgumentException if any missing required value.
+     * @see GrantType
      * @see OAuthApi#init(String, String, String, String, GrantType)
      * @see OAuth2Api
      */
@@ -47,7 +61,7 @@ public interface OAuthClient<T extends OAuthApi> {
      *
      * @return An OAuth API is wrapped by OAuth Client
      */
-    T getOAuthApi();
+    T getApi();
 
     /**
      * Generate the authorize redirect.

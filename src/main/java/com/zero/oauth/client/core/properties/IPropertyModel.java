@@ -8,6 +8,8 @@ import com.zero.oauth.client.type.HttpPlacement;
 
 /**
  * Defines an OAuth property in HTTP request, HTTP response or HTTP header.
+ *
+ * @since 1.0.0
  */
 public interface IPropertyModel {
 
@@ -29,6 +31,7 @@ public interface IPropertyModel {
     /**
      * Set value.
      *
+     * @param <T>   Any type of {@code Property Model}
      * @param value Any value but have to implement {@link Object#toString()}
      * @return itself
      */
@@ -65,6 +68,7 @@ public interface IPropertyModel {
     /**
      * Set constraint.
      *
+     * @param <T>   Any type of {@code Property Model}
      * @param value Constraint value
      * @return itself
      */

@@ -29,9 +29,10 @@ class OAuth2Properties<P extends OAuth2PropertyMatcher> extends PropertyStore<P>
                              .collect(Collectors.toList()));
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public final List<IPropertyModel> by(FlowStep step) {
-        return this.properties().stream().map(prop -> prop.match(this.grantType, step))
+    public final <T extends IPropertyModel> List<T> by(FlowStep step) {
+        return this.properties().stream().map(prop -> (T) prop.match(this.grantType, step))
                    .filter(Objects::nonNull).collect(Collectors.toList());
     }
 

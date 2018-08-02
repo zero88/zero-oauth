@@ -5,13 +5,16 @@ import com.zero.oauth.client.type.GrantType;
 
 /**
  * OAuth API interface.
+ *
+ * @since 1.0.0
  */
 public interface OAuthApi {
 
     /**
      * Factory method to create OAuth v1 API.
      *
-     * @see OAuth1Api
+     * @return OAuth v1 API
+     * @see OAuth1Api#init(String, String, String, String, String)
      */
     static OAuthApi init(String clientId, String clientSecret, String requestTokenUrl, String authorizeUrl,
                          String accessTokenUrl) {
@@ -21,7 +24,8 @@ public interface OAuthApi {
     /**
      * Factory method to create OAuth v2 API.
      *
-     * @see OAuth2Api
+     * @return OAuth v2 API
+     * @see OAuth2Api#init(String, String, String, String, GrantType)
      */
     static OAuthApi init(String clientId, String clientSecret, String authorizeUrl, String accessTokenUrl,
                          GrantType grantType) {

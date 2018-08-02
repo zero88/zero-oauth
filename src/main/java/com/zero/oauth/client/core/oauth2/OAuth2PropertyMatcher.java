@@ -6,12 +6,15 @@ import com.zero.oauth.client.type.GrantType;
 
 /**
  * OAuth v2 matcher.
+ *
+ * @since 1.0.0
  */
 interface OAuth2PropertyMatcher extends IPropertyModel {
 
     /**
      * Declare required property belongs to given {@code GrantType} and {@code FlowStep}.
      *
+     * @param <T>       Type of implementation of property model
      * @param grantType OAuth Grant Type contains property
      * @param step      OAuth Flow step contains property
      * @return Current instance
@@ -25,6 +28,7 @@ interface OAuth2PropertyMatcher extends IPropertyModel {
     /**
      * Declare property belongs to given {@code GrantType} and {@code FlowStep} and its constraint.
      *
+     * @param <T>        Type of implementation of property model
      * @param grantType  OAuth Grant Type contains property
      * @param step       OAuth Flow step contains property
      * @param constraint Property constraint
@@ -38,15 +42,17 @@ interface OAuth2PropertyMatcher extends IPropertyModel {
     /**
      * Check this is matched with the given {@code GrantType} and {@code FlowStep}.
      *
+     * @param <T>       Type of implementation of property model
      * @param grantType {@link GrantType}
      * @param step      {@link FlowStep}
      * @return {@code null} if this property doesn't conform given {@code GrantType} and {@code FlowStep}
      */
-    IPropertyModel match(GrantType grantType, FlowStep step);
+    <T extends IPropertyModel> T match(GrantType grantType, FlowStep step);
 
     /**
      * Check this is matched with the given {@code GrantType}.
      *
+     * @param <T>       Type of implementation of property model
      * @param grantType {@link GrantType}
      * @return {@code null} if this property doesn't conform given {@code GrantType}
      */

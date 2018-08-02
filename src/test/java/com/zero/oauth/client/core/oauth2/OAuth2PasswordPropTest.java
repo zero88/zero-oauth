@@ -57,8 +57,8 @@ public class OAuth2PasswordPropTest {
     @Test
     public void testRequestParams_Implicit_Value() {
         OAuth2RequestProperties params = OAuth2RequestProperties.init(GrantType.PASSWORD);
-        OAuth2RequestProp customValue2 = params.get(OAuth2RequestProp.GRANT_TYPE.getName());
-        assertNotSame(OAuth2RequestProp.GRANT_TYPE, customValue2);
+        OAuth2RequestProperty customValue2 = params.get(OAuth2RequestProperty.GRANT_TYPE.getName());
+        assertNotSame(OAuth2RequestProperty.GRANT_TYPE, customValue2);
         assertEquals("password", customValue2.getValue());
     }
 

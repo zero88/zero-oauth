@@ -15,6 +15,12 @@ import com.zero.oauth.client.exceptions.OAuthException;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 
+/**
+ * OAuth Encode/Decode Utilities for URI Query or HTTP Header.
+ *
+ * @see <a href="https://tools.ietf.org/html/rfc3986#section-2">Character encoding</a>
+ * @since 1.0.0
+ */
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class OAuthEncoder {
 
@@ -28,6 +34,16 @@ public final class OAuthEncoder {
         ENCODING_RULES = Collections.unmodifiableMap(rules);
     }
 
+    /**
+     * Encode plain text in {@code UTF-8} encoding and follow standardization format.
+     *
+     * @param plain text to encode
+     * @return Encoded value
+     * @see <a href="https://tools.ietf.org/html/rfc5849#section-3.6">Percent encoding</a>
+     * @see <a href="https://tools.ietf.org/html/rfc3986#section-2.2">Reserved Characters</a>
+     * @see <a href="https://tools.ietf.org/html/rfc3986#section-2.3">Unreserved Characters</a>
+     * @see <a href="https://tools.ietf.org/html/rfc3986#section-2.4">When to Encode or Decode</a>
+     */
     public static String encode(String plain) {
         Objects.requireNonNull(plain, "Cannot encode null object");
         String encoded;
@@ -43,10 +59,12 @@ public final class OAuthEncoder {
         return encoded;
     }
 
-    private static String applyRule(String encoded, String toReplace, String replacement) {
-        return encoded.replaceAll(Pattern.quote(toReplace), replacement);
-    }
-
+    /**
+     * Decode encoded text for human readable.
+     *
+     * @param encoded Encoded value to decode
+     * @return Plain text
+     */
     public static String decode(String encoded) {
         Objects.requireNonNull(encoded, "Cannot decode null object");
         try {
@@ -55,6 +73,10 @@ public final class OAuthEncoder {
             throw new OAuthException("Charset not found while decoding string: " + StandardCharsets.UTF_8,
                                      uee);
         }
+    }
+
+    private static String applyRule(String encoded, String toReplace, String replacement) {
+        return encoded.replaceAll(Pattern.quote(toReplace), replacement);
     }
 
 }

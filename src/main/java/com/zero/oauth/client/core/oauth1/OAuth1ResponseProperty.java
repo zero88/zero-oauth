@@ -14,49 +14,49 @@ import lombok.Getter;
  * @see PropertyModel
  */
 @Getter
-public class OAuth1ResponseProp extends OAuth1PropertyModel implements IResponsePropModel {
+public class OAuth1ResponseProperty extends OAuth1PropertyModel implements IResponsePropModel {
 
     /**
      * The Request Token or Access Token.
      */
 
-    public static final OAuth1ResponseProp TOKEN =
-            new OAuth1ResponseProp("oauth_token").declare(FlowStep.REQUEST).declare(FlowStep.AUTHORIZE)
+    public static final OAuth1ResponseProperty TOKEN =
+        new OAuth1ResponseProperty("oauth_token").declare(FlowStep.REQUEST).declare(FlowStep.AUTHORIZE)
                                                  .declare(FlowStep.EXCHANGE_TOKEN);
 
     /**
      * The Token Secret.
      */
 
-    public static final OAuth1ResponseProp TOKEN_SECRET =
-            new OAuth1ResponseProp("oauth_token_secret").declare(FlowStep.REQUEST)
+    public static final OAuth1ResponseProperty TOKEN_SECRET =
+        new OAuth1ResponseProperty("oauth_token_secret").declare(FlowStep.REQUEST)
                                                         .declare(FlowStep.EXCHANGE_TOKEN);
 
     /**
      * MUST be present and set to "true". The parameter is used to differentiate from previous versions of the
      * protocol.
      */
-    public static final OAuth1ResponseProp CALLBACK_CONFIRMED =
-            new OAuth1ResponseProp("oauth_callback_confirmed").declare(FlowStep.REQUEST);
+    public static final OAuth1ResponseProperty CALLBACK_CONFIRMED =
+        new OAuth1ResponseProperty("oauth_callback_confirmed").declare(FlowStep.REQUEST);
     /**
      * The verification code.
      */
-    public static final OAuth1ResponseProp VERIFIER =
-            new OAuth1ResponseProp("oauth_verifier").declare(FlowStep.AUTHORIZE);
+    public static final OAuth1ResponseProperty VERIFIER =
+        new OAuth1ResponseProperty("oauth_verifier").declare(FlowStep.AUTHORIZE);
 
     private boolean error = false;
 
-    public OAuth1ResponseProp(String name) {
+    public OAuth1ResponseProperty(String name) {
         super(name);
     }
 
-    private OAuth1ResponseProp(String name, Map<FlowStep, Constraint> steps) {
+    private OAuth1ResponseProperty(String name, Map<FlowStep, Constraint> steps) {
         super(name, steps);
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public OAuth1ResponseProp error() {
+    public OAuth1ResponseProperty error() {
         this.error = true;
         return this;
     }
@@ -68,9 +68,9 @@ public class OAuth1ResponseProp extends OAuth1PropertyModel implements IResponse
 
     @SuppressWarnings("unchecked")
     @Override
-    public OAuth1ResponseProp duplicate() {
-        OAuth1ResponseProp prop =
-                new OAuth1ResponseProp(this.getName(), this.getMapping()).setValue(this.getValue());
+    public OAuth1ResponseProperty duplicate() {
+        OAuth1ResponseProperty prop =
+            new OAuth1ResponseProperty(this.getName(), this.getMapping()).setValue(this.getValue());
         if (this.isError()) {
             prop.error();
         }

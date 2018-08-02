@@ -55,6 +55,7 @@ class OAuth1PropertyModel extends PropertyModel implements OAuth1PropertyMatcher
     /**
      * Recommendation value depends on OAuth flow step. It is not capable to use this method.
      *
+     * @param <T> Type of implementation of property model
      * @throws UnsupportedOperationException Raise exception
      * @deprecated Use {@link #declare(FlowStep, Constraint)}
      */

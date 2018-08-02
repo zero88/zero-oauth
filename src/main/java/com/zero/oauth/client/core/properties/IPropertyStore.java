@@ -6,11 +6,14 @@ package com.zero.oauth.client.core.properties;
  * @param <P> Indicates that for this instantiation of the store, the type of {@code IPropertyModel}
  *            implementation.
  * @see IPropertyModel
+ * @since 1.0.0
  */
 public interface IPropertyStore<P extends IPropertyModel> {
 
     /**
      * Add new property in store.
+     *
+     * @param property Property
      */
     void add(P property);
 

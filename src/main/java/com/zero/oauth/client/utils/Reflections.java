@@ -12,14 +12,34 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
+/**
+ * Reflections Utilities.
+ * @since 1.0.0
+ */
 @Log4j2
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Reflections {
 
+    /**
+     * Get Constants with same type with specified class.
+     *
+     * @param destClazz Class to find constants
+     * @param <T>       Type of class
+     * @return list of constants
+     */
     public static <T> List<T> getConstants(Class<T> destClazz) {
         return Reflections.getConstants(destClazz, destClazz);
     }
 
+    /**
+     * Get Constants with given type from specified class.
+     *
+     * @param destClazz Class to find constants
+     * @param findClazz Class of constant
+     * @param <T>       Type of find class
+     * @param <P>       Type of constants class
+     * @return list of constants value
+     */
     @SuppressWarnings("unchecked")
     public static <T, P> List<P> getConstants(Class<T> destClazz, Class<P> findClazz) {
         List<P> consts = new ArrayList<>();
