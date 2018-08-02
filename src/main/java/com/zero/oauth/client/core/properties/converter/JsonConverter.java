@@ -6,15 +6,15 @@ import java.util.stream.Collectors;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
-import com.zero.oauth.client.core.properties.IPropertiesFilter;
 import com.zero.oauth.client.core.properties.IPropertyModel;
-import com.zero.oauth.client.core.properties.PropertyStore;
+import com.zero.oauth.client.core.properties.IPropertyStore;
+import com.zero.oauth.client.core.properties.OAuthProperties;
 import com.zero.oauth.client.type.FlowStep;
 
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class JsonConverter<T extends IPropertiesFilter> implements IPropertiesConverter<T> {
+public class JsonConverter<T extends OAuthProperties> implements PropertiesConverter<T> {
 
     private final T properties;
 
@@ -24,7 +24,7 @@ public class JsonConverter<T extends IPropertiesFilter> implements IPropertiesCo
     }
 
     @Override
-    public PropertyStore<IPropertyModel> deserialize(String properties, FlowStep step) {
+    public IPropertyStore<IPropertyModel> deserialize(String properties, FlowStep step) {
         Gson gson = new GsonBuilder().create();
         Map<String, Object> map =
                 gson.fromJson(properties, new TypeToken<Map<String, Object>>() {}.getType());

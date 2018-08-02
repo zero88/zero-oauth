@@ -29,20 +29,8 @@ public class PropertyModel implements IPropertyModel {
     @ToString.Include
     private final String name;
     private Object value;
-    private Object defaultValue;
     @ToString.Include
     private Constraint constraint = Constraint.OPTIONAL;
-
-    /**
-     * Init default property value.
-     *
-     * @return Current instance
-     */
-    @SuppressWarnings("unchecked")
-    public <T extends PropertyModel> T defaultValue(Object value) {
-        this.defaultValue = value;
-        return (T) this;
-    }
 
     /**
      * Mark property is required to further error validation.
@@ -50,7 +38,7 @@ public class PropertyModel implements IPropertyModel {
      * @return Current instance
      */
     @SuppressWarnings("unchecked")
-    public <T extends PropertyModel> T require() {
+    public <T extends IPropertyModel> T require() {
         this.constraint = Constraint.REQUIRED;
         return (T) this;
     }
@@ -61,7 +49,7 @@ public class PropertyModel implements IPropertyModel {
      * @return Current instance
      */
     @SuppressWarnings("unchecked")
-    public <T extends PropertyModel> T recommend() {
+    public <T extends IPropertyModel> T recommend() {
         this.constraint = Constraint.RECOMMENDATION;
         return (T) this;
     }
@@ -70,37 +58,45 @@ public class PropertyModel implements IPropertyModel {
      * For internal process to extract {@code PropertyModel} to make request.
      *
      * @param constraint Override constraint
-     *
      * @return a clone of {@code PropertyModel}
      */
-    protected PropertyModel clone(Constraint constraint) {
+    protected IPropertyModel clone(Constraint constraint) {
         return this.duplicate().constraint(constraint);
     }
 
-    @SuppressWarnings("unchecked")
-    protected <T extends PropertyModel> T constraint(Constraint constraint) {
-        this.constraint = Objects.requireNonNull(constraint);
-        return (T) this;
-    }
-
     public Object getValue() {
-        return Objects.isNull(this.value) ? this.defaultValue : this.value;
+        return this.value;
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends PropertyModel> T setValue(Object value) {
+    public <T extends IPropertyModel> T setValue(Object value) {
         this.value = value;
         return (T) this;
     }
 
-    public <T extends PropertyModel> T duplicate() {
-        return new PropertyModel(getVersion(), getName()).constraint(this.constraint)
-                                                         .setValue(this.getValue());
+    @Override
+    public Object validate() {
+        if (Objects.isNull(this.getValue()) || Strings.isBlank(this.getValue().toString())) {
+            if (this.isRequired()) {
+                throw new OAuthParameterException("Missing required of property name: " + this.getName());
+            }
+            if (this.isRecommendation()) {
+                log.warn("It is recommendation to add property '{}' when sending OAuth request. " +
+                         "Check REST APIs docs for more details.", this.getName());
+            }
+        }
+        return this.getValue();
     }
 
-    public <T extends PropertyModel> T duplicate(Object value) {
+    public <T extends IPropertyModel> T duplicate(Object value) {
         T instance = this.duplicate();
         return instance.setValue(value);
+    }
+
+    @SuppressWarnings("unchecked")
+    public <T extends IPropertyModel> T constraint(Constraint constraint) {
+        this.constraint = Objects.requireNonNull(constraint);
+        return (T) this;
     }
 
     public boolean isRequired() {
@@ -115,19 +111,9 @@ public class PropertyModel implements IPropertyModel {
         return this.constraint == Constraint.OPTIONAL;
     }
 
-    @Override
-    public Object validate() {
-        if (Objects.isNull(this.getValue()) || Strings.isBlank(this.getValue().toString())) {
-            if (this.isRequired()) {
-                throw new OAuthParameterException(
-                        "Missing required of property name: " + this.getName());
-            }
-            if (this.isRecommendation()) {
-                log.warn("It is recommendation to add property '{}' when sending OAuth request. " +
-                         "Check REST APIs docs for more details.", this.getName());
-            }
-        }
-        return this.getValue();
+    protected <T extends IPropertyModel> T duplicate() {
+        return new PropertyModel(getVersion(), getName()).constraint(this.constraint).setValue(
+            this.getValue());
     }
 
 }

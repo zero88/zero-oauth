@@ -5,7 +5,6 @@ package com.zero.oauth.client.core.properties;
  *
  * @param <P> Indicates that for this instantiation of the store, the type of {@code IPropertyModel}
  *            implementation.
- *
  * @see IPropertyModel
  */
 public interface IPropertyStore<P extends IPropertyModel> {
@@ -27,7 +26,6 @@ public interface IPropertyStore<P extends IPropertyModel> {
      * Remove property out of store.
      *
      * @param name Property's name
-     *
      * @return {@link IPropertyModel} instance or {@code null} if store doesn't contain property
      */
     P remove(String name);
@@ -41,7 +39,6 @@ public interface IPropertyStore<P extends IPropertyModel> {
      * Get property in store.
      *
      * @param name Property's name
-     *
      * @return {@link IPropertyModel} instance or {@code null} if store doesn't contain property
      */
     P get(String name);
@@ -50,9 +47,8 @@ public interface IPropertyStore<P extends IPropertyModel> {
      * Check property in store.
      *
      * @param name Property's name
-     *
      * @return {@code True} if store has property
      */
-    public boolean has(String name);
+    boolean has(String name);
 
 }

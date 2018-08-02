@@ -49,7 +49,6 @@ public enum HttpHeader {
      * Returns a {@code HttpHeader} from a given string representation.
      *
      * @param name the string representation.
-     *
      * @return the HttpHeader.
      */
     public static Optional<HttpHeader> fromName(final String name) {

@@ -4,13 +4,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.zero.oauth.client.core.properties.IPropertiesFilter;
 import com.zero.oauth.client.core.properties.IPropertyModel;
+import com.zero.oauth.client.core.properties.OAuthProperties;
 import com.zero.oauth.client.core.properties.PropertyStore;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.GrantType;
 import com.zero.oauth.client.type.OAuthVersion;
-import com.zero.oauth.client.utils.ReflectionUtils;
+import com.zero.oauth.client.utils.Reflections;
 
 import lombok.AccessLevel;
 import lombok.Getter;
@@ -18,16 +18,15 @@ import lombok.RequiredArgsConstructor;
 
 @Getter(value = AccessLevel.PROTECTED)
 @RequiredArgsConstructor(access = AccessLevel.PROTECTED)
-class OAuth2Properties<P extends IOAuth2PropertyMatcher> extends PropertyStore<P>
-        implements IPropertiesFilter {
+class OAuth2Properties<P extends OAuth2PropertyMatcher> extends PropertyStore<P> implements OAuthProperties {
 
     private final GrantType grantType;
 
-    protected OAuth2Properties(GrantType grantType, Class<P> clazz) {
-        this.grantType = grantType;
-        this.init(ReflectionUtils.getConstants(clazz).stream()
-                                 .filter(prop -> Objects.nonNull(prop.match(this.grantType)))
-                                 .collect(Collectors.toList()));
+    OAuth2Properties(GrantType grantType, Class<P> clazz) {
+        this.grantType = Objects.requireNonNull(grantType);
+        this.init(Reflections.getConstants(clazz).stream()
+                             .filter(prop -> Objects.nonNull(prop.match(this.grantType)))
+                             .collect(Collectors.toList()));
     }
 
     @Override

@@ -21,8 +21,7 @@ public class OAuth1ResponseProp extends OAuth1PropertyModel implements IResponse
      */
 
     public static final OAuth1ResponseProp TOKEN =
-            new OAuth1ResponseProp("oauth_token").declare(FlowStep.REQUEST)
-                                                 .declare(FlowStep.AUTHORIZE)
+            new OAuth1ResponseProp("oauth_token").declare(FlowStep.REQUEST).declare(FlowStep.AUTHORIZE)
                                                  .declare(FlowStep.EXCHANGE_TOKEN);
 
     /**
@@ -34,8 +33,8 @@ public class OAuth1ResponseProp extends OAuth1PropertyModel implements IResponse
                                                         .declare(FlowStep.EXCHANGE_TOKEN);
 
     /**
-     * MUST be present and set to "true". The parameter is used to differentiate from previous
-     * versions of the protocol.
+     * MUST be present and set to "true". The parameter is used to differentiate from previous versions of the
+     * protocol.
      */
     public static final OAuth1ResponseProp CALLBACK_CONFIRMED =
             new OAuth1ResponseProp("oauth_callback_confirmed").declare(FlowStep.REQUEST);

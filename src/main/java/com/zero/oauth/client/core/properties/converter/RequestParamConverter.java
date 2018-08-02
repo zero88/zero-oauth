@@ -5,9 +5,9 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.zero.oauth.client.core.properties.IPropertiesFilter;
 import com.zero.oauth.client.core.properties.IPropertyModel;
-import com.zero.oauth.client.core.properties.PropertyStore;
+import com.zero.oauth.client.core.properties.IPropertyStore;
+import com.zero.oauth.client.core.properties.OAuthProperties;
 import com.zero.oauth.client.exceptions.OAuthParameterException;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.utils.OAuthEncoder;
@@ -16,7 +16,7 @@ import com.zero.oauth.client.utils.Strings;
 import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
-public class RequestParamConverter<T extends IPropertiesFilter> implements IPropertiesConverter<T> {
+public class RequestParamConverter<T extends OAuthProperties> implements PropertiesConverter<T> {
 
     private static final String EQUAL = "=";
     private static final String SEPARATE = "&";
@@ -29,7 +29,7 @@ public class RequestParamConverter<T extends IPropertiesFilter> implements IProp
     }
 
     @Override
-    public PropertyStore<IPropertyModel> deserialize(String properties, FlowStep step) {
+    public IPropertyStore<IPropertyModel> deserialize(String properties, FlowStep step) {
         Map<String, String> map = new HashMap<>();
         for (String property : properties.split("\\" + SEPARATE)) {
             String[] keyValues = property.split("\\" + EQUAL);
@@ -53,8 +53,7 @@ public class RequestParamConverter<T extends IPropertiesFilter> implements IProp
         if (Objects.isNull(value)) {
             return null;
         }
-        return new StringBuilder(key).append(EQUAL).append(OAuthEncoder.encode(value.toString()))
-                                     .toString();
+        return new StringBuilder(key).append(EQUAL).append(OAuthEncoder.encode(value.toString())).toString();
     }
 
 }

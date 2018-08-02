@@ -16,7 +16,7 @@ public enum OAuthVersion {
      * Specifications:
      * </p>
      * <ul>
-     * <li><a href="https://tools.ietf.org/html/rfc6749">[RFC6749]</a></li>
+     * <li><a href="http://tools.ietf.org/html/rfc5849">[RFC 5849]</a></li>
      * <li><a href="https://oauth.net/core/1.0/">OAuth 1.0</a></li>
      * <li><a href="https://oauth.net/core/1.0a/">OAuth 1.0a</a></li>
      * </ul>
@@ -28,14 +28,13 @@ public enum OAuthVersion {
      * Specifications:
      * </p>
      * <ul>
-     * <li><a href="http://tools.ietf.org/html/rfc5849">[RFC 5849]</a></li>
-     * <li><a href="https://oauth.net/core/1.0/">OAuth 1.0</a></li>
-     * <li><a href="https://oauth.net/core/1.0a/">OAuth 1.0a</a></li>
+     * <li><a href="https://tools.ietf.org/html/rfc6749">[RFC6749]</a></li>
+     * <li><a href="https://oauth.net/core/2/">OAuth 2.0</a></li>
      * </ul>
      */
     V2("2.0"),
     /**
-     * Just for programmatic.
+     * Just for developing.
      */
     ALL("");
 

@@ -15,7 +15,6 @@ public class OAuthSignatureException extends OAuthException {
      *
      * @param signature Signature gets signed (HMAC-SHA, etc)
      * @param e         original exception
-     *
      * @see SignatureMethod
      */
     public OAuthSignatureException(SignatureMethod signature, Exception e) {

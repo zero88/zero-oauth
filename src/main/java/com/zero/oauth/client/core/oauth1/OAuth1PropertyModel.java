@@ -5,12 +5,13 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 
+import com.zero.oauth.client.core.properties.IPropertyModel;
 import com.zero.oauth.client.core.properties.PropertyModel;
 import com.zero.oauth.client.exceptions.OAuthParameterException;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.OAuthVersion;
 
-class OAuth1PropertyModel extends PropertyModel implements IOAuth1PropertyMatcher {
+class OAuth1PropertyModel extends PropertyModel implements OAuth1PropertyMatcher {
 
     private final Map<FlowStep, Constraint> steps = new HashMap<>();
 
@@ -28,7 +29,7 @@ class OAuth1PropertyModel extends PropertyModel implements IOAuth1PropertyMatche
         Objects.requireNonNull(step, "OAuth flow step cannot be null");
         if (!this.getVersion().isEqual(step.getVersion())) {
             throw new OAuthParameterException(
-                    "Step " + step.name() + " isn't supported in OAuth v" + this.getVersion());
+                "Step " + step.name() + " isn't supported in OAuth v" + this.getVersion());
         }
         this.steps.put(step, constraint);
         return (T) this;
@@ -47,7 +48,7 @@ class OAuth1PropertyModel extends PropertyModel implements IOAuth1PropertyMatche
      */
     @Override
     @Deprecated
-    public <T extends PropertyModel> T require() {
+    public <T extends IPropertyModel> T require() {
         throw new UnsupportedOperationException("Required value depends on grant type and step.");
     }
 
@@ -59,9 +60,8 @@ class OAuth1PropertyModel extends PropertyModel implements IOAuth1PropertyMatche
      */
     @Override
     @Deprecated
-    public <T extends PropertyModel> T recommend() {
-        throw new UnsupportedOperationException(
-                "Recommendation value depends on grant type and step.");
+    public <T extends IPropertyModel> T recommend() {
+        throw new UnsupportedOperationException("Recommendation value depends on grant type and step.");
     }
 
     Map<FlowStep, Constraint> getMapping() {

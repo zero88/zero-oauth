@@ -1,7 +1,7 @@
 package com.zero.oauth.client.core.oauth2;
 
 import com.zero.oauth.client.type.GrantType;
-import com.zero.oauth.client.utils.ReflectionUtils;
+import com.zero.oauth.client.utils.Reflections;
 
 import lombok.Getter;
 
@@ -17,7 +17,7 @@ public final class OAuth2ResponseProperties extends OAuth2Properties<OAuth2Respo
 
     private OAuth2ResponseProperties(GrantType grantType, boolean error) {
         super(grantType);
-        for (OAuth2ResponseProp prop : ReflectionUtils.getConstants(OAuth2ResponseProp.class)) {
+        for (OAuth2ResponseProp prop : Reflections.getConstants(OAuth2ResponseProp.class)) {
             if (prop.isError()) {
                 this.add(prop);
             }

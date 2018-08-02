@@ -110,9 +110,8 @@ public class OAuthEnconderTest {
     @Test
     public void test_reservedCharacters_noEncode() {
         final String plain = "abcdefghijklmnopqrstuxyzwABCDEFGHIJKLMNOPQRSTUXYZW1234567890-._~";
-        final String encoded = plain;
-        assertEquals(encoded, OAuthEncoder.encode(plain));
-        assertEquals(plain, OAuthEncoder.decode(encoded));
+        assertEquals(plain, OAuthEncoder.encode(plain));
+        assertEquals(plain, OAuthEncoder.decode(plain));
     }
 
 }

@@ -3,26 +3,25 @@ package com.zero.oauth.client.core.properties.converter;
 import java.util.Map;
 import java.util.Objects;
 
-import com.zero.oauth.client.core.properties.IPropertiesFilter;
 import com.zero.oauth.client.core.properties.IPropertyModel;
+import com.zero.oauth.client.core.properties.IPropertyStore;
+import com.zero.oauth.client.core.properties.OAuthProperties;
 import com.zero.oauth.client.core.properties.PropertyModel;
 import com.zero.oauth.client.core.properties.PropertyStore;
 import com.zero.oauth.client.type.FlowStep;
 
 /**
- * Represents {@code converter} that turns transformation properties to data format.
+ * Represents {@code converter} that turns on properties transform to data format.
  *
- * @param T Property store type that implemented {@link IPropertiesConverter}
- *
- * @see PropertyStore
+ * @param <T> Property store type that implemented {@link PropertiesConverter}
+ * @see IPropertyStore
  */
-public interface IPropertiesConverter<T extends IPropertiesFilter> {
+public interface PropertiesConverter<T extends OAuthProperties> {
 
     /**
      * Convert properties in store to a corresponding data format in given Flow step.
      *
      * @param step Flow step
-     *
      * @return String data with format
      */
     String serialize(FlowStep step);
@@ -32,25 +31,21 @@ public interface IPropertiesConverter<T extends IPropertiesFilter> {
      *
      * @param properties String properties is response data
      * @param step       Flow step
-     *
      * @return Property store contains all response data
      */
-    PropertyStore<IPropertyModel> deserialize(String properties, FlowStep step);
+    IPropertyStore<IPropertyModel> deserialize(String properties, FlowStep step);
 
     /**
-     * It is step 2 of {@link #deserialize(String, FlowStep)} after decomposed string properties to
-     * {@code Key-Value} list.
+     * It is step 2 of {@link #deserialize(String, FlowStep)} after decomposed string properties to {@code
+     * Key-Value} list.
      *
      * @param deserializeValues Key-Value properties
      * @param step              Flow step
-     *
      * @return Property store contains all response data
      */
-    default PropertyStore<IPropertyModel> deserialize(Map<String, ?> deserializeValues,
-                                                      FlowStep step) {
-        PropertyStore<IPropertyModel> store = new PropertyStore<>();
-        deserializeValues.entrySet().stream()
-                         .map(entry -> compose(step, entry.getKey(), entry.getValue()))
+    default IPropertyStore<IPropertyModel> deserialize(Map<String, ?> deserializeValues, FlowStep step) {
+        IPropertyStore<IPropertyModel> store = new PropertyStore<>();
+        deserializeValues.entrySet().stream().map(entry -> compose(step, entry.getKey(), entry.getValue()))
                          .filter(Objects::nonNull).forEach(store::add);
         return store;
     }
@@ -61,9 +56,7 @@ public interface IPropertiesConverter<T extends IPropertiesFilter> {
      * @param step  Flow step
      * @param key   Property key
      * @param value Property value
-     *
      * @return Default property by given key and value
-     *
      * @see IPropertyModel
      * @see PropertyModel
      */
