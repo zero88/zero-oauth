@@ -66,7 +66,7 @@ public final class Strings {
         if (isBlank(text)) {
             throw new IllegalArgumentException(message);
         }
-        return text;
+        return text.trim();
     }
 
 }
