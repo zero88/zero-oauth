@@ -91,18 +91,19 @@ public interface OAuthClient<T extends OAuthApi> {
     /**
      * Issue request to server.
      *
-     * @param <P>     The type of response property model
-     * @param <R>     The type of request property model
-     * @param method  Http method
-     * @param url     Destination full URL or path(if register specific {@code apiBaseUrl}) for issue
-     *                particular request
-     * @param payload Request payload
+     * @param <P>      The type of response property model
+     * @param <R>      The type of request property model
+     * @param method   Http method
+     * @param url      Destination full URL or path(if register specific {@code apiBaseUrl}) for issue
+     *                 particular request
+     * @param reqProps Request properties, maybe located in {@code HTTP Headers}, {@code URI query} or {@code
+     *                 HTTP request body}
      * @return Response properties
      * @see HttpMethod
      */
     <P extends IResponsePropModel, R extends IPropertyModel> IPropertyStore<P> request(HttpMethod method,
                                                                                        String url,
-                                                                                       IPropertyStore<R> payload);
+                                                                                       IPropertyStore<R> reqProps);
 
     /**
      * Make {@code GET} request to server.
@@ -111,13 +112,13 @@ public interface OAuthClient<T extends OAuthApi> {
      * @param <R>     The type of request property model
      * @param url     Destination full URL or path(if register specific {@code apiBaseUrl}) for issue
      *                particular request
-     * @param payload Request payload
+     * @param queries Request properties, maybe located in {@code HTTP Headers}, {@code URI query}
      * @return Response properties
      * @see HttpMethod#GET
      */
     default <P extends IResponsePropModel, R extends IPropertyModel> IPropertyStore<P> get(String url,
-                                                                                           IPropertyStore<R> payload) {
-        return this.request(HttpMethod.GET, url, payload);
+                                                                                           IPropertyStore<R> queries) {
+        return this.request(HttpMethod.GET, url, queries);
     }
 
     /**
@@ -171,17 +172,17 @@ public interface OAuthClient<T extends OAuthApi> {
     /**
      * Make {@code DELETE} request to server.
      *
-     * @param <P>    The type of response property model
-     * @param <R>    The type of request property model
-     * @param url    Destination full URL or path(if register specific {@code apiBaseUrl}) for issue
-     *               particular request
-     * @param header Request header. Any
+     * @param <P>     The type of response property model
+     * @param <R>     The type of request property model
+     * @param url     Destination full URL or path(if register specific {@code apiBaseUrl}) for issue
+     *                particular request
+     * @param headers Request header. Any properties that declared in different placements, will be ignore.
      * @return Response properties
      * @see HttpMethod#DELETE
      */
     default <P extends IResponsePropModel, R extends IPropertyModel> IPropertyStore<P> delete(String url,
-                                                                                              IPropertyStore<R> header) {
-        return this.request(HttpMethod.DELETE, url, header);
+                                                                                              IPropertyStore<R> headers) {
+        return this.request(HttpMethod.DELETE, url, headers);
     }
 
 }

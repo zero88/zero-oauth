@@ -48,7 +48,7 @@ repositories {
 }
 
 distributions {
-    main { baseName = 'oauth-apis-client' }
+    main { baseName = project.name }
 }
 
 jacocoTestReport {
@@ -56,6 +56,7 @@ jacocoTestReport {
     reports {
         xml.enabled true
         csv.enabled false
+        html.enabled true
         html.destination "${buildDir}/reports/coverage"
     }
 }
@@ -68,6 +69,7 @@ tasks.withType(Jar) { // includes War and Ear
         }
         javaVersion = System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')'
 
+        println '- Project Name:     ' + project.name
         println '- Project Version:  ' + project.version
         println '- Semantic Version: ' + project.semanticVersion
         println '- Build Number:     ' + project.buildNumber

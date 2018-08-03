@@ -1,6 +1,5 @@
 package com.zero.oauth.client.core.properties;
 
-import java.util.Arrays;
 import java.util.List;
 
 import com.zero.oauth.client.exceptions.OAuthParameterException;
@@ -33,7 +32,7 @@ public interface IPropertyModel {
      *
      * @param <T>   Any type of {@code Property Model}
      * @param value Any value but have to implement {@link Object#toString()}
-     * @return itself
+     * @return {@code this}
      */
     <T extends IPropertyModel> T setValue(Object value);
 
@@ -57,20 +56,27 @@ public interface IPropertyModel {
     <T extends IPropertyModel> T duplicate(Object value);
 
     /**
+     * Register HTTP Placement that this property can appear in {@code HTTP Request}.
+     *
+     * @param placements available placements
+     * @param <T>        Any type of {@code Property Model}
+     * @return {@code this}
+     */
+    <T extends IPropertyModel> T registerPlacements(HttpPlacement... placements);
+
+    /**
      * Available HTTP placements that this property can be put into.
      *
      * @return List of available placements
      */
-    default List<HttpPlacement> getAvailabePlacements() {
-        return Arrays.asList(HttpPlacement.HEADER, HttpPlacement.URI_QUERY, HttpPlacement.BODY);
-    }
+    List<HttpPlacement> getAvailabePlacements();
 
     /**
      * Set constraint.
      *
      * @param <T>   Any type of {@code Property Model}
      * @param value Constraint value
-     * @return itself
+     * @return {@code this}
      */
     <T extends IPropertyModel> T constraint(Constraint value);
 

@@ -16,11 +16,8 @@ public enum HttpScheme {
 
     HTTP("http"), HTTPS("https");
 
+    public static final String SCHEME_REGEX = "(https?://)";
     private final String scheme;
-
-    public static String schemeRegex() {
-        return "(https?://)";
-    }
 
     @Override
     public String toString() {

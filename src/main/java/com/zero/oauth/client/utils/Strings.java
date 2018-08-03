@@ -1,13 +1,17 @@
 package com.zero.oauth.client.utils;
 
+import org.apache.logging.log4j.message.ParameterizedMessage;
+
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 
 /**
  * Strings Utilities.
  *
  * @since 1.0.0
  */
+@Log4j2
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Strings {
 
@@ -45,7 +49,7 @@ public final class Strings {
      * @throws IllegalArgumentException if {@code obj} is {@code blank}
      */
     public static String requireNotBlank(String text) {
-        return requireNotBlank(text, "");
+        return requireNotBlank(text, "Given input cannot be empty");
     }
 
     /**
@@ -67,6 +71,54 @@ public final class Strings {
             throw new IllegalArgumentException(message);
         }
         return text.trim();
+    }
+
+    /**
+     * Checks that the specified string reference is not {@code blank} then remove all space characters.
+     *
+     * @param text Given input
+     * @return Optimization text
+     * @throws IllegalArgumentException if {@code text} is {@code blank}
+     */
+    public static String optimizeNoSpace(String text) {
+        String t = requireNotBlank(text);
+        return t.replaceAll("\\s+", "");
+    }
+
+    /**
+     * Checks that the specified string reference is not {@code blank} and its length greater than given
+     * input.
+     *
+     * @param text      Given input
+     * @param minLength Min length
+     * @return this text if conforms condition
+     * @throws IllegalArgumentException if {@code text} or {@code optimized text} is {@code blank}
+     */
+    public static String requiredMinLength(String text, int minLength) {
+        String t = requireNotBlank(text);
+        if (t.length() < minLength) {
+            throw new IllegalArgumentException("Text " + text + " length must be greater than " + minLength);
+        }
+        return t;
+    }
+
+    /**
+     * Convert {@code string} to {@code int}.
+     *
+     * @param text     Text to convert
+     * @param fallback Default value to fallback
+     * @return Int value that corresponding to given text
+     */
+    public static int convertToInt(String text, int fallback) {
+        if (Strings.isBlank(text)) {
+            return fallback;
+        }
+        try {
+            return Integer.parseInt(text);
+        } catch (NumberFormatException ex) {
+            log.debug(new ParameterizedMessage("Cannot parse {} to int", text, ex));
+            return fallback;
+        }
     }
 
 }

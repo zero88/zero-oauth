@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-import org.apache.logging.log4j.message.StringFormattedMessage;
+import org.apache.logging.log4j.message.ParameterizedMessage;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -14,6 +14,7 @@ import lombok.extern.log4j.Log4j2;
 
 /**
  * Reflections Utilities.
+ *
  * @since 1.0.0
  */
 @Log4j2
@@ -55,7 +56,7 @@ public final class Reflections {
             try {
                 consts.add((P) f.get(null));
             } catch (IllegalArgumentException | IllegalAccessException e) {
-                log.warn(new StringFormattedMessage("Failed to get field constant {}", f.getName()), e);
+                log.warn(new ParameterizedMessage("Failed to get field constant {}", f.getName(), e));
             }
         }
         return consts;
@@ -72,10 +73,57 @@ public final class Reflections {
                 return (Class<?>) primitiveClazz;
             }
         } catch (IllegalAccessException | NoSuchFieldException e) {
-            log.debug(new StringFormattedMessage("Try to get TYPE value of {} if {} can represents primitive",
-                                                 findClazz.getName()), e);
+            log.trace(new ParameterizedMessage("Try to get TYPE value of {} if {} can represents primitive",
+                                               findClazz.getName(), e));
         }
         return null;
+    }
+
+    /**
+     * Find Class by class name and parent class.
+     *
+     * @param className   Class name to find. Must be full qualified name
+     * @param parentClass Parent class to check a finding class is sub class of given one
+     * @param <T>         Type of parent class
+     * @return Class object
+     * @throws IllegalArgumentException if {@code className} is {@code blank}
+     * @throws NullPointerException     if {@code parentClass} is {@code null}
+     * @throws ClassNotFoundException   if class not found by {@code className}
+     * @throws RuntimeException         if class found but not child of by {@code parentClass}
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> Class<T> findClass(String className, Class<T> parentClass)
+        throws ClassNotFoundException {
+        Objects.requireNonNull(parentClass);
+        String clazzName = Strings.requireNotBlank(className);
+        ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
+        if (classLoader == null) {
+            classLoader = Reflections.class.getClassLoader();
+        }
+        Class<?> clazz = classLoader.loadClass(clazzName);
+        if (parentClass.isAssignableFrom(clazz)) {
+            return (Class<T>) clazz;
+        }
+        throw new RuntimeException(
+            "Class " + clazz.getName() + " is not child of class " + parentClass.getName());
+    }
+
+    /**
+     * Get instance of class name.
+     *
+     * @param className   Class name to find. Must be full qualified name
+     * @param parentClass Parent class to check a finding class is sub class of given one
+     * @param <T>         Type of parent class
+     * @return Instance object, {@code null} if not found a class by name or failed to init an instance
+     */
+    public static <T> T getClassInstance(String className, Class<T> parentClass) {
+        try {
+            Class<T> clazz = findClass(className, parentClass);
+            return clazz.newInstance();
+        } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | RuntimeException e) {
+            log.warn(new ParameterizedMessage("Failed to init instance of class name {}", className, e));
+            return null;
+        }
     }
 
 }

@@ -10,8 +10,8 @@ import com.zero.oauth.client.core.properties.IPropertyStore;
 import com.zero.oauth.client.core.properties.OAuthProperties;
 import com.zero.oauth.client.exceptions.OAuthParameterException;
 import com.zero.oauth.client.type.FlowStep;
-import com.zero.oauth.client.utils.OAuthEncoder;
 import com.zero.oauth.client.utils.Strings;
+import com.zero.oauth.client.utils.Urls;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -46,18 +46,18 @@ public class HttpQueryConverter<T extends OAuthProperties> implements Properties
                 throw new OAuthParameterException(
                     "Property doesn't conform the syntax: `key`" + EQUAL + "`value`");
             }
-            map.put(OAuthEncoder.decode(keyValues[0]), OAuthEncoder.decode(keyValues[1]));
+            map.put(Urls.decode(keyValues[0]), Urls.decode(keyValues[1]));
         }
         return this.deserialize(map, step);
     }
 
     private String compute(IPropertyModel property) {
-        String key = OAuthEncoder.encode(Strings.requireNotBlank(property.getName()));
+        String key = Urls.encode(Strings.requireNotBlank(property.getName()));
         Object value = property.validate();
         if (Objects.isNull(value)) {
             return null;
         }
-        return new StringBuilder(key).append(EQUAL).append(OAuthEncoder.encode(value.toString())).toString();
+        return new StringBuilder(key).append(EQUAL).append(Urls.encode(value.toString())).toString();
     }
 
 }

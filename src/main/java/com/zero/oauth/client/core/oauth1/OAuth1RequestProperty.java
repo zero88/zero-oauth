@@ -4,6 +4,7 @@ import java.util.Map;
 
 import com.zero.oauth.client.core.properties.PropertyModel;
 import com.zero.oauth.client.type.FlowStep;
+import com.zero.oauth.client.type.SignatureMethod;
 
 import lombok.Getter;
 
@@ -57,11 +58,14 @@ public final class OAuth1RequestProperty extends OAuth1PropertyModel {
 
     /**
      * The name of the signature method used by the client to sign the request.
+     *
+     * @see SignatureMethod
      */
     public static final OAuth1RequestProperty SIGNATURE_METHOD =
         new OAuth1RequestProperty("oauth_signature_method").declare(FlowStep.REQUEST)
                                                            .declare(FlowStep.EXCHANGE_TOKEN)
-                                                           .declare(FlowStep.ACCESS_RESOURCE);
+                                                           .declare(FlowStep.ACCESS_RESOURCE)
+                                                           .setValue(SignatureMethod.HMAC_SHA1);
 
     /**
      * The client generates a signature and use it together with {@link #SIGNATURE_METHOD}.

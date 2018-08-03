@@ -34,7 +34,7 @@ public class OAuth2Client<T extends OAuth2Api> implements OAuthClient<T> {
 
     @Override
     public <P extends IResponsePropModel, R extends IPropertyModel> IPropertyStore<P> request(
-        HttpMethod method, String url, IPropertyStore<R> payload) {
+        HttpMethod method, String url, IPropertyStore<R> reqProps) {
         return null;
     }
 

@@ -1,8 +1,11 @@
 package com.zero.oauth.client.core.properties;
 
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 import com.zero.oauth.client.exceptions.OAuthParameterException;
+import com.zero.oauth.client.type.HttpPlacement;
 import com.zero.oauth.client.type.OAuthVersion;
 import com.zero.oauth.client.utils.Strings;
 
@@ -31,6 +34,9 @@ public class PropertyModel implements IPropertyModel {
     private Object value;
     @ToString.Include
     private Constraint constraint = Constraint.OPTIONAL;
+    @Getter
+    private List<HttpPlacement> availabePlacements =
+        Arrays.asList(HttpPlacement.HEADER, HttpPlacement.URI_QUERY, HttpPlacement.BODY);
 
     /**
      * Mark property is required to further error validation.
@@ -90,6 +96,7 @@ public class PropertyModel implements IPropertyModel {
         return this.getValue();
     }
 
+    @Override
     public <T extends IPropertyModel> T duplicate(Object value) {
         T instance = this.duplicate();
         return instance.setValue(value);
@@ -111,6 +118,13 @@ public class PropertyModel implements IPropertyModel {
 
     public boolean isOptional() {
         return this.constraint == Constraint.OPTIONAL;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends IPropertyModel> T registerPlacements(HttpPlacement... placements) {
+        this.availabePlacements = Arrays.asList(placements);
+        return (T) this;
     }
 
     protected <T extends IPropertyModel> T duplicate() {
