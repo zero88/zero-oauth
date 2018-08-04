@@ -13,7 +13,7 @@ abstract class RandomSecurityService implements SecurityService {
 
     private RandomMachine randomMachine;
 
-    <T extends RandomMachine> void registerMachine(T machine) {
+    final <T extends RandomMachine> void registerMachine(T machine) {
         this.randomMachine = machine;
     }
 

@@ -8,6 +8,8 @@ import java.util.Properties;
 
 import org.apache.logging.log4j.message.ParameterizedMessage;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -16,6 +18,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 1.0.0
  */
 @Log4j2
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class Environments {
 
     private static final String OAUTH_PROPERTIES_FILE = "oauth.properties";

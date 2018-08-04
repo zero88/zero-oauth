@@ -13,10 +13,6 @@ public final class TimestampSecurityService extends RandomSecurityService implem
         this.registerMachine(new TimerMachine());
     }
 
-    <T extends TimerMachine> void registerMachine(T randomMachine) {
-        super.registerMachine(randomMachine);
-    }
-
     /**
      * {@inheritDoc}
      */

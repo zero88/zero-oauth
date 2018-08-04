@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 import org.apache.logging.log4j.message.ParameterizedMessage;
 
 import lombok.AccessLevel;
-import lombok.RequiredArgsConstructor;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 /**
@@ -24,7 +24,7 @@ import lombok.extern.log4j.Log4j2;
  * @since 1.0.0
  */
 @Log4j2
-@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class FileUtils {
 
     /**

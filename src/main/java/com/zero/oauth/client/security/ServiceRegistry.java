@@ -10,17 +10,15 @@ import com.zero.oauth.client.utils.Environments;
 import com.zero.oauth.client.utils.Reflections;
 import com.zero.oauth.client.utils.Strings;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 
 @Log4j2
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public final class ServiceRegistry {
 
     private static final Map<String, SecurityService> SECURITY_REGISTRY = initialize();
-    private static final Map<String, SignatureService> SIGNATURE_REGISTRY = initialize_signature();
-
-    private static Map<String, SignatureService> initialize_signature() {
-        return new HashMap<>();
-    }
 
     private static Map<String, SecurityService> initialize() {
         Map<String, SecurityService> registries = new HashMap<>();
