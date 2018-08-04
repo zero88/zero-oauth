@@ -9,7 +9,6 @@ import java.nio.file.Files;
 import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -33,36 +32,28 @@ public final class FileUtils {
      *
      * @param filePath Given file path
      * @return File content in text
-     * @throws RuntimeException if error when reading file
+     * @throws RuntimeException if error when parsing file path or reading file
      */
     public static String readFileToString(String filePath) {
+        String strPath = Strings.requireNotBlank(filePath);
+        strPath = strPath.replaceFirst("^(?:file:/)([^/])", "/".equals(File.separator) ? "/$1" : "$1");
         Path path;
         try {
-            String strPath = Strings.requireNotBlank(filePath);
-            strPath = strPath.replaceFirst("^(?:file:/)?([^/])", "/".equals(File.separator) ? "/$1" : "$1");
-            path = Paths.get(strPath);
-        } catch (InvalidPathException ex) {
-            log.warn(new ParameterizedMessage("Invalid file path {}. Try to convert URI", filePath, ex));
-            path = getPathByURI(filePath, ex);
+            path = Paths.get(URI.create(filePath));
+        } catch (IllegalArgumentException | FileSystemNotFoundException | SecurityException ex) {
+            log.warn(new ParameterizedMessage("Invalid parse URI: {}. Try to parse plain text", strPath, ex));
+            try {
+                path = Paths.get(strPath);
+            } catch (InvalidPathException ex1) {
+                ex1.addSuppressed(ex);
+                throw new RuntimeException("Cannot parse file path: " + filePath, ex1);
+            }
         }
         try (Stream<String> stream = Files.lines(path, StandardCharsets.UTF_8)) {
             return stream.collect(Collectors.joining("\n"));
         } catch (IOException e) {
             throw new RuntimeException("Error when reading file: " + filePath, e);
         }
-    }
-
-    private static Path getPathByURI(String filePath, InvalidPathException ex) {
-        final Path path;
-        try {
-            path = Paths.get(URI.create(filePath));
-        } catch (IllegalArgumentException | FileSystemNotFoundException | SecurityException ex1) {
-            if (Objects.nonNull(ex)) {
-                ex1.addSuppressed(ex);
-            }
-            throw new RuntimeException("Error when parse file uri of " + filePath, ex1);
-        }
-        return path;
     }
 
 }
