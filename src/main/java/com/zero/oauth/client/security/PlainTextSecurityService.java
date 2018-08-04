@@ -13,7 +13,7 @@ public class PlainTextSecurityService extends RandomSecurityService implements S
 
     static final SecurityService INSTANCE = new PlainTextSecurityService();
 
-    PlainTextSecurityService() {
+    private PlainTextSecurityService() {
         this.registerMachine(new RandomText(SecurityService.loadRandomTextMaxLength(),
                                             SecurityService.loadRandomTextSymbols()));
     }

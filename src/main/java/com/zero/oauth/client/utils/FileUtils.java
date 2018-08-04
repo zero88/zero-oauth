@@ -1,5 +1,6 @@
 package com.zero.oauth.client.utils;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
@@ -37,7 +38,9 @@ public final class FileUtils {
     public static String readFileToString(String filePath) {
         Path path;
         try {
-            path = Paths.get(Strings.requireNotBlank(filePath));
+            String strPath = Strings.requireNotBlank(filePath);
+            strPath = strPath.replaceFirst("^(?:file:/)?([^/])", "/".equals(File.separator) ? "/$1" : "$1");
+            path = Paths.get(strPath);
         } catch (InvalidPathException ex) {
             log.warn(new ParameterizedMessage("Invalid file path {}. Try to convert URI", filePath, ex));
             path = getPathByURI(filePath, ex);
@@ -57,7 +60,7 @@ public final class FileUtils {
             if (Objects.nonNull(ex)) {
                 ex1.addSuppressed(ex);
             }
-            throw new RuntimeException("Error when parse file path", ex1);
+            throw new RuntimeException("Error when parse file uri of " + filePath, ex1);
         }
         return path;
     }

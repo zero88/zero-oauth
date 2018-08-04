@@ -56,9 +56,9 @@ public class RandomSecurityServiceTest {
 
     @Test
     public void test_randomToken_fromText_Customization() {
-        System.setProperty("z.oauth.sec.algo.random_token.text.max_len", "10");
-        System.setProperty("z.oauth.sec.algo.random_token.text.symbols", "!@#$%^&*()-=");
-        String token = new PlainTextSecurityService().randomToken();
+        ((PlainTextSecurityService) plainService)
+            .registerMachine(new PlainTextSecurityService.RandomText(10, "!@#$%^&*()-="));
+        String token = this.plainService.randomToken();
         System.out.println("Plain text special token: " + token);
         Assert.assertTrue(token.matches("[\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)\\-\\=]{8,10}"));
     }

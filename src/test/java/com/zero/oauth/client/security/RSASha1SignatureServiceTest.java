@@ -27,6 +27,7 @@ public class RSASha1SignatureServiceTest {
     @Before
     public void setUp() {
         String fileName = this.getClass().getClassLoader().getResource("rsa_key.pk8").toString();
+        System.out.println(fileName);
         System.setProperty("z.oauth.sec.algo.rsa.private_key", fileName);
         this.signatureService = new RSASha1SignatureService(SecurityService.loadRsaPrivateKey());
     }
@@ -77,11 +78,10 @@ public class RSASha1SignatureServiceTest {
 
     @Test
     public void test_GetSignature_Success() {
-        Assert.assertEquals(
-            "IAbWzJW0ixW7sJd+Dck4ZDEUg+r2BzuNiFdfsr6egdXRjQoxn2nazwL" +
-            "+hvE0pqTqonIKF6LmgPa9DZg7Z4m9rZ72OR2Xp7Ymyr39rTAvBxOvyX/ACy7K0zJFzH" +
-            "+rICyNbrRB6Y9x3TsJkofA84VRWmkZ7U9QRxmMSC5QDCrVCDc=",
-            this.signatureService.computeSignature("abc", null, null));
+        Assert.assertEquals("IAbWzJW0ixW7sJd+Dck4ZDEUg+r2BzuNiFdfsr6egdXRjQoxn2nazwL" +
+                            "+hvE0pqTqonIKF6LmgPa9DZg7Z4m9rZ72OR2Xp7Ymyr39rTAvBxOvyX/ACy7K0zJFzH" +
+                            "+rICyNbrRB6Y9x3TsJkofA84VRWmkZ7U9QRxmMSC5QDCrVCDc=",
+                            this.signatureService.computeSignature("abc", null, null));
     }
 
 }

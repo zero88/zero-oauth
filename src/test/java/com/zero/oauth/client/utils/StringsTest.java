@@ -79,7 +79,7 @@ public class StringsTest {
 
     @Test
     public void test_ConvertToInt_StringNotInt() {
-        Assert.assertEquals(6, Strings.convertToInt("6.0", 6));
+        Assert.assertEquals(6, Strings.convertToInt("5.0", 6));
     }
 
     @Test

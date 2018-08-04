@@ -23,7 +23,7 @@ public class FileUtilsTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_URISyntaxError() throws Throwable {
-        readErrorFile("f/:/xx");
+        readErrorFile(":file/:/xx");
     }
 
     @Test(expected = IOException.class)
