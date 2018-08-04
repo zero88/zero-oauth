@@ -55,6 +55,18 @@ public class RandomSecurityServiceTest {
     }
 
     @Test
+    public void test_randomToken_fromText_MustFlexibleCharLen() {
+        int len = 0;
+        while (true) {
+            String token = plainService.randomToken();
+            len = len == 0 ? token.length() : len;
+            if (token.length() - len != 0) {
+                return;
+            }
+        }
+    }
+
+    @Test
     public void test_randomToken_fromText_Customization() {
         ((PlainTextSecurityService) plainService)
             .registerMachine(new PlainTextSecurityService.RandomText(10, "!@#$%^&*()-="));
