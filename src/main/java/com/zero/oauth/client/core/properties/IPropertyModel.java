@@ -1,9 +1,11 @@
 package com.zero.oauth.client.core.properties;
 
 import java.util.List;
+import java.util.function.Function;
 
 import com.zero.oauth.client.exceptions.OAuthParameterException;
 import com.zero.oauth.client.type.HttpPlacement;
+import com.zero.oauth.client.type.OAuthVersion;
 
 /**
  * Defines an OAuth property in HTTP request, HTTP response or HTTP header.
@@ -11,6 +13,13 @@ import com.zero.oauth.client.type.HttpPlacement;
  * @since 1.0.0
  */
 public interface IPropertyModel {
+
+    /**
+     * Property's for which OAuth Version.
+     *
+     * @return {@code OAuth version}
+     */
+    OAuthVersion getVersion();
 
     /**
      * Property's name is mandatory and unique, that declares a key in HTTP Request/Response parameters/header
@@ -21,7 +30,7 @@ public interface IPropertyModel {
     String getName();
 
     /**
-     * Property's value is mandatory in case of it is marked as {@link Constraint#REQUIRED}.
+     * Property's raw value.
      *
      * @return {@code property's value}
      */
@@ -30,55 +39,73 @@ public interface IPropertyModel {
     /**
      * Set value.
      *
-     * @param <T>   Any type of {@code Property Model}
+     * @param <P>   Any type of {@code Property Model}
      * @param value Any value but have to implement {@link Object#toString()}
      * @return {@code this}
      */
-    <T extends IPropertyModel> T setValue(Object value);
+    <P extends IPropertyModel> P setValue(Object value);
 
     /**
-     * Validate before serialize or after deserialize.
+     * Serialize data. It maybe used {@code Function} to compute value if declare it by {@link
+     * #registerFunction(Function)}. Also, validate data depends on {@code Constraint}.
      *
      * @return {@code property's value}
      * @throws OAuthParameterException If property is marked as {@link Constraint#REQUIRED} but {@code value}
      *                                 is {@code null} or {@code empty}
      */
-    Object validate();
+    Object serialize();
 
     /**
      * Clone current instance with overriding property value. It is helper method to generate new {@code
      * PropertyModel} instance from builtin {@code PropertyModel}.
      *
-     * @param <T>   Any type of {@code Property Model}
+     * @param <P>   Any type of {@code Property Model}
      * @param value Any value but have to implement {@link Object#toString()}
      * @return New instance
      */
-    <T extends IPropertyModel> T duplicate(Object value);
+    <P extends IPropertyModel> P duplicate(Object value);
+
+    /**
+     * Check if this is compute value.
+     *
+     * @return {@code True} if it is compute value, else otherwise
+     */
+    boolean isComputeValue();
+
+    /**
+     * Register function to compute value in run time when calling {@link #getValue()}.
+     *
+     * @param <P> Any type of {@code Property Model}
+     * @param <T> Type of raw property's value
+     * @param <R> Type of function output
+     * @return {@code this}
+     */
+    <P extends IPropertyModel, T, R> P registerFunction(Function<T, R> func);
 
     /**
      * Register HTTP Placement that this property can appear in {@code HTTP Request}.
      *
      * @param placements available placements
-     * @param <T>        Any type of {@code Property Model}
+     * @param <P>        Any type of {@code Property Model}
      * @return {@code this}
      */
-    <T extends IPropertyModel> T registerPlacements(HttpPlacement... placements);
+    <P extends IPropertyModel> P registerPlacements(HttpPlacement... placements);
 
     /**
      * Available HTTP placements that this property can be put into.
      *
      * @return List of available placements
      */
-    List<HttpPlacement> getAvailabePlacements();
+    List<HttpPlacement> getAvailablePlacements();
 
     /**
      * Set constraint.
      *
-     * @param <T>   Any type of {@code Property Model}
+     * @param <P>   Any type of {@code Property Model}
      * @param value Constraint value
      * @return {@code this}
      */
-    <T extends IPropertyModel> T constraint(Constraint value);
+    <P extends IPropertyModel> P constraint(Constraint value);
 
     /**
      * Check property is required or not.

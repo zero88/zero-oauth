@@ -2,7 +2,6 @@ package com.zero.oauth.client.core.oauth2;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -67,14 +66,11 @@ public class OAuth2DeviceCodePropTest {
     }
 
     @Test
-    public void testRequestParams_Value() {
-        OAuth2RequestProperties params = OAuth2RequestProperties.init(GrantType.DEVICE_CODE);
-        OAuth2RequestProperty customValue = params.get(OAuth2RequestProperty.RESPONSE_TYPE.getName());
-        assertNotSame(OAuth2RequestProperty.RESPONSE_TYPE, customValue);
-        assertEquals("device_code", customValue.getValue());
-        OAuth2RequestProperty customValue2 = params.get(OAuth2RequestProperty.GRANT_TYPE.getName());
-        assertNotSame(OAuth2RequestProperty.GRANT_TYPE, customValue2);
-        assertEquals("urn:ietf:params:oauth:grant-type:device_code", customValue2.getValue());
+    public void testRequestParams_DefaultValue() {
+        OAuth2RequestProperty prop1 = requestProperties.get(OAuth2RequestProperty.RESPONSE_TYPE.getName());
+        assertEquals("device_code", prop1.getValue());
+        OAuth2RequestProperty prop2 = requestProperties.get(OAuth2RequestProperty.GRANT_TYPE.getName());
+        assertEquals("urn:ietf:params:oauth:grant-type:device_code", prop2.getValue());
     }
 
     @Test

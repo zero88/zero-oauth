@@ -19,9 +19,9 @@ class OAuth1PropertyModel extends PropertyModel implements OAuth1PropertyMatcher
         super(OAuthVersion.V1, name);
     }
 
-    OAuth1PropertyModel(String name, Map<FlowStep, Constraint> steps) {
-        super(OAuthVersion.V1, name);
-        this.steps.putAll(steps);
+    OAuth1PropertyModel(OAuth1PropertyModel property) {
+        super(property);
+        this.steps.putAll(property.getMapping());
     }
 
     @SuppressWarnings("unchecked")

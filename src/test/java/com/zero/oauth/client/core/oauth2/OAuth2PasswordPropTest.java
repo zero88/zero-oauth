@@ -2,7 +2,6 @@ package com.zero.oauth.client.core.oauth2;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -55,11 +54,9 @@ public class OAuth2PasswordPropTest {
     }
 
     @Test
-    public void testRequestParams_Implicit_Value() {
-        OAuth2RequestProperties params = OAuth2RequestProperties.init(GrantType.PASSWORD);
-        OAuth2RequestProperty customValue2 = params.get(OAuth2RequestProperty.GRANT_TYPE.getName());
-        assertNotSame(OAuth2RequestProperty.GRANT_TYPE, customValue2);
-        assertEquals("password", customValue2.getValue());
+    public void testRequestParams_DefaultValue() {
+        OAuth2RequestProperty prop = requestProperties.get(OAuth2RequestProperty.GRANT_TYPE.getName());
+        assertEquals("password", prop.getValue());
     }
 
     @Test

@@ -1,4 +1,4 @@
-package com.zero.oauth.client.client;
+package com.zero.oauth.client;
 
 import java.util.Objects;
 
@@ -18,7 +18,7 @@ public class OAuth1Client<T extends OAuth1Api> implements OAuthClient<T> {
     private CallbackHandler callback;
 
     @Override
-    public <P extends IResponsePropModel> IPropertyStore<P> generateAuthorizeRedirect() {
+    public String generateAuthorizeRedirect() {
         return null;
     }
 

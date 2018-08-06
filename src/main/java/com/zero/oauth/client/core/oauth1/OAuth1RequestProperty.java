@@ -1,7 +1,5 @@
 package com.zero.oauth.client.core.oauth1;
 
-import java.util.Map;
-
 import com.zero.oauth.client.core.properties.PropertyModel;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.SignatureMethod;
@@ -127,14 +125,14 @@ public final class OAuth1RequestProperty extends OAuth1PropertyModel {
         super(name);
     }
 
-    private OAuth1RequestProperty(String name, Map<FlowStep, Constraint> steps) {
-        super(name, steps);
+    private OAuth1RequestProperty(OAuth1RequestProperty property) {
+        super(property);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public OAuth1RequestProperty duplicate() {
-        return new OAuth1RequestProperty(this.getName(), this.getMapping()).setValue(this.getValue());
+        return new OAuth1RequestProperty(this);
     }
 
 }

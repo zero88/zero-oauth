@@ -1,5 +1,7 @@
 package com.zero.oauth.client.core.oauth2;
 
+import java.util.stream.Collectors;
+
 import com.zero.oauth.client.type.GrantType;
 import com.zero.oauth.client.utils.Reflections;
 
@@ -17,11 +19,8 @@ public final class OAuth2ResponseProperties extends OAuth2Properties<OAuth2Respo
 
     private OAuth2ResponseProperties(GrantType grantType, boolean error) {
         super(grantType);
-        for (OAuth2ResponseProperty prop : Reflections.getConstants(OAuth2ResponseProperty.class)) {
-            if (prop.isError()) {
-                this.add(prop);
-            }
-        }
+        this.init(Reflections.getConstants(OAuth2ResponseProperty.class).stream()
+                             .filter(OAuth2ResponseProperty::isError).collect(Collectors.toList()));
         this.error = error;
     }
 

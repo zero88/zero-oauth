@@ -1,8 +1,7 @@
 package com.zero.oauth.client.core.oauth2;
 
-import java.util.Map;
-
 import com.zero.oauth.client.core.properties.PropertyModel;
+import com.zero.oauth.client.security.TokenGeneration;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.GrantType;
 
@@ -10,7 +9,6 @@ import com.zero.oauth.client.type.GrantType;
  * It is model to define an OAuth parameter when sending request OAuth server.
  *
  * @see PropertyModel
- * @see OAuth2PropertyModel
  */
 public class OAuth2RequestProperty extends OAuth2PropertyModel {
 
@@ -59,7 +57,8 @@ public class OAuth2RequestProperty extends OAuth2PropertyModel {
         .declare(GrantType.AUTH_CODE, FlowStep.AUTHORIZE, Constraint.RECOMMENDATION)
         .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE, Constraint.RECOMMENDATION)
         .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN, Constraint.RECOMMENDATION)
-        .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN, Constraint.RECOMMENDATION);
+        .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN, Constraint.RECOMMENDATION)
+        .registerFunction(new TokenGeneration());
 
     /**
      * The public identifier for the application, obtained when the developer first registered the
@@ -139,14 +138,14 @@ public class OAuth2RequestProperty extends OAuth2PropertyModel {
         super(name);
     }
 
-    private OAuth2RequestProperty(String name, Map<GrantType, Map<FlowStep, Constraint>> mapping) {
-        super(name, mapping);
+    private OAuth2RequestProperty(OAuth2RequestProperty property) {
+        super(property);
     }
 
     @SuppressWarnings("unchecked")
     @Override
     public OAuth2RequestProperty duplicate() {
-        return new OAuth2RequestProperty(this.getName(), this.getMapping()).setValue(this.getValue());
+        return new OAuth2RequestProperty(this);
     }
 
 }

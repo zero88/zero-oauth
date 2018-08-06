@@ -3,12 +3,14 @@ package com.zero.oauth.client.core.properties;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
+import java.util.function.Function;
 
 import com.zero.oauth.client.exceptions.OAuthParameterException;
 import com.zero.oauth.client.type.HttpPlacement;
 import com.zero.oauth.client.type.OAuthVersion;
 import com.zero.oauth.client.utils.Strings;
 
+import lombok.AccessLevel;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -32,11 +34,25 @@ public class PropertyModel implements IPropertyModel {
     @ToString.Include
     private final String name;
     private Object value;
+    private Object serializeData;
     @ToString.Include
     private Constraint constraint = Constraint.OPTIONAL;
+    @Getter(value = AccessLevel.PROTECTED)
+    private Function func;
     @Getter
-    private List<HttpPlacement> availabePlacements =
+    private List<HttpPlacement> availablePlacements =
         Arrays.asList(HttpPlacement.HEADER, HttpPlacement.URI_QUERY, HttpPlacement.BODY);
+
+    protected <P extends PropertyModel> PropertyModel(P property) {
+        this.version = property.getVersion();
+        this.name = property.getName();
+        this.value = property.getValue();
+        this.constraint = property.isRequired()
+                          ? Constraint.REQUIRED
+                          : property.isOptional() ? Constraint.OPTIONAL : Constraint.RECOMMENDATION;
+        this.func = property.getFunc();
+        this.availablePlacements = property.getAvailablePlacements();
+    }
 
     /**
      * Mark property is required to further error validation.
@@ -62,16 +78,6 @@ public class PropertyModel implements IPropertyModel {
         return (T) this;
     }
 
-    /**
-     * For internal process to extract {@code PropertyModel} to make request.
-     *
-     * @param constraint Override constraint
-     * @return a clone of {@code PropertyModel}
-     */
-    protected IPropertyModel clone(Constraint constraint) {
-        return this.duplicate().constraint(constraint);
-    }
-
     public Object getValue() {
         return this.value;
     }
@@ -82,9 +88,13 @@ public class PropertyModel implements IPropertyModel {
         return (T) this;
     }
 
+    @SuppressWarnings("unchecked")
     @Override
-    public Object validate() {
-        if (Objects.isNull(this.getValue()) || Strings.isBlank(this.getValue().toString())) {
+    public Object serialize() {
+        Object value = this.getValue();
+        this.serializeData =
+            isComputeValue() ? Objects.isNull(serializeData) ? func.apply(value) : serializeData : value;
+        if (Objects.isNull(serializeData) || Strings.isBlank(serializeData.toString())) {
             if (this.isRequired()) {
                 throw new OAuthParameterException("Missing required of property name: " + this.getName());
             }
@@ -93,13 +103,32 @@ public class PropertyModel implements IPropertyModel {
                          "Check REST APIs docs for more details.", this.getName());
             }
         }
-        return this.getValue();
+        return serializeData;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends IPropertyModel> T duplicate(Object value) {
+        return this.duplicate().setValue(value);
     }
 
     @Override
-    public <T extends IPropertyModel> T duplicate(Object value) {
-        T instance = this.duplicate();
-        return instance.setValue(value);
+    public boolean isComputeValue() {
+        return Objects.nonNull(this.func);
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends IPropertyModel, I, R> T registerFunction(Function<I, R> func) {
+        this.func = func;
+        return (T) this;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public <T extends IPropertyModel> T registerPlacements(HttpPlacement... placements) {
+        this.availablePlacements = Arrays.asList(placements);
+        return (T) this;
     }
 
     @SuppressWarnings("unchecked")
@@ -121,15 +150,18 @@ public class PropertyModel implements IPropertyModel {
     }
 
     @SuppressWarnings("unchecked")
-    @Override
-    public <T extends IPropertyModel> T registerPlacements(HttpPlacement... placements) {
-        this.availabePlacements = Arrays.asList(placements);
-        return (T) this;
+    protected <T extends IPropertyModel> T duplicate() {
+        return (T) new PropertyModel(this);
     }
 
-    protected <T extends IPropertyModel> T duplicate() {
-        return new PropertyModel(getVersion(), getName()).constraint(this.constraint)
-                                                         .setValue(this.getValue());
+    /**
+     * For internal process to extract {@code PropertyModel} to make request.
+     *
+     * @param constraint Override constraint
+     * @return a clone of {@code PropertyModel}
+     */
+    protected IPropertyModel clone(Constraint constraint) {
+        return this.duplicate().constraint(constraint);
     }
 
 }

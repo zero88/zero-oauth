@@ -1,4 +1,4 @@
-package com.zero.oauth.client.client;
+package com.zero.oauth.client;
 
 import com.zero.oauth.client.core.properties.IPropertyModel;
 import com.zero.oauth.client.core.properties.IPropertyStore;
@@ -42,7 +42,7 @@ public interface OAuthClient<T extends OAuthApi> {
      * @param clientId       Client ID is required value, which you get from client registration.
      * @param clientSecret   Client Secret is required value, which you get from registration.
      * @param authorizeUrl   Endpoint for user authorization of OAuth v2, it is required value.
-     * @param accessTokenUrl RAccess Token endpoint for OAuth v2, it is required value.
+     * @param accessTokenUrl Access Token endpoint for OAuth v2, it is required value.
      * @param grantType      Define client use which OAuth v2 grant type, it is required value.
      * @return OAuth client version 2
      * @throws IllegalArgumentException if any missing required value.
@@ -66,12 +66,9 @@ public interface OAuthClient<T extends OAuthApi> {
     /**
      * Generate the authorize redirect.
      *
-     * @param <P> The type of property model
-     * @return Response properties that conforms with {@link FlowStep#AUTHORIZE}
-     * @see IPropertyModel
-     * @see IPropertyStore
+     * @return URL string that to make
      */
-    <P extends IResponsePropModel> IPropertyStore<P> generateAuthorizeRedirect();
+    String generateAuthorizeRedirect();
 
     /**
      * Exchange {@code access token} with server by the given input is an output of {@link

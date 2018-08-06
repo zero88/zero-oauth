@@ -1,4 +1,4 @@
-package com.zero.oauth.client.client;
+package com.zero.oauth.client;
 
 import com.zero.oauth.client.core.oauth2.OAuth2RequestProperties;
 import com.zero.oauth.client.core.oauth2.OAuth2RequestProperty;
@@ -14,7 +14,7 @@ public class OAuth2Api implements OAuthApi {
     private final String clientSecret;
     private final String authorizeUrl;
     private final String accessTokenUrl;
-    private final OAuth2RequestProperties defaultPayload;
+    private final OAuth2RequestProperties requestProperties;
     private String apiBaseUrl;
     private String refreshTokenUrl;
 
@@ -35,9 +35,9 @@ public class OAuth2Api implements OAuthApi {
         this.clientSecret = Strings.requireNotBlank(clientSecret);
         this.authorizeUrl = Strings.requireNotBlank(authorizeUrl);
         this.accessTokenUrl = Strings.requireNotBlank(accessTokenUrl);
-        this.defaultPayload = OAuth2RequestProperties.init(grantType);
-        this.defaultPayload.update(OAuth2RequestProperty.CLIENT_ID.getName(), clientId);
-        this.defaultPayload.update(OAuth2RequestProperty.CLIENT_SECRET.getName(), clientSecret);
+        this.requestProperties = OAuth2RequestProperties.init(grantType);
+        this.requestProperties.update(OAuth2RequestProperty.CLIENT_ID.getName(), clientId);
+        this.requestProperties.update(OAuth2RequestProperty.CLIENT_SECRET.getName(), clientSecret);
     }
 
     @SuppressWarnings("unchecked")

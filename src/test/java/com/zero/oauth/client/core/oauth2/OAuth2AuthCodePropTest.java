@@ -2,7 +2,10 @@ package com.zero.oauth.client.core.oauth2;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertNotSame;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
@@ -65,32 +68,48 @@ public class OAuth2AuthCodePropTest {
     }
 
     @Test
-    public void test_RequestProp_ResponseType() {
-        OAuth2RequestProperty customValue =
-            requestProperties.get(OAuth2RequestProperty.RESPONSE_TYPE.getName());
-        assertNotSame(OAuth2RequestProperty.RESPONSE_TYPE, customValue);
-        assertEquals("code", customValue.getValue());
+    public void test_RequestProp_DefaultValue() {
+        assertEquals("authorization_code",
+                     requestProperties.get(OAuth2RequestProperty.GRANT_TYPE.getName()).getValue());
+        assertEquals("code", requestProperties.get(OAuth2RequestProperty.RESPONSE_TYPE.getName()).getValue());
     }
 
     @Test
-    public void test_RequestProp_GrantType() {
-        OAuth2RequestProperty customValue2 =
-            requestProperties.get(OAuth2RequestProperty.GRANT_TYPE.getName());
-        assertNotSame(OAuth2RequestProperty.GRANT_TYPE, customValue2);
-        assertEquals("authorization_code", customValue2.getValue());
+    public void test_RequestProp_DuplicateValue() {
+        OAuth2RequestProperty property = OAuth2RequestProperty.RESPONSE_TYPE.duplicate("xyz");
+        assertNotSame(OAuth2RequestProperty.RESPONSE_TYPE, property);
+        assertEquals("xyz", property.getValue());
+        assertEquals(OAuth2RequestProperty.RESPONSE_TYPE.getMapping(), property.getMapping());
     }
 
     @Test
     public void test_ResponseProp_Error() {
-        assertTrue("Error repsonse must be marked as `error=True`", errorProperties.isError());
-        assertTrue("Error repsonse must have `error` prop key", errorProperties.has("error"));
+        assertTrue("Error response must be marked as `error=True`", errorProperties.isError());
+        assertTrue("Error response must have `error` prop key", errorProperties.has("error"));
         assertTrue("`error` prop key must be required", errorProperties.get("error").isRequired());
-        assertTrue("Error repsonse must have `error_description` prop key",
+        assertTrue("Error response must have `error_description` prop key",
                    errorProperties.has("error_description"));
         assertTrue("`error_description` prop key must be optional",
                    errorProperties.get("error_description").isOptional());
-        assertTrue("Error repsonse must have `error_uri` prop key", errorProperties.has("error_uri"));
+        assertTrue("Error response must have `error_uri` prop key", errorProperties.has("error_uri"));
         assertTrue("`error_uri` prop key must be optional", errorProperties.get("error_uri").isOptional());
+    }
+
+    @Test
+    public void test_ResponseProp_Error_Duplicate() {
+        OAuth2ResponseProperty error = errorProperties.get("error").duplicate("invalid_request");
+        assertNotSame(error, OAuth2ResponseProperty.ERROR_CODE);
+        assertTrue(error.isError());
+        assertEquals("invalid_request", error.getValue());
+    }
+
+    @Test
+    public void test_ResponseProp_Duplicate() {
+        OAuth2ResponseProperty responseProperty =
+            responseProperties.by(FlowStep.EXCHANGE_TOKEN, "access_token").duplicate("xxx");
+        assertNotSame(responseProperty, OAuth2ResponseProperty.ACCESS_TOKEN);
+        assertFalse(responseProperty.isError());
+        assertEquals("xxx", responseProperty.getValue());
     }
 
     @Test
@@ -98,6 +117,24 @@ public class OAuth2AuthCodePropTest {
         List<IPropertyModel> by = requestProperties.by(FlowStep.ACCESS_RESOURCE);
         List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
         assertThat(param_names, hasItems("access_token"));
+    }
+
+    @Test
+    public void test_RequestProp_StateValue() {
+        OAuth2RequestProperty state = OAuth2RequestProperty.STATE.duplicate();
+        assertTrue(state.isComputeValue());
+        assertNull(state.getValue());
+        Object value1 = state.serialize();
+        assertNotNull(value1);
+        assertEquals(value1, state.serialize());
+    }
+
+    @Test
+    public void test_RequestProp_SetStateValue() {
+        OAuth2RequestProperty state = OAuth2RequestProperty.STATE.duplicate();
+        state.setValue("xyz");
+        assertEquals("xyz", state.getValue());
+        assertEquals("xyz", state.serialize());
     }
 
 }

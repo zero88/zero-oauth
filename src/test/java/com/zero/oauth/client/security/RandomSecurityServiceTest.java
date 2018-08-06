@@ -66,6 +66,12 @@ public class RandomSecurityServiceTest {
         }
     }
 
+    @Test(expected = IllegalArgumentException.class)
+    public void test_randomToken_fromText_Customization_MaxLessThanMin() {
+        ((PlainTextSecurityService) plainService)
+            .registerMachine(new PlainTextSecurityService.RandomText(5, "!@#$%^&*()-="));
+    }
+
     @Test
     public void test_randomToken_fromText_Customization() {
         ((PlainTextSecurityService) plainService)

@@ -1,4 +1,4 @@
-package com.zero.oauth.client.client;
+package com.zero.oauth.client;
 
 import com.zero.oauth.client.core.properties.OAuthProperties;
 import com.zero.oauth.client.type.GrantType;
@@ -89,7 +89,7 @@ public interface OAuthApi {
     }
 
     /**
-     * Register refresh token endpoint. It is able only on OAuth v2.
+     * Register refresh token endpoint. It is only available on OAuth v2.
      *
      * @param refreshTokenUrl Refresh Token endpoint for OAuth v2
      * @param <T>             Type of OAuth API
@@ -101,11 +101,15 @@ public interface OAuthApi {
     }
 
     /**
-     * OAuth default payload is standard properties in OAuth flow, that helps making request to Authorization
-     * server then achieving credentials token to access Resource server.
+     * OAuth Request properties, it can be used to create HTTP header, HTTP Query or HTTP Body in request.
+     * <ul>
+     * <li>Builtin standard properties in OAuth flow, that helps making request to
+     * Authorization server then achieving credentials token to access Resource server.</li>
+     * <li>Any custom properties</li>
+     * </ul>
      *
-     * @return OAuth default payload
+     * @return OAuth request properties
      */
-    OAuthProperties getDefaultPayload();
+    OAuthProperties getRequestProperties();
 
 }

@@ -48,21 +48,15 @@ public class HttpHeaderConverter<T extends OAuthProperties> implements Propertie
                 throw new OAuthParameterException(
                     "Property doesn't conform the syntax: `key`" + EQUAL + "`value`");
             }
-            map.put(Urls.decode(keyValues[0]),
-                    Urls.decode(keyValues[1].replaceAll("^\"(.+)\"$", "$1")));
+            map.put(Urls.decode(keyValues[0]), Urls.decode(keyValues[1].replaceAll("^\"(.+)\"$", "$1")));
         }
         return this.deserialize(map, step);
     }
 
     private String compute(IPropertyModel property) {
         String key = Strings.requireNotBlank(property.getName());
-        Object value = property.validate();
-        if (Objects.isNull(value)) {
-            return null;
-        }
-        return new StringBuilder(Urls.encode(key)).append(EQUAL).append("\"")
-                                                  .append(Urls.encode(value.toString()))
-                                                  .append("\"").toString();
+        String value = Strings.toString(property.serialize());
+        return Strings.isBlank(value) ? null : Urls.encode(key) + EQUAL + "\"" + Urls.encode(value) + "\"";
     }
 
 }

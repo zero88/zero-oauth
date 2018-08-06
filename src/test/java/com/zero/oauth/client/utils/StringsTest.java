@@ -73,6 +73,11 @@ public class StringsTest {
     }
 
     @Test
+    public void test_ConvertToInt_StringBlank() {
+        Assert.assertEquals(2, Strings.convertToInt("", 2));
+    }
+
+    @Test
     public void test_ConvertToInt_StringNotNumber() {
         Assert.assertEquals(4, Strings.convertToInt(" a b ", 4));
     }
@@ -85,6 +90,14 @@ public class StringsTest {
     @Test
     public void test_ConvertToInt_Success() {
         Assert.assertEquals(8, Strings.convertToInt(" 8 ", 8));
+    }
+
+    @Test
+    public void test_toString() {
+        Assert.assertEquals("", Strings.toString(null));
+        Assert.assertEquals("123", Strings.toString(123));
+        Assert.assertEquals("true", Strings.toString(Boolean.TRUE));
+        Assert.assertEquals("xy", Strings.toString(" xy    "));
     }
 
 }

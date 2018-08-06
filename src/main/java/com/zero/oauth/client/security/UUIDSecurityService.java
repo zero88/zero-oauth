@@ -3,7 +3,7 @@ package com.zero.oauth.client.security;
 import java.util.UUID;
 
 /**
- * Use {@code} UUID_ALGO to generate random token.
+ * Use {@code} uuid to generate random token.
  *
  * @see java.util.UUID
  */

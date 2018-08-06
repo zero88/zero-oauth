@@ -81,8 +81,8 @@ public class HttpHeaderConverterTest {
         String headers = "oauth_token=\"" + TOKEN + "\"," + "oauth_token_secret=\"" + TOKEN_SECRET + "\"," +
                          "oauth_callback_confirmed=\"" + TOKEN_CONFIRMED + "\"";
         System.out.println("Deserialize: " + headers);
-        IPropertyStore<IPropertyModel> store = new HttpHeaderConverter<>(new OAuth1ResponseProperties())
-            .deserialize(headers, FlowStep.REQUEST);
+        IPropertyStore<IPropertyModel> store =
+            new HttpHeaderConverter<>(new OAuth1ResponseProperties()).deserialize(headers, FlowStep.REQUEST);
         assertEquals(TOKEN, store.get(OAuth1ResponseProperty.TOKEN.getName()).getValue());
         assertEquals(TOKEN_SECRET, store.get(OAuth1ResponseProperty.TOKEN_SECRET.getName()).getValue());
         assertEquals(TOKEN_CONFIRMED,

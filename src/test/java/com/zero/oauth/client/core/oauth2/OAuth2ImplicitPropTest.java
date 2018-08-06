@@ -2,7 +2,6 @@ package com.zero.oauth.client.core.oauth2;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -52,11 +51,9 @@ public class OAuth2ImplicitPropTest {
     }
 
     @Test
-    public void testRequestParams_Implicit_Value() {
-        OAuth2RequestProperties params = OAuth2RequestProperties.init(GrantType.IMPLICIT);
-        OAuth2RequestProperty customValue2 = params.get(OAuth2RequestProperty.RESPONSE_TYPE.getName());
-        assertNotSame(OAuth2RequestProperty.RESPONSE_TYPE, customValue2);
-        assertEquals("token", customValue2.getValue());
+    public void testRequestParams_DefaultValue() {
+        OAuth2RequestProperty property = requestProperties.get(OAuth2RequestProperty.RESPONSE_TYPE.getName());
+        assertEquals("token", property.getValue());
     }
 
     @Test

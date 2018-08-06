@@ -16,6 +16,16 @@ import lombok.extern.log4j.Log4j2;
 public final class Strings {
 
     /**
+     * To String.
+     *
+     * @param object the object cast to string.
+     * @return {@code blank} if null, else {@link Object#toString()} with {@code trim}
+     */
+    public static String toString(Object object) {
+        return object == null ? "" : object.toString().trim();
+    }
+
+    /**
      * Check given text is blank or not.
      *
      * @param text the text to check for blank
@@ -26,7 +36,7 @@ public final class Strings {
     }
 
     /**
-     * Check given text is not blank or not. The reversation of {@link #isBlank(String)}
+     * Check given text is not blank or not. The reversion of {@link #isBlank(String)}
      *
      * @param text the text to check for blank
      * @return {@code True} if not blank, else otherwise

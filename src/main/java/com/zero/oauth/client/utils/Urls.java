@@ -48,6 +48,14 @@ public final class Urls {
      * @see <a href="https://tools.ietf.org/html/rfc3986#section-3">URL syntax</a>
      */
     public static final String URL_PATTERN = HttpScheme.SCHEME_REGEX + AUTHORITY_PATTERN + PATH_PATTERN;
+    /**
+     * URL Query separator character.
+     */
+    public static final String QUERY_SEP_CHAR = "?";
+    /**
+     * URL Fragment separator character.
+     */
+    public static final String FRAGMENT_SEP_CHAR = "#";
     private static final Map<String, String> ENCODING_RULES;
 
     static {
@@ -88,7 +96,7 @@ public final class Urls {
     /**
      * Validate URL.
      *
-     * @param url String to validate
+     * @param url String to serialize
      * @return {@code True} if given input is valid URL syntax, otherwise {@code False}
      * @see #URL_PATTERN
      */
@@ -99,7 +107,7 @@ public final class Urls {
     /**
      * Validate URL Path.
      *
-     * @param path String to validate
+     * @param path String to serialize
      * @return {@code True} if given input is valid URL syntax, otherwise {@code False}
      * @see #PATH_PATTERN
      */
@@ -114,6 +122,27 @@ public final class Urls {
     private static boolean validate(String s, String pattern) {
         return Strings.isNotBlank(s) &&
                Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(s).matches();
+    }
+
+    /**
+     * Build a complete URL.
+     *
+     * @param url      Base URL with path
+     * @param query    Encode query
+     * @param fragment Encode fragment
+     * @return URL based on given input
+     * @throws IllegalArgumentException if {@code url} is null or empty
+     */
+    public static String buildURL(String url, String query, String fragment) {
+        return normalize(Strings.requireNotBlank(url) + buildQuery(query) + buildFragment(fragment));
+    }
+
+    private static String buildFragment(String fragment) {
+        return Strings.isBlank(fragment) ? "" : FRAGMENT_SEP_CHAR + fragment;
+    }
+
+    private static String buildQuery(String query) {
+        return Strings.isBlank(query) ? "" : QUERY_SEP_CHAR + query;
     }
 
     /**

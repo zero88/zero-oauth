@@ -1,6 +1,8 @@
 package com.zero.oauth.client.core.oauth1;
 
 import static org.hamcrest.CoreMatchers.hasItems;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -24,7 +26,15 @@ public class OAuth1PropTest {
     }
 
     @Test
-    public void testRequest_RequestToken() {
+    public void test_Duplicate_Request_Property() {
+        OAuth1RequestProperty duplicate = OAuth1RequestProperty.CONSUMER_KEY.duplicate();
+        assertNotSame(OAuth1RequestProperty.CONSUMER_KEY, duplicate);
+        assertEquals(OAuth1RequestProperty.CONSUMER_KEY, duplicate);
+        assertEquals(duplicate.getMapping(), OAuth1RequestProperty.CONSUMER_KEY.getMapping());
+    }
+
+    @Test
+    public void test_Request_RequestToken() {
         List<IPropertyModel> by = requestProperties.by(FlowStep.REQUEST);
         List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
         assertThat(param_names,
@@ -33,7 +43,7 @@ public class OAuth1PropTest {
     }
 
     @Test
-    public void testResponse_RequestToken() {
+    public void test_Response_RequestToken() {
         List<IPropertyModel> by = responseProperties.by(FlowStep.REQUEST);
         List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
         assertThat(param_names, hasItems("oauth_token", "oauth_token_secret", "oauth_callback_confirmed"));

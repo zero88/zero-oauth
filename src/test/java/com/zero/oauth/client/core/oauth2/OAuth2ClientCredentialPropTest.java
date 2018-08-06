@@ -2,7 +2,6 @@ package com.zero.oauth.client.core.oauth2;
 
 import static org.hamcrest.CoreMatchers.hasItems;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotSame;
 import static org.junit.Assert.assertThat;
 
 import java.util.List;
@@ -53,11 +52,9 @@ public class OAuth2ClientCredentialPropTest {
     }
 
     @Test
-    public void testRequestParams_Value() {
-        OAuth2RequestProperties params = OAuth2RequestProperties.init(GrantType.CLIENT_CREDENTIALS);
-        OAuth2RequestProperty customValue2 = params.get(OAuth2RequestProperty.GRANT_TYPE.getName());
-        assertNotSame(OAuth2RequestProperty.GRANT_TYPE, customValue2);
-        assertEquals("client_credentials", customValue2.getValue());
+    public void testRequestParams_DefaultValue() {
+        OAuth2RequestProperty prop = requestProperties.get(OAuth2RequestProperty.GRANT_TYPE.getName());
+        assertEquals("client_credentials", prop.getValue());
     }
 
     @Test

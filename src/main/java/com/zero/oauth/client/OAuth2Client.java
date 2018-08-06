@@ -1,11 +1,14 @@
-package com.zero.oauth.client.client;
+package com.zero.oauth.client;
 
 import java.util.Objects;
 
 import com.zero.oauth.client.core.properties.IPropertyModel;
 import com.zero.oauth.client.core.properties.IPropertyStore;
 import com.zero.oauth.client.core.properties.IResponsePropModel;
+import com.zero.oauth.client.core.properties.converter.HttpQueryConverter;
+import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.HttpMethod;
+import com.zero.oauth.client.utils.Urls;
 
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
@@ -18,8 +21,10 @@ public class OAuth2Client<T extends OAuth2Api> implements OAuthClient<T> {
     private CallbackHandler callback;
 
     @Override
-    public <P extends IResponsePropModel> IPropertyStore<P> generateAuthorizeRedirect() {
-        return null;
+    public String generateAuthorizeRedirect() {
+        return Urls.buildURL(this.api.getAuthorizeUrl(),
+                             new HttpQueryConverter<>(this.api.getRequestProperties())
+                                 .serialize(FlowStep.AUTHORIZE), null);
     }
 
     @Override

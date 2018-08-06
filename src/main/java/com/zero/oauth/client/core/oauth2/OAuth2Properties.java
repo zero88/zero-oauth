@@ -40,7 +40,11 @@ class OAuth2Properties<P extends OAuth2PropertyMatcher> extends PropertyStore<P>
     @Override
     public final <T extends IPropertyModel> T by(FlowStep step, String name) {
         P property = this.get(name);
-        return Objects.isNull(property) ? null : (T) property.match(this.grantType, step);
+        if (Objects.nonNull(property)) {
+            return (T) property.match(this.grantType, step);
+        }
+        return (T) this.properties().stream().filter(prop -> name.equals(prop.getName())).findFirst()
+                       .map(prop -> prop.match(this.grantType, step)).orElse(null);
     }
 
     @Override

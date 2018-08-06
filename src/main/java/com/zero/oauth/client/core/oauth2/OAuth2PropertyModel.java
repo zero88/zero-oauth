@@ -20,9 +20,9 @@ class OAuth2PropertyModel extends PropertyModel implements OAuth2PropertyMatcher
         super(OAuthVersion.V2, name);
     }
 
-    OAuth2PropertyModel(String name, Map<GrantType, Map<FlowStep, Constraint>> mapping) {
-        super(OAuthVersion.V2, name);
-        this.mapping.putAll(mapping);
+    OAuth2PropertyModel(OAuth2PropertyModel property) {
+        super(property);
+        this.mapping.putAll(property.getMapping());
     }
 
     @SuppressWarnings("unchecked")
@@ -41,13 +41,11 @@ class OAuth2PropertyModel extends PropertyModel implements OAuth2PropertyMatcher
      * @param step      {@link FlowStep}
      * @return Property Model
      */
+    @SuppressWarnings("unchecked")
     public IPropertyModel match(GrantType grantType, FlowStep step) {
         validate(grantType, step);
         Map<FlowStep, Constraint> flows = this.mapping.get(grantType);
-        if (flows == null) {
-            return null;
-        }
-        if (!flows.containsKey(step)) {
+        if (flows == null || !flows.containsKey(step)) {
             return null;
         }
         return this.clone(flows.get(step));

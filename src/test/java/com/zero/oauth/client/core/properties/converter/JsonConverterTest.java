@@ -55,7 +55,8 @@ public class JsonConverterTest {
 
     @Test(expected = OAuthParameterException.class)
     public void test_RequestProp_JsonConverter_MissingValue() {
-        new JsonConverter<>(requestProperties).serialize(FlowStep.EXCHANGE_TOKEN);
+        String serialize = new JsonConverter<>(requestProperties).serialize(FlowStep.EXCHANGE_TOKEN);
+        System.out.println("JSON: " + serialize);
     }
 
     @Test

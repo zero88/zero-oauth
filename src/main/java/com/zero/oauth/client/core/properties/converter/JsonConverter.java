@@ -24,7 +24,7 @@ public class JsonConverter<T extends OAuthProperties> implements PropertiesConve
     public String serialize(FlowStep step) {
         Gson gson = new GsonBuilder().create();
         Map<String, Object> map = this.propertyStore.by(step).stream().collect(
-            Collectors.toMap(IPropertyModel::getName, IPropertyModel::validate));
+            Collectors.toMap(IPropertyModel::getName, IPropertyModel::serialize));
         return gson.toJson(map);
     }
 

@@ -1,7 +1,5 @@
 package com.zero.oauth.client.core.oauth2;
 
-import java.util.Map;
-
 import com.zero.oauth.client.core.properties.IPropertyModel;
 import com.zero.oauth.client.core.properties.IResponsePropModel;
 import com.zero.oauth.client.type.FlowStep;
@@ -20,21 +18,18 @@ public class OAuth2ResponseProperty extends OAuth2PropertyModel implements IResp
     /**
      * The authorization token string as issued by the authorization server.
      */
-
     public static final OAuth2ResponseProperty AUTH_TOKEN =
         new OAuth2ResponseProperty("token").declare(GrantType.AUTH_CODE, FlowStep.AUTHORIZE);
 
     /**
      * The access token string as issued by the authorization server.
      */
-
     public static final OAuth2ResponseProperty AUTH_STATE = new OAuth2ResponseProperty("state")
         .declare(GrantType.AUTH_CODE, FlowStep.AUTHORIZE, Constraint.RECOMMENDATION);
 
     /**
      * The access token string as issued by the authorization server.
      */
-
     public static final OAuth2ResponseProperty ACCESS_TOKEN =
         new OAuth2ResponseProperty("access_token").declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN)
                                                   .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE)
@@ -47,7 +42,6 @@ public class OAuth2ResponseProperty extends OAuth2PropertyModel implements IResp
     /**
      * The type of token this is, typically just the string "bearer".
      */
-
     public static final OAuth2ResponseProperty TOKEN_TYPE =
         new OAuth2ResponseProperty("token_type").declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN)
                                                 .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE)
@@ -61,7 +55,6 @@ public class OAuth2ResponseProperty extends OAuth2PropertyModel implements IResp
     /**
      * The length of time, in seconds, that response are valid.
      */
-
     public static final OAuth2ResponseProperty EXPIRES_IN = new OAuth2ResponseProperty("expires_in")
         .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN, Constraint.RECOMMENDATION)
         .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE, Constraint.RECOMMENDATION)
@@ -76,7 +69,6 @@ public class OAuth2ResponseProperty extends OAuth2PropertyModel implements IResp
      * to obtain another access token. However, tokens issued with the implicit grant cannot be issued a
      * refresh token.
      */
-
     public static final OAuth2ResponseProperty REFRESH_TOKEN = new OAuth2ResponseProperty("refresh_token")
         .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
         .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
@@ -89,7 +81,6 @@ public class OAuth2ResponseProperty extends OAuth2PropertyModel implements IResp
      * If the granted scope is different from the requested scope, such as if the user modified the scope,
      * then this parameter is required.
      */
-
     public static final OAuth2ResponseProperty SCOPE = new OAuth2ResponseProperty("scope")
         .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
         .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE, Constraint.OPTIONAL)
@@ -104,7 +95,6 @@ public class OAuth2ResponseProperty extends OAuth2PropertyModel implements IResp
      * capabilities. This code lets the device running the app securely determine whether the user has granted
      * or denied access.
      */
-
     public static final OAuth2ResponseProperty DEVICE_CODE =
         new OAuth2ResponseProperty("device_code").declare(GrantType.DEVICE_CODE, FlowStep.EXCHANGE_TOKEN);
 
@@ -113,7 +103,6 @@ public class OAuth2ResponseProperty extends OAuth2PropertyModel implements IResp
      * Your user interface will instruct the user to enter this value on a separate device with richer input
      * capabilities.
      */
-
     public static final OAuth2ResponseProperty USER_CODE =
         new OAuth2ResponseProperty("user_code").declare(GrantType.DEVICE_CODE, FlowStep.EXCHANGE_TOKEN);
 
@@ -121,7 +110,6 @@ public class OAuth2ResponseProperty extends OAuth2PropertyModel implements IResp
      * A URL that the user must navigate to, on a separate device, to enter the user_code and grant or deny
      * access to your application. Your user interface will also display this value.
      */
-
     public static final OAuth2ResponseProperty VERIFICATION_URL =
         new OAuth2ResponseProperty("verification_url")
             .declare(GrantType.DEVICE_CODE, FlowStep.EXCHANGE_TOKEN);
@@ -129,7 +117,6 @@ public class OAuth2ResponseProperty extends OAuth2PropertyModel implements IResp
     /**
      * The length of time, in seconds, that your device should wait between polling requests.
      */
-
     public static final OAuth2ResponseProperty INTERVAL =
         new OAuth2ResponseProperty("interval").declare(GrantType.DEVICE_CODE, FlowStep.EXCHANGE_TOKEN);
 
@@ -156,8 +143,8 @@ public class OAuth2ResponseProperty extends OAuth2PropertyModel implements IResp
         super(name);
     }
 
-    private OAuth2ResponseProperty(String name, Map<GrantType, Map<FlowStep, Constraint>> mapping) {
-        super(name, mapping);
+    private OAuth2ResponseProperty(OAuth2ResponseProperty property) {
+        super(property);
     }
 
     @SuppressWarnings("unchecked")
@@ -167,20 +154,16 @@ public class OAuth2ResponseProperty extends OAuth2PropertyModel implements IResp
         return this;
     }
 
-    @SuppressWarnings("unchecked")
-    @Override
-    public OAuth2ResponseProperty duplicate() {
-        OAuth2ResponseProperty prop =
-            new OAuth2ResponseProperty(this.getName(), this.getMapping()).setValue(this.getValue());
-        if (this.isError()) {
-            prop.error();
-        }
-        return prop;
-    }
-
     @Override
     public boolean isError() {
         return this.error;
+    }
+
+    @SuppressWarnings("unchecked")
+    @Override
+    public OAuth2ResponseProperty duplicate() {
+        OAuth2ResponseProperty prop = new OAuth2ResponseProperty(this);
+        return this.isError() ? prop.error() : prop;
     }
 
 }

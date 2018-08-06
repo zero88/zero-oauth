@@ -1,7 +1,5 @@
 package com.zero.oauth.client.core.oauth1;
 
-import java.util.Map;
-
 import com.zero.oauth.client.core.properties.IResponsePropModel;
 import com.zero.oauth.client.core.properties.PropertyModel;
 import com.zero.oauth.client.type.FlowStep;
@@ -50,8 +48,8 @@ public class OAuth1ResponseProperty extends OAuth1PropertyModel implements IResp
         super(name);
     }
 
-    private OAuth1ResponseProperty(String name, Map<FlowStep, Constraint> steps) {
-        super(name, steps);
+    private OAuth1ResponseProperty(OAuth1ResponseProperty property) {
+        super(property);
     }
 
     @SuppressWarnings("unchecked")
@@ -69,12 +67,8 @@ public class OAuth1ResponseProperty extends OAuth1PropertyModel implements IResp
     @SuppressWarnings("unchecked")
     @Override
     public OAuth1ResponseProperty duplicate() {
-        OAuth1ResponseProperty prop =
-            new OAuth1ResponseProperty(this.getName(), this.getMapping()).setValue(this.getValue());
-        if (this.isError()) {
-            prop.error();
-        }
-        return prop;
+        OAuth1ResponseProperty prop = new OAuth1ResponseProperty(this);
+        return this.isError() ? prop.error() : prop;
     }
 
 }

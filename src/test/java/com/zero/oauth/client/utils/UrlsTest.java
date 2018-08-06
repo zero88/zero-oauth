@@ -1,6 +1,9 @@
 package com.zero.oauth.client.utils;
 
-import org.junit.Assert;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
+
 import org.junit.Test;
 
 import com.zero.oauth.client.exceptions.OAuthUrlException;
@@ -26,17 +29,17 @@ public class UrlsTest {
 
     @Test
     public void test_optimizeUrl_NullPath() {
-        Assert.assertEquals(DEFAULT_URL, Urls.optimizeUrl(DEFAULT_URL, null));
+        assertEquals(DEFAULT_URL, Urls.optimizeUrl(DEFAULT_URL, null));
     }
 
     @Test
     public void test_optimizeUrl_BlankPath() {
-        Assert.assertEquals(DEFAULT_URL, Urls.optimizeUrl(DEFAULT_URL, ""));
+        assertEquals(DEFAULT_URL, Urls.optimizeUrl(DEFAULT_URL, ""));
     }
 
     @Test
     public void test_optimizeUrl_FullPath() {
-        Assert.assertEquals(DEFAULT_URL + "/auth", Urls.optimizeUrl(DEFAULT_URL, "/auth"));
+        assertEquals(DEFAULT_URL + "/auth", Urls.optimizeUrl(DEFAULT_URL, "/auth"));
     }
 
     @Test(expected = OAuthUrlException.class)
@@ -46,65 +49,85 @@ public class UrlsTest {
 
     @Test
     public void test_optimizeUrl_MessyPath1() {
-        Assert.assertEquals(DEFAULT_URL + "/auth/t1", Urls.optimizeUrl(DEFAULT_URL, "//auth///t1"));
+        assertEquals(DEFAULT_URL + "/auth/t1", Urls.optimizeUrl(DEFAULT_URL, "//auth///t1"));
     }
 
     @Test
     public void test_optimizeUrl_MessyPath2() {
-        Assert.assertEquals(DEFAULT_URL + "/auth/t2/", Urls.optimizeUrl(DEFAULT_URL, "//auth///t2///"));
+        assertEquals(DEFAULT_URL + "/auth/t2/", Urls.optimizeUrl(DEFAULT_URL, "//auth///t2///"));
     }
 
     @Test(expected = OAuthUrlException.class)
     public void test_optimizeUrl_PathWithParameter() {
-        Assert.assertEquals(DEFAULT_URL + "/auth?name=x&age=20",
-                            Urls.optimizeUrl(DEFAULT_URL, "auth?name=x&age=20"));
+        assertEquals(DEFAULT_URL + "/auth?name=x&age=20",
+                     Urls.optimizeUrl(DEFAULT_URL, "auth?name=x&age=20"));
     }
 
     @Test(expected = OAuthUrlException.class)
     public void test_optimizeUrl_PathWithEncodeParameter() {
-        Assert.assertEquals(DEFAULT_URL + "/auth?name=x%2By&age=20",
-                            Urls.optimizeUrl(DEFAULT_URL, "auth?name=x+y&age=20"));
+        assertEquals(DEFAULT_URL + "/auth?name=x%2By&age=20",
+                     Urls.optimizeUrl(DEFAULT_URL, "auth?name=x+y&age=20"));
     }
 
     @Test
     public void test_optimizeUrl_PathIsUrl() {
-        Assert.assertEquals("https://localhost/api", Urls.optimizeUrl(DEFAULT_URL, "https://localhost/api"));
+        assertEquals("https://localhost/api", Urls.optimizeUrl(DEFAULT_URL, "https://localhost/api"));
     }
 
     @Test
     public void test_validUrl_LocalWithoutPort() {
-        Assert.assertTrue(Urls.validateUrl("https://localhost"));
+        assertTrue(Urls.validateUrl("https://localhost"));
     }
 
     @Test
     public void test_validUrl_LocalWithPort() {
-        Assert.assertTrue(Urls.validateUrl("https://localhost:80/"));
+        assertTrue(Urls.validateUrl("https://localhost:80/"));
     }
 
     @Test
     public void test_validUrl_LocalWithTopLabel() {
-        Assert.assertTrue(Urls.validateUrl("https://localhost.com"));
+        assertTrue(Urls.validateUrl("https://localhost.com"));
     }
 
     @Test
     public void test_validUrl_LocalWithPortAndTopLabel() {
-        Assert.assertTrue(Urls.validateUrl("https://localhost.com:9090/"));
+        assertTrue(Urls.validateUrl("https://localhost.com:9090/"));
     }
 
     @Test
     public void test_validUrl_Remote() {
-        Assert.assertTrue(Urls.validateUrl("https://github.com/google//blob/master/UserGuide.md"));
+        assertTrue(Urls.validateUrl("https://github.com/google//blob/master/UserGuide.md"));
     }
 
     @Test
     public void test_validUrl_Remote_WithParameter() {
-        Assert.assertFalse(Urls.validateUrl("https://github.org/wiki/GRUB_2?rd=Grub2"));
+        assertFalse(Urls.validateUrl("https://github.org/wiki/GRUB_2?rd=Grub2"));
     }
 
     @Test
     public void test_validUrl_Remote_WithSpecialChar() {
-        Assert.assertTrue(Urls.validateUrl("https://jenkins.org/blue/organizations/jenkins/zos%2Foauth-apis" +
-                                           "-client/,();$!a+bc=d:@&!*xy/"));
+        assertTrue(Urls.validateUrl("https://jenkins.org/blue/organizations/jenkins/zos%2Foauth-apis" +
+                                    "-client/,();$!a+bc=d:@&!*xy/"));
+    }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void test_buildUrl_UrlBlank() {
+        Urls.buildURL(null, null, null);
+    }
+
+    @Test
+    public void test_buildUrl_OtherBlank() {
+        assertEquals("https://github.org/", Urls.buildURL("https://github.org/", null, null));
+    }
+
+    @Test
+    public void test_buildUrl_FragmentBlank() {
+        assertEquals("https://github.org/?abc=xyz", Urls.buildURL("https://github.org/", "abc=xyz", null));
+    }
+
+    @Test
+    public void test_buildUrl_QueryBlank() {
+        assertEquals("https://github.org#section2.3", Urls.buildURL("https://github.org", null, "section2.3"));
     }
 
 }

@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -31,11 +30,9 @@ public class PropertyStore<P extends IPropertyModel> implements IPropertyStore<P
     }
 
     protected Collection<P> properties() {
-        Collector<Entry<String, P>, ?, Map<String, P>> map =
-            Collectors.toMap(Entry::getKey, Entry::getValue, (actual, prop) -> actual);
         Map<String, P> properties =
             Stream.of(this.actualProps, this.defaultProps).map(Map::entrySet).flatMap(Collection::stream)
-                  .collect(map);
+                  .collect(Collectors.toMap(Entry::getKey, Entry::getValue, (actual, prop) -> actual));
         return properties.values();
     }
 
@@ -43,13 +40,15 @@ public class PropertyStore<P extends IPropertyModel> implements IPropertyStore<P
         addMore(actualProps, property);
     }
 
-    @SuppressWarnings("unchecked")
+    /**
+     * {@inheritDoc}
+     */
     public void update(String name, Object value) {
-        P prop = this.get(name);
+        P prop = this.actualProps.get(name);
         if (Objects.isNull(prop)) {
             P property = this.defaultProps.get(name);
             Objects.requireNonNull(property, "Not found property name: " + name);
-            this.add((P) property.duplicate(value));
+            this.add(property.duplicate(value));
         } else {
             prop.setValue(value);
         }
@@ -64,11 +63,11 @@ public class PropertyStore<P extends IPropertyModel> implements IPropertyStore<P
     }
 
     public P get(String name) {
-        return this.actualProps.get(name);
+        return this.actualProps.containsKey(name) ? this.actualProps.get(name) : this.defaultProps.get(name);
     }
 
     public boolean has(String name) {
-        return this.actualProps.containsKey(name);
+        return this.actualProps.containsKey(name) || this.defaultProps.containsKey(name);
     }
 
 }

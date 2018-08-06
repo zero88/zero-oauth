@@ -53,11 +53,8 @@ public class HttpQueryConverter<T extends OAuthProperties> implements Properties
 
     private String compute(IPropertyModel property) {
         String key = Urls.encode(Strings.requireNotBlank(property.getName()));
-        Object value = property.validate();
-        if (Objects.isNull(value)) {
-            return null;
-        }
-        return new StringBuilder(key).append(EQUAL).append(Urls.encode(value.toString())).toString();
+        String value = Strings.toString(property.serialize());
+        return Strings.isBlank(value) ? null : key + EQUAL + Urls.encode(value);
     }
 
 }

@@ -1,4 +1,4 @@
-package com.zero.oauth.client.client;
+package com.zero.oauth.client;
 
 import org.junit.Assert;
 import org.junit.Test;
@@ -20,7 +20,7 @@ public class OAuth2ApiTest {
         Assert.assertEquals("accessTokenUrl", api.getAccessTokenUrl());
         Assert.assertEquals("apiBaseUrl", api.getApiBaseUrl());
         Assert.assertEquals("refreshTokenUrl", api.getRefreshTokenUrl());
-        Assert.assertTrue(api.getDefaultPayload().getVersion().isEqual(OAuthVersion.V2));
+        Assert.assertTrue(api.getRequestProperties().getVersion().isEqual(OAuthVersion.V2));
     }
 
     @Test(expected = IllegalArgumentException.class)
