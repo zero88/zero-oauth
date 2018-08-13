@@ -1,12 +1,17 @@
 package com.zero.oauth.client;
 
-/**
- * Callback handler to complete the OAuth flow. It can be attached into current existed server.
- *
- * @since 1.0.0
- */
-public interface CallbackHandler {
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-    String getCallBackUrl();
+@RequiredArgsConstructor
+@Getter
+public class CallbackHandler implements ICallbackHandler {
+
+    private final String callbackUrl;
+
+    @Override
+    public void redirectUserToLoginScreen(String authorizationUrl) {
+        System.out.println("Login here: " + authorizationUrl);
+    }
 
 }

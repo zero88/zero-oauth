@@ -14,8 +14,8 @@ import com.zero.oauth.client.utils.FileUtils;
 import com.zero.oauth.client.utils.Strings;
 
 /**
- * Defines a set of method to generate token key or load private key from file. The implementation of this
- * interface must have {@code Constructor} with no arguments.
+ * Defines a set of method to generate token key or load private key from file. The implementation of this interface
+ * must have {@code Constructor} with no arguments.
  *
  * @since 1.0.0
  */

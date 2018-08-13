@@ -18,8 +18,7 @@ public class HeaderProperty extends PropertyModel {
     /**
      * HTTP Accept Header for {@code json}.
      */
-    public static final HeaderProperty JSON_ACCEPT =
-        new HeaderProperty("Accept").setValue("application/json");
+    public static final HeaderProperty JSON_ACCEPT = new HeaderProperty("Accept").setValue("application/json");
 
     /**
      * HTTP User-Agent Header.

@@ -35,8 +35,8 @@ public final class ServiceRegistry {
      * @return security service
      */
     static SecurityService getSecurityService(String algorithm) {
-        SecurityService securityService =
-            SECURITY_REGISTRY.get(Strings.isBlank(algorithm) ? Constants.TEXT_ALGO : algorithm);
+        SecurityService securityService = SECURITY_REGISTRY.get(
+            Strings.isBlank(algorithm) ? Constants.TEXT_ALGO : algorithm);
         if (Objects.nonNull(securityService)) {
             return securityService;
         }
@@ -44,8 +44,8 @@ public final class ServiceRegistry {
     }
 
     /**
-     * Load security service based on environment variable {@code Z_OAUTH_SEC_ALGO_RANDOM_TOKEN} or from
-     * configuration with property name {@code z.oauth.sec.algo.random_token}.
+     * Load security service based on environment variable {@code Z_OAUTH_SEC_ALGO_RANDOM_TOKEN} or from configuration
+     * with property name {@code z.oauth.sec.algo.random_token}.
      *
      * @return security service
      * @see Constants#OAUTH_RANDOM_TOKEN_PROPERTY

@@ -35,58 +35,55 @@ public class OAuth1PropTest {
 
     @Test
     public void test_Request_RequestToken() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.REQUEST);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names,
-                   hasItems("realm", "oauth_consumer_key", "oauth_signature_method", "oauth_signature",
-                            "oauth_timestamp", "oauth_nonce", "oauth_version", "oauth_callback"));
+        List<OAuth1RequestProperty> by = requestProperties.by(FlowStep.REQUEST);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("realm", "oauth_consumer_key", "oauth_signature_method", "oauth_signature",
+                                        "oauth_timestamp", "oauth_nonce", "oauth_version", "oauth_callback"));
     }
 
     @Test
     public void test_Response_RequestToken() {
-        List<IPropertyModel> by = responseProperties.by(FlowStep.REQUEST);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("oauth_token", "oauth_token_secret", "oauth_callback_confirmed"));
+        List<OAuth1ResponseProperty> by = responseProperties.by(FlowStep.REQUEST);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("oauth_token", "oauth_token_secret", "oauth_callback_confirmed"));
     }
 
     @Test
     public void test_RequestProp_FilterBy_Authorize() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.AUTHORIZE);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("realm", "oauth_token"));
+        List<OAuth1RequestProperty> by = requestProperties.by(FlowStep.AUTHORIZE);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("realm", "oauth_token"));
     }
 
     @Test
     public void test_ResponseProp_FilterBy_Authorize() {
-        List<IPropertyModel> by = responseProperties.by(FlowStep.AUTHORIZE);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("oauth_token", "oauth_verifier"));
+        List<OAuth1ResponseProperty> by = responseProperties.by(FlowStep.AUTHORIZE);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("oauth_token", "oauth_verifier"));
     }
 
     @Test
     public void test_RequestProp_FilterBy_ExchangeToken() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.EXCHANGE_TOKEN);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names,
-                   hasItems("realm", "oauth_consumer_key", "oauth_token", "oauth_signature_method",
-                            "oauth_signature", "oauth_timestamp", "oauth_nonce", "oauth_version",
-                            "oauth_verifier"));
+        List<OAuth1RequestProperty> by = requestProperties.by(FlowStep.EXCHANGE_TOKEN);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames,
+                   hasItems("realm", "oauth_consumer_key", "oauth_token", "oauth_signature_method", "oauth_signature",
+                            "oauth_timestamp", "oauth_nonce", "oauth_version", "oauth_verifier"));
     }
 
     @Test
     public void test_ResponseProp_FilterBy_ExchangeToken() {
-        List<IPropertyModel> by = responseProperties.by(FlowStep.EXCHANGE_TOKEN);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("oauth_token", "oauth_token_secret"));
+        List<OAuth1ResponseProperty> by = responseProperties.by(FlowStep.EXCHANGE_TOKEN);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("oauth_token", "oauth_token_secret"));
     }
 
     @Test
     public void test_RequestProp_FilterBy_AccessResource() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.ACCESS_RESOURCE);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names,
-                   hasItems("realm", "oauth_consumer_key", "oauth_token", "oauth_signature_method",
-                            "oauth_signature", "oauth_timestamp", "oauth_nonce", "oauth_version"));
+        List<OAuth1RequestProperty> by = requestProperties.by(FlowStep.ACCESS_RESOURCE);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("realm", "oauth_consumer_key", "oauth_token", "oauth_signature_method",
+                                        "oauth_signature", "oauth_timestamp", "oauth_nonce", "oauth_version"));
     }
 
 }

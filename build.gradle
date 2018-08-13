@@ -10,7 +10,6 @@ plugins {
     id 'java-library'
     id 'java-library-distribution'
     id 'eclipse'
-    id 'idea'
     id 'jacoco'
     id 'signing'
     id 'net.ltgt.apt' version '0.17'

@@ -33,16 +33,16 @@ public class OAuth2ImplicitPropTest {
 
     @Test
     public void testRequestParams_FilterBy_Authorize() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.AUTHORIZE);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("response_type", "client_id", "redirect_uri", "scope", "state"));
+        List<OAuth2RequestProperty> by = requestProperties.by(FlowStep.AUTHORIZE);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("response_type", "client_id", "redirect_uri", "scope", "state"));
     }
 
     @Test
     public void testResponseParams_FilterBy_ExchangeToken() {
-        List<IPropertyModel> by = responseProperties.by(FlowStep.AUTHORIZE);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("access_token", "token_type", "expires_in", "scope"));
+        List<OAuth2ResponseProperty> by = responseProperties.by(FlowStep.AUTHORIZE);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("access_token", "token_type", "expires_in", "scope"));
     }
 
     @Test(expected = OAuthParameterException.class)
@@ -58,9 +58,9 @@ public class OAuth2ImplicitPropTest {
 
     @Test
     public void test_RequestProp_FilterBy_AccessResource() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.ACCESS_RESOURCE);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("access_token"));
+        List<OAuth2RequestProperty> by = requestProperties.by(FlowStep.ACCESS_RESOURCE);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("access_token"));
     }
 
 }

@@ -10,9 +10,9 @@ public class OAuth2ApiTest {
 
     @Test
     public void init() {
-        OAuthApi api =
-            OAuthApi.init("clientId", "clientSecret", "authorizeUrl", "accessTokenUrl", GrantType.AUTH_CODE)
-                    .registerApiBaseUrl("apiBaseUrl").registerRefreshTokenUrl("refreshTokenUrl");
+        OAuthApi api = OAuthApi.initV2("clientId", "clientSecret", "authorizeUrl", "accessTokenUrl",
+                                       GrantType.AUTH_CODE).registerApiBaseUrl("apiBaseUrl").registerRefreshTokenUrl(
+            "refreshTokenUrl");
         Assert.assertEquals("clientId", api.getClientId());
         Assert.assertEquals("clientSecret", api.getClientSecret());
         Assert.assertNull(api.getRequestTokenUrl());
@@ -25,7 +25,7 @@ public class OAuth2ApiTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void init_withEmptyRequiredValue() {
-        OAuthApi.init("", "", "authorizeUrl", "accessTokenUrl", GrantType.AUTH_CODE);
+        OAuthApi.initV2("", "", "authorizeUrl", "accessTokenUrl", GrantType.AUTH_CODE);
     }
 
 }

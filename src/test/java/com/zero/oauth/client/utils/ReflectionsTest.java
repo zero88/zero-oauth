@@ -33,8 +33,7 @@ public class ReflectionsTest {
     public void test_FindConst_Int() {
         List<Integer> constants = Reflections.getConstants(ReflectionTest.class, Integer.class);
         Assert.assertThat(constants, CoreMatchers.hasItems(1, 3));
-        Assert.assertTrue(
-            constants.stream().noneMatch(i -> Arrays.asList(2, 4, 10, 20, 30, 40, 50).contains(i)));
+        Assert.assertTrue(constants.stream().noneMatch(i -> Arrays.asList(2, 4, 10, 20, 30, 40, 50).contains(i)));
     }
 
     @Test

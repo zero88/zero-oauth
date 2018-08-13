@@ -1,45 +1,16 @@
 package com.zero.oauth.client;
 
-import java.util.Objects;
-
 import com.zero.oauth.client.core.properties.IPropertyModel;
 import com.zero.oauth.client.core.properties.IPropertyStore;
-import com.zero.oauth.client.core.properties.IResponsePropModel;
-import com.zero.oauth.client.core.properties.converter.HttpQueryConverter;
-import com.zero.oauth.client.type.FlowStep;
+import com.zero.oauth.client.core.properties.IResponseProperty;
 import com.zero.oauth.client.type.HttpMethod;
-import com.zero.oauth.client.utils.Urls;
 
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-
-@Getter
-@RequiredArgsConstructor
-public class OAuth2Client<T extends OAuth2Api> implements OAuthClient<T> {
-
-    private final T api;
-    private CallbackHandler callback;
+public class OAuth2Client<T extends OAuth2Api> extends OAuthClient<T> {
 
     @Override
-    public String generateAuthorizeRedirect() {
-        return Urls.buildURL(this.api.getAuthorizeUrl(),
-                             new HttpQueryConverter<>(this.api.getRequestProperties())
-                                 .serialize(FlowStep.AUTHORIZE), null);
-    }
-
-    @Override
-    public <P extends IResponsePropModel> IPropertyStore<P> fetchAccessToken() {
-        return null;
-    }
-
-    @Override
-    public void registerCallback(CallbackHandler callback) {
-        this.callback = Objects.requireNonNull(callback);
-    }
-
-    @Override
-    public <P extends IResponsePropModel, R extends IPropertyModel> IPropertyStore<P> request(
-        HttpMethod method, String url, IPropertyStore<R> reqProps) {
+    public <P extends IResponseProperty, R extends IPropertyModel> IPropertyStore<P> request(HttpMethod method,
+                                                                                             String url,
+                                                                                             IPropertyStore<R> reqProps) {
         return null;
     }
 

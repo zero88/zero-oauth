@@ -31,38 +31,37 @@ public class OAuth2RequestProperty extends OAuth2PropertyModel {
                                                  .declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN)
                                                  .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE)
                                                  .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN)
-                                                 .declare(GrantType.CLIENT_CREDENTIALS,
-                                                          FlowStep.EXCHANGE_TOKEN);
+                                                 .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN);
 
     /**
-     * One or more space-separated strings indicating which permissions the application is requesting. The
-     * specific OAuth API you’re using will define the scopes that it supports.
+     * One or more space-separated strings indicating which permissions the application is requesting. The specific
+     * OAuth API you’re using will define the scopes that it supports.
      */
     public static final OAuth2RequestProperty SCOPE =
         new OAuth2RequestProperty("scope").declare(GrantType.AUTH_CODE, FlowStep.AUTHORIZE)
                                           .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE)
-                                          .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN,
-                                                   Constraint.OPTIONAL)
+                                          .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN, Constraint.OPTIONAL)
                                           .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN)
                                           .declare(GrantType.DEVICE_CODE, FlowStep.EXCHANGE_TOKEN)
                                           .declare(GrantType.REFRESH_TOKEN, FlowStep.EXCHANGE_TOKEN,
                                                    Constraint.OPTIONAL);
 
     /**
-     * The application generates a random string and includes it in the request. It should then check that the
-     * same value is returned after the user authorizes the app. This is used to prevent <a
-     * href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29">CSRF attacks</a>.
+     * The application generates a random string and includes it in the request. It should then check that the same
+     * value is returned after the user authorizes the app. This is used to prevent
+     * <a href="https://www.owasp.org/index.php/Cross-Site_Request_Forgery_%28CSRF%29">CSRF attacks</a>.
      */
-    public static final OAuth2RequestProperty STATE = new OAuth2RequestProperty("state")
-        .declare(GrantType.AUTH_CODE, FlowStep.AUTHORIZE, Constraint.RECOMMENDATION)
-        .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE, Constraint.RECOMMENDATION)
-        .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN, Constraint.RECOMMENDATION)
-        .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN, Constraint.RECOMMENDATION)
-        .registerFunction(new TokenGeneration());
+    public static final OAuth2RequestProperty STATE =
+        new OAuth2RequestProperty("state").declare(GrantType.AUTH_CODE, FlowStep.AUTHORIZE, Constraint.RECOMMENDATION)
+                                          .declare(GrantType.IMPLICIT, FlowStep.AUTHORIZE, Constraint.RECOMMENDATION)
+                                          .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN,
+                                                   Constraint.RECOMMENDATION)
+                                          .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN,
+                                                   Constraint.RECOMMENDATION)
+                                          .registerFunction(new TokenGeneration());
 
     /**
-     * The public identifier for the application, obtained when the developer first registered the
-     * application.
+     * The public identifier for the application, obtained when the developer first registered the application.
      */
     public static final OAuth2RequestProperty CLIENT_ID =
         new OAuth2RequestProperty("client_id").declare(GrantType.AUTH_CODE, FlowStep.AUTHORIZE)
@@ -74,15 +73,14 @@ public class OAuth2RequestProperty extends OAuth2PropertyModel {
                                               .declare(GrantType.DEVICE_CODE, FlowStep.POLLING);
 
     /**
-     * The secret identifier for the application, obtained when the developer first registered the
-     * application. This ensures that the request to get the access token is made only from the application,
-     * and not from a potential attacker that may have intercepted the authorization code.
+     * The secret identifier for the application, obtained when the developer first registered the application. This
+     * ensures that the request to get the access token is made only from the application, and not from a potential
+     * attacker that may have intercepted the authorization code.
      */
     public static final OAuth2RequestProperty CLIENT_SECRET =
         new OAuth2RequestProperty("client_secret").declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN)
                                                   .declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN)
-                                                  .declare(GrantType.CLIENT_CREDENTIALS,
-                                                           FlowStep.EXCHANGE_TOKEN)
+                                                  .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.EXCHANGE_TOKEN)
                                                   .declare(GrantType.DEVICE_CODE, FlowStep.POLLING);
 
     /**
@@ -108,8 +106,8 @@ public class OAuth2RequestProperty extends OAuth2PropertyModel {
         new OAuth2RequestProperty("password").declare(GrantType.PASSWORD, FlowStep.EXCHANGE_TOKEN);
 
     /**
-     * This parameter is the authorization code that the client previously received from the authorization
-     * server. It will be used to exchange for {@code access token}.
+     * This parameter is the authorization code that the client previously received from the authorization server. It
+     * will be used to exchange for {@code access token}.
      */
     public static final OAuth2RequestProperty CODE =
         new OAuth2RequestProperty("code").declare(GrantType.AUTH_CODE, FlowStep.EXCHANGE_TOKEN)
@@ -130,8 +128,7 @@ public class OAuth2RequestProperty extends OAuth2PropertyModel {
         new OAuth2RequestProperty("access_token").declare(GrantType.AUTH_CODE, FlowStep.ACCESS_RESOURCE)
                                                  .declare(GrantType.IMPLICIT, FlowStep.ACCESS_RESOURCE)
                                                  .declare(GrantType.PASSWORD, FlowStep.ACCESS_RESOURCE)
-                                                 .declare(GrantType.CLIENT_CREDENTIALS,
-                                                          FlowStep.ACCESS_RESOURCE)
+                                                 .declare(GrantType.CLIENT_CREDENTIALS, FlowStep.ACCESS_RESOURCE)
                                                  .declare(GrantType.DEVICE_CODE, FlowStep.ACCESS_RESOURCE);
 
     public OAuth2RequestProperty(String name) {

@@ -33,8 +33,7 @@ public final class Urls {
      *
      * @see <a href="https://tools.ietf.org/html/rfc3986#section-3.2">Authority syntax</a>
      */
-    public static final String AUTHORITY_PATTERN =
-        "(www\\.)?(([\\w-]+\\.)+[\\w]{2,63}|[\\w-]+)(:[1-9]\\d{1,4})?/?";
+    public static final String AUTHORITY_PATTERN = "(www\\.)?(([\\w-]+\\.)+[\\w]{2,63}|[\\w-]+)(:[1-9]\\d{1,4})?/?";
     /**
      * Path syntax.
      *
@@ -120,8 +119,7 @@ public final class Urls {
     }
 
     private static boolean validate(String s, String pattern) {
-        return Strings.isNotBlank(s) &&
-               Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(s).matches();
+        return Strings.isNotBlank(s) && Pattern.compile(pattern, Pattern.CASE_INSENSITIVE).matcher(s).matches();
     }
 
     /**
@@ -161,8 +159,7 @@ public final class Urls {
         try {
             encoded = URLEncoder.encode(plain, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException uee) {
-            throw new OAuthException("Charset not found while encoding string: " + StandardCharsets.UTF_8,
-                                     uee);
+            throw new OAuthException("Charset not found while encoding string: " + StandardCharsets.UTF_8, uee);
         }
         for (Map.Entry<String, String> rule : ENCODING_RULES.entrySet()) {
             encoded = applyRule(encoded, rule.getKey(), rule.getValue());
@@ -181,8 +178,7 @@ public final class Urls {
         try {
             return URLDecoder.decode(encoded, StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException uee) {
-            throw new OAuthException("Charset not found while decoding string: " + StandardCharsets.UTF_8,
-                                     uee);
+            throw new OAuthException("Charset not found while decoding string: " + StandardCharsets.UTF_8, uee);
         }
     }
 

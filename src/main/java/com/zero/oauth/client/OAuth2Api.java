@@ -2,8 +2,13 @@ package com.zero.oauth.client;
 
 import com.zero.oauth.client.core.oauth2.OAuth2RequestProperties;
 import com.zero.oauth.client.core.oauth2.OAuth2RequestProperty;
+import com.zero.oauth.client.core.properties.IPropertyStore;
+import com.zero.oauth.client.core.properties.IResponseProperty;
+import com.zero.oauth.client.core.properties.converter.HttpQueryConverter;
+import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.GrantType;
 import com.zero.oauth.client.utils.Strings;
+import com.zero.oauth.client.utils.Urls;
 
 import lombok.Getter;
 
@@ -38,6 +43,17 @@ public class OAuth2Api implements OAuthApi {
         this.requestProperties = OAuth2RequestProperties.init(grantType);
         this.requestProperties.update(OAuth2RequestProperty.CLIENT_ID.getName(), clientId);
         this.requestProperties.update(OAuth2RequestProperty.CLIENT_SECRET.getName(), clientSecret);
+    }
+
+    @Override
+    public String generateAuthorizeRedirect() {
+        return Urls.buildURL(this.getAuthorizeUrl(),
+                             new HttpQueryConverter<>(this.requestProperties).serialize(FlowStep.AUTHORIZE), null);
+    }
+
+    @Override
+    public <P extends IResponseProperty> IPropertyStore<P> fetchAccessToken() {
+        return null;
     }
 
     @SuppressWarnings("unchecked")

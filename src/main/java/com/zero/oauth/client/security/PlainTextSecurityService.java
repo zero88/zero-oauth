@@ -14,8 +14,8 @@ public class PlainTextSecurityService extends RandomSecurityService implements S
     static final SecurityService INSTANCE = new PlainTextSecurityService();
 
     private PlainTextSecurityService() {
-        this.registerMachine(new RandomText(SecurityService.loadRandomTextMaxLength(),
-                                            SecurityService.loadRandomTextSymbols()));
+        this.registerMachine(
+            new RandomText(SecurityService.loadRandomTextMaxLength(), SecurityService.loadRandomTextSymbols()));
     }
 
     static class RandomText implements RandomMachine {
@@ -35,9 +35,8 @@ public class PlainTextSecurityService extends RandomSecurityService implements S
             }
             this.random = new SecureRandom();
             this.maxLength = maxLength;
-            String s = Strings.isBlank(symbols)
-                       ? ALPHANUMERIC
-                       : Strings.requiredMinLength(Strings.optimizeNoSpace(symbols), MIN_LENGTH);
+            String s = Strings.isBlank(symbols) ? ALPHANUMERIC : Strings.requiredMinLength(
+                Strings.optimizeNoSpace(symbols), MIN_LENGTH);
             this.symbols = s.toCharArray();
         }
 

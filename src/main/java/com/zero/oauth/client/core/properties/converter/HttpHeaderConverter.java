@@ -1,14 +1,13 @@
 package com.zero.oauth.client.core.properties.converter;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
 import com.zero.oauth.client.core.properties.IPropertyModel;
 import com.zero.oauth.client.core.properties.IPropertyStore;
-import com.zero.oauth.client.core.properties.OAuthProperties;
+import com.zero.oauth.client.core.properties.RequestProperties;
 import com.zero.oauth.client.exceptions.OAuthParameterException;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.utils.Strings;
@@ -20,23 +19,23 @@ import lombok.RequiredArgsConstructor;
 /**
  * HTTP Header converter.
  *
- * @param <T> Type of {@code OAuthProperties}
+ * @param <T> Type of {@code RequestProperties}
  * @see <a href="https://tools.ietf.org/html/rfc5849#section-3.5.1">Header syntax</a>
- * @see OAuthProperties
+ * @see RequestProperties
  */
 @RequiredArgsConstructor
 @Getter
-public class HttpHeaderConverter<T extends OAuthProperties> implements PropertiesConverter<T> {
+public class HttpHeaderConverter<P extends IPropertyModel, T extends RequestProperties<P>>
+    implements PropertiesConverter<P, T> {
 
     private static final String EQUAL = "=";
     private static final String SEPARATE = ",";
-
     private final T propertyStore;
 
     @Override
     public String serialize(FlowStep step) {
-        List<IPropertyModel> by = this.propertyStore.by(step);
-        return by.stream().map(this::compute).filter(Objects::nonNull).collect(Collectors.joining(SEPARATE));
+        return this.propertyStore.by(step).stream().map(this::compute).filter(Objects::nonNull).collect(
+            Collectors.joining(SEPARATE));
     }
 
     @Override
@@ -45,8 +44,7 @@ public class HttpHeaderConverter<T extends OAuthProperties> implements Propertie
         for (String property : properties.split("\\" + SEPARATE)) {
             String[] keyValues = property.split("\\" + EQUAL);
             if (keyValues.length != 2) {
-                throw new OAuthParameterException(
-                    "Property doesn't conform the syntax: `key`" + EQUAL + "`value`");
+                throw new OAuthParameterException("Property doesn't conform the syntax: `key`" + EQUAL + "`value`");
             }
             map.put(Urls.decode(keyValues[0]), Urls.decode(keyValues[1].replaceAll("^\"(.+)\"$", "$1")));
         }

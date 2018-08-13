@@ -37,6 +37,7 @@ public class PropertyModel implements IPropertyModel {
     private Object serializeData;
     @ToString.Include
     private Constraint constraint = Constraint.OPTIONAL;
+    @SuppressWarnings("rawtypes")
     @Getter(value = AccessLevel.PROTECTED)
     private Function func;
     @Getter
@@ -47,9 +48,9 @@ public class PropertyModel implements IPropertyModel {
         this.version = property.getVersion();
         this.name = property.getName();
         this.value = property.getValue();
-        this.constraint = property.isRequired()
-                          ? Constraint.REQUIRED
-                          : property.isOptional() ? Constraint.OPTIONAL : Constraint.RECOMMENDATION;
+        this.constraint =
+            property.isRequired() ? Constraint.REQUIRED
+                                  : property.isOptional() ? Constraint.OPTIONAL : Constraint.RECOMMENDATION;
         this.func = property.getFunc();
         this.availablePlacements = property.getAvailablePlacements();
     }
@@ -91,9 +92,11 @@ public class PropertyModel implements IPropertyModel {
     @SuppressWarnings("unchecked")
     @Override
     public Object serialize() {
-        Object value = this.getValue();
-        this.serializeData =
-            isComputeValue() ? Objects.isNull(serializeData) ? func.apply(value) : serializeData : value;
+        if (isComputeValue()) {
+            this.serializeData = Objects.isNull(serializeData) ? func.apply(this.getValue()) : serializeData;
+        } else {
+            this.serializeData = this.getValue();
+        }
         if (Objects.isNull(serializeData) || Strings.isBlank(serializeData.toString())) {
             if (this.isRequired()) {
                 throw new OAuthParameterException("Missing required of property name: " + this.getName());
@@ -106,7 +109,6 @@ public class PropertyModel implements IPropertyModel {
         return serializeData;
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public <T extends IPropertyModel> T duplicate(Object value) {
         return this.duplicate().setValue(value);

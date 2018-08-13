@@ -68,14 +68,14 @@ public class RandomSecurityServiceTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void test_randomToken_fromText_Customization_MaxLessThanMin() {
-        ((PlainTextSecurityService) plainService)
-            .registerMachine(new PlainTextSecurityService.RandomText(5, "!@#$%^&*()-="));
+        ((PlainTextSecurityService) plainService).registerMachine(
+            new PlainTextSecurityService.RandomText(5, "!@#$%^&*()-="));
     }
 
     @Test
     public void test_randomToken_fromText_Customization() {
-        ((PlainTextSecurityService) plainService)
-            .registerMachine(new PlainTextSecurityService.RandomText(10, "!@#$%^&*()-="));
+        ((PlainTextSecurityService) plainService).registerMachine(
+            new PlainTextSecurityService.RandomText(10, "!@#$%^&*()-="));
         String token = this.plainService.randomToken();
         System.out.println("Plain text special token: " + token);
         Assert.assertTrue(token.matches("[\\!\\@\\#\\$\\%\\^\\&\\*\\(\\)\\-\\=]{8,10}"));

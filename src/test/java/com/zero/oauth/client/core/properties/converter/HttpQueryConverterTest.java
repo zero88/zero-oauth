@@ -27,8 +27,8 @@ public class HttpQueryConverterTest {
     private static final String STATE = "m99oZsYX6wk5b1Sf";
     private static final String SCOPE = "channels:read team:read";
     private static final String SCOPE_ENCODE = "channels%3Aread%20team%3Aread";
-    private static final String ACCESS_TOKEN =
-        "eyJraWQiOiIyRDN3Y0lycGQxYWpUdERwZ0NKTnFHU09odXNhQTVDUnEwRGd2ZGZXNXFVIiwiYWxnIjoiUlMyNTYifQ";
+    private static final String ACCESS_TOKEN
+        = "eyJraWQiOiIyRDN3Y0lycGQxYWpUdERwZ0NKTnFHU09odXNhQTVDUnEwRGd2ZGZXNXFVIiwiYWxnIjoiUlMyNTYifQ";
     private static final String TOKEN_TYPE = "Bearer";
     private static final int EXPIRES_IN = 3600;
     private OAuth2RequestProperties requestProperties;
@@ -48,8 +48,8 @@ public class HttpQueryConverterTest {
         requestProperties.update("state", STATE);
         String parameters = new HttpQueryConverter<>(requestProperties).serialize(FlowStep.AUTHORIZE);
         assertThat(Arrays.asList(parameters.split("\\&")),
-                   hasItems("response_type=token", "client_id=" + CLIENT_ID, "state=" + STATE,
-                            "scope=" + SCOPE_ENCODE, "redirect_uri=" + REDIRECT_URI_ENCODE));
+                   hasItems("response_type=token", "client_id=" + CLIENT_ID, "state=" + STATE, "scope=" + SCOPE_ENCODE,
+                            "redirect_uri=" + REDIRECT_URI_ENCODE));
     }
 
     @Test(expected = OAuthParameterException.class)
@@ -59,15 +59,14 @@ public class HttpQueryConverterTest {
 
     @Test
     public void test_ResponseProp_ParameterConverter() {
-        String queryPath =
-            "access_token=" + ACCESS_TOKEN + "&" + "token_type=" + TOKEN_TYPE + "&" + "expires_in=" +
-            EXPIRES_IN + "&" + "scope=" + SCOPE_ENCODE + "&" + "state=" + STATE;
-        IPropertyStore<IPropertyModel> properties =
-            new HttpQueryConverter<>(responseProperties).deserialize(queryPath, FlowStep.AUTHORIZE);
+        String queryPath = "access_token=" + ACCESS_TOKEN + "&" + "token_type=" + TOKEN_TYPE + "&" + "expires_in=" +
+                           EXPIRES_IN + "&" + "scope=" + SCOPE_ENCODE + "&" + "state=" + STATE;
+        IPropertyStore<IPropertyModel> properties = new HttpQueryConverter<>(responseProperties).deserialize(queryPath,
+                                                                                                             FlowStep.AUTHORIZE);
         assertEquals(ACCESS_TOKEN, properties.get(OAuth2ResponseProperty.ACCESS_TOKEN.getName()).getValue());
         assertEquals(TOKEN_TYPE, properties.get(OAuth2ResponseProperty.TOKEN_TYPE.getName()).getValue());
-        assertEquals(EXPIRES_IN, Integer
-            .parseInt(properties.get(OAuth2ResponseProperty.EXPIRES_IN.getName()).getValue().toString()));
+        assertEquals(EXPIRES_IN, Integer.parseInt(properties.get(OAuth2ResponseProperty.EXPIRES_IN.getName()).getValue()
+                                                            .toString()));
         assertEquals(SCOPE, properties.get(OAuth2ResponseProperty.SCOPE.getName()).getValue());
         assertEquals(STATE, properties.get(OAuth2ResponseProperty.AUTH_STATE.getName()).getValue());
     }

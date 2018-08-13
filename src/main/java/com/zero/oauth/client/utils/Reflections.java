@@ -92,8 +92,7 @@ public final class Reflections {
      * @throws RuntimeException         if class found but not child of by {@code parentClass}
      */
     @SuppressWarnings("unchecked")
-    public static <T> Class<T> findClass(String className, Class<T> parentClass)
-        throws ClassNotFoundException {
+    public static <T> Class<T> findClass(String className, Class<T> parentClass) throws ClassNotFoundException {
         Objects.requireNonNull(parentClass);
         String clazzName = Strings.requireNotBlank(className);
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -104,8 +103,7 @@ public final class Reflections {
         if (parentClass.isAssignableFrom(clazz)) {
             return (Class<T>) clazz;
         }
-        throw new RuntimeException(
-            "Class " + clazz.getName() + " is not child of class " + parentClass.getName());
+        throw new RuntimeException("Class " + clazz.getName() + " is not child of class " + parentClass.getName());
     }
 
     /**

@@ -3,8 +3,7 @@ package com.zero.oauth.client.core.properties;
 /**
  * Store all properties that used in one OAuth session.
  *
- * @param <P> Indicates that for this instantiation of the store, the type of {@code IPropertyModel}
- *            implementation.
+ * @param <P> Indicates that for this instantiation of the store, the type of {@code IPropertyModel} implementation.
  * @see IPropertyModel
  * @since 1.0.0
  */

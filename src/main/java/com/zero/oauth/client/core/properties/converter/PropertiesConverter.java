@@ -5,9 +5,9 @@ import java.util.Objects;
 
 import com.zero.oauth.client.core.properties.IPropertyModel;
 import com.zero.oauth.client.core.properties.IPropertyStore;
-import com.zero.oauth.client.core.properties.OAuthProperties;
 import com.zero.oauth.client.core.properties.PropertyModel;
 import com.zero.oauth.client.core.properties.PropertyStore;
+import com.zero.oauth.client.core.properties.RequestProperties;
 import com.zero.oauth.client.type.FlowStep;
 
 /**
@@ -17,7 +17,7 @@ import com.zero.oauth.client.type.FlowStep;
  * @see IPropertyStore
  * @since 1.0.0
  */
-public interface PropertiesConverter<T extends OAuthProperties> {
+public interface PropertiesConverter<P extends IPropertyModel, T extends RequestProperties<P>> {
 
     /**
      * Convert properties in store to a corresponding data format in given Flow step.
@@ -37,8 +37,8 @@ public interface PropertiesConverter<T extends OAuthProperties> {
     IPropertyStore<IPropertyModel> deserialize(String properties, FlowStep step);
 
     /**
-     * It is step 2 of {@link #deserialize(String, FlowStep)} after decomposed string properties to {@code
-     * Key-Value} list.
+     * It is step 2 of {@link #deserialize(String, FlowStep)} after decomposed string properties to {@code Key-Value}
+     * list.
      *
      * @param deserializeValues Key-Value properties
      * @param step              Flow step
@@ -46,8 +46,8 @@ public interface PropertiesConverter<T extends OAuthProperties> {
      */
     default IPropertyStore<IPropertyModel> deserialize(Map<String, ?> deserializeValues, FlowStep step) {
         IPropertyStore<IPropertyModel> store = new PropertyStore<>();
-        deserializeValues.entrySet().stream().map(entry -> compose(step, entry.getKey(), entry.getValue()))
-                         .filter(Objects::nonNull).forEach(store::add);
+        deserializeValues.entrySet().stream().map(entry -> compose(step, entry.getKey(), entry.getValue())).filter(
+            Objects::nonNull).forEach(store::add);
         return store;
     }
 

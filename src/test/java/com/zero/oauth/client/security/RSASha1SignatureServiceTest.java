@@ -15,11 +15,10 @@ public class RSASha1SignatureServiceTest {
     private SignatureService signatureService;
 
     /**
-     * Key generator:
+     * Key generator.
      * <p>
-     * {@code openssl req -x509 -nodes -days 365 -newkey rsa:1024 -sha1 -subj
-     * "/C=VN/ST=/L=HaNoi/CN=www.example.com" -keyout ./src/test/resources/private_key.pem -out
-     * ./src/test/resources/rsa_cert.pem}
+     * {@code openssl req -x509 -nodes -days 365 -newkey rsa:1024 -sha1 -subj "/C=VN/ST=/L=HaNoi/CN=www.example.com"
+     * -keyout ./src/test/resources/private_key.pem -out ./src/test/resources/rsa_cert.pem}
      * <p>
      * {@code openssl pkcs8 -in ./src/test/resources/private_key.pem -topk8 -nocrypt -out
      * ./src/test/resources/rsa_key.pk8}

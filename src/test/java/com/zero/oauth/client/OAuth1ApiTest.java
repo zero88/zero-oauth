@@ -9,9 +9,8 @@ public class OAuth1ApiTest {
 
     @Test
     public void init() {
-        OAuthApi api =
-            OAuthApi.init("clientId", "clientSecret", "requestTokenUrl", "authorizeUrl", "accessTokenUrl")
-                    .registerApiBaseUrl("apiBaseUrl");
+        OAuthApi api = OAuthApi.initV1("clientId", "clientSecret", "requestTokenUrl", "authorizeUrl", "accessTokenUrl")
+                               .registerApiBaseUrl("apiBaseUrl");
         Assert.assertEquals("clientId", api.getClientId());
         Assert.assertEquals("clientSecret", api.getClientSecret());
         Assert.assertEquals("requestTokenUrl", api.getRequestTokenUrl());
@@ -24,12 +23,12 @@ public class OAuth1ApiTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void init_withEmptyRequiredValue() {
-        OAuthApi.init(null, null, null, "authorizeUrl", "accessTokenUrl");
+        OAuthApi.initV1(null, null, null, "authorizeUrl", "accessTokenUrl");
     }
 
     @Test(expected = UnsupportedOperationException.class)
     public void init_withRefreshTokenUrl() {
-        OAuthApi.init("clientId", "clientSecret", "requestTokenUrl", "authorizeUrl", "accessTokenUrl")
+        OAuthApi.initV1("clientId", "clientSecret", "requestTokenUrl", "authorizeUrl", "accessTokenUrl")
                 .registerRefreshTokenUrl("refresh");
     }
 

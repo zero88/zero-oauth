@@ -4,14 +4,13 @@ import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
 
-import com.zero.oauth.client.core.properties.IPropertyModel;
-import com.zero.oauth.client.core.properties.OAuthProperties;
 import com.zero.oauth.client.core.properties.PropertyStore;
+import com.zero.oauth.client.core.properties.RequestProperties;
 import com.zero.oauth.client.type.FlowStep;
 import com.zero.oauth.client.type.OAuthVersion;
 import com.zero.oauth.client.utils.Reflections;
 
-class OAuth1Properties<P extends OAuth1PropertyMatcher> extends PropertyStore<P> implements OAuthProperties {
+class OAuth1Properties<P extends OAuth1PropertyMatcher> extends PropertyStore<P> implements RequestProperties<P> {
 
     OAuth1Properties(Class<P> clazz) {
         this.init(Reflections.getConstants(clazz));
@@ -19,16 +18,16 @@ class OAuth1Properties<P extends OAuth1PropertyMatcher> extends PropertyStore<P>
 
     @SuppressWarnings("unchecked")
     @Override
-    public final List<IPropertyModel> by(FlowStep step) {
-        return this.properties().stream().map(prop -> prop.match(step)).filter(Objects::nonNull)
-                   .collect(Collectors.toList());
+    public final List<P> by(FlowStep step) {
+        return this.properties().stream().map(prop -> (P) prop.match(step)).filter(Objects::nonNull).collect(
+            Collectors.toList());
     }
 
     @SuppressWarnings("unchecked")
     @Override
-    public final <T extends IPropertyModel> T by(FlowStep step, String name) {
+    public final P by(FlowStep step, String name) {
         P property = this.get(name);
-        return Objects.isNull(property) ? null : (T) property.match(step);
+        return Objects.isNull(property) ? null : (P) property.match(step);
     }
 
     @Override

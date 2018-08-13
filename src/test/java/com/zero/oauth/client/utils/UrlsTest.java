@@ -59,14 +59,12 @@ public class UrlsTest {
 
     @Test(expected = OAuthUrlException.class)
     public void test_optimizeUrl_PathWithParameter() {
-        assertEquals(DEFAULT_URL + "/auth?name=x&age=20",
-                     Urls.optimizeUrl(DEFAULT_URL, "auth?name=x&age=20"));
+        assertEquals(DEFAULT_URL + "/auth?name=x&age=20", Urls.optimizeUrl(DEFAULT_URL, "auth?name=x&age=20"));
     }
 
     @Test(expected = OAuthUrlException.class)
     public void test_optimizeUrl_PathWithEncodeParameter() {
-        assertEquals(DEFAULT_URL + "/auth?name=x%2By&age=20",
-                     Urls.optimizeUrl(DEFAULT_URL, "auth?name=x+y&age=20"));
+        assertEquals(DEFAULT_URL + "/auth?name=x%2By&age=20", Urls.optimizeUrl(DEFAULT_URL, "auth?name=x+y&age=20"));
     }
 
     @Test
@@ -106,8 +104,8 @@ public class UrlsTest {
 
     @Test
     public void test_validUrl_Remote_WithSpecialChar() {
-        assertTrue(Urls.validateUrl("https://jenkins.org/blue/organizations/jenkins/zos%2Foauth-apis" +
-                                    "-client/,();$!a+bc=d:@&!*xy/"));
+        assertTrue(Urls.validateUrl(
+            "https://jenkins.org/blue/organizations/jenkins/zos%2Foauth-apis-client/,();$!a+bc=d:@&!*xy/"));
     }
 
     @Test(expected = IllegalArgumentException.class)

@@ -23,8 +23,8 @@ public final class PlainTextSignatureService implements SignatureService {
     public String computeSignature(String baseString, String consumerSecret, String tokenSecret) {
         try {
             String encodedToken = Strings.isBlank(tokenSecret) ? Constants.BLANK : Urls.encode(tokenSecret);
-            return Urls.encode(Strings.requireNotBlank(consumerSecret, "Consumer secret can not be blank")) +
-                   '&' + encodedToken;
+            return Urls.encode(Strings.requireNotBlank(consumerSecret, "Consumer secret can not be blank")) + '&' +
+                   encodedToken;
         } catch (OAuthException | IllegalArgumentException e) {
             throw new OAuthSignatureException(getSignatureMethod(), "", e);
         }

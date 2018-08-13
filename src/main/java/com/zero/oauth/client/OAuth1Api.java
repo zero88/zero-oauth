@@ -2,6 +2,8 @@ package com.zero.oauth.client;
 
 import com.zero.oauth.client.core.oauth1.OAuth1RequestProperties;
 import com.zero.oauth.client.core.oauth1.OAuth1RequestProperty;
+import com.zero.oauth.client.core.properties.IPropertyStore;
+import com.zero.oauth.client.core.properties.IResponseProperty;
 import com.zero.oauth.client.utils.Strings;
 
 import lombok.Getter;
@@ -37,6 +39,16 @@ public class OAuth1Api implements OAuthApi {
         this.requestProperties = new OAuth1RequestProperties();
         this.requestProperties.update(OAuth1RequestProperty.CONSUMER_KEY.getName(), clientId);
         this.requestProperties.update(OAuth1RequestProperty.CONSUMER_SECRET.getName(), clientSecret);
+    }
+
+    @Override
+    public String generateAuthorizeRedirect() {
+        return null;
+    }
+
+    @Override
+    public <P extends IResponseProperty> IPropertyStore<P> fetchAccessToken() {
+        return null;
     }
 
     @SuppressWarnings("unchecked")

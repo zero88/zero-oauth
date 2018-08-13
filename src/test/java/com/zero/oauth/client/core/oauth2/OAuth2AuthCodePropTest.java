@@ -40,31 +40,30 @@ public class OAuth2AuthCodePropTest {
 
     @Test
     public void test_RequestProp_FilterBy_Authorize() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.AUTHORIZE);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("client_id", "response_type", "redirect_uri", "scope", "state"));
+        List<OAuth2RequestProperty> by = requestProperties.by(FlowStep.AUTHORIZE);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("client_id", "response_type", "redirect_uri", "scope", "state"));
     }
 
     @Test
     public void test_ResponseProp_FilterBy_Authorize() {
-        List<IPropertyModel> by = responseProperties.by(FlowStep.AUTHORIZE);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("token", "state"));
+        List<OAuth2ResponseProperty> by = responseProperties.by(FlowStep.AUTHORIZE);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("token", "state"));
     }
 
     @Test
     public void test_RequestProp_FilterBy_ExchangeToken() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.EXCHANGE_TOKEN);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("grant_type", "client_id", "client_secret", "redirect_uri", "code"));
+        List<OAuth2RequestProperty> by = requestProperties.by(FlowStep.EXCHANGE_TOKEN);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("grant_type", "client_id", "client_secret", "redirect_uri", "code"));
     }
 
     @Test
     public void test_ResponseProp_FilterBy_ExchangeToken() {
-        List<IPropertyModel> by = responseProperties.by(FlowStep.EXCHANGE_TOKEN);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names,
-                   hasItems("access_token", "token_type", "expires_in", "refresh_token", "scope"));
+        List<OAuth2ResponseProperty> by = responseProperties.by(FlowStep.EXCHANGE_TOKEN);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("access_token", "token_type", "expires_in", "refresh_token", "scope"));
     }
 
     @Test
@@ -87,8 +86,7 @@ public class OAuth2AuthCodePropTest {
         assertTrue("Error response must be marked as `error=True`", errorProperties.isError());
         assertTrue("Error response must have `error` prop key", errorProperties.has("error"));
         assertTrue("`error` prop key must be required", errorProperties.get("error").isRequired());
-        assertTrue("Error response must have `error_description` prop key",
-                   errorProperties.has("error_description"));
+        assertTrue("Error response must have `error_description` prop key", errorProperties.has("error_description"));
         assertTrue("`error_description` prop key must be optional",
                    errorProperties.get("error_description").isOptional());
         assertTrue("Error response must have `error_uri` prop key", errorProperties.has("error_uri"));
@@ -98,25 +96,25 @@ public class OAuth2AuthCodePropTest {
     @Test
     public void test_ResponseProp_Error_Duplicate() {
         OAuth2ResponseProperty error = errorProperties.get("error").duplicate("invalid_request");
-        assertNotSame(error, OAuth2ResponseProperty.ERROR_CODE);
+        assertNotSame(OAuth2ResponseProperty.ERROR_CODE, error);
         assertTrue(error.isError());
         assertEquals("invalid_request", error.getValue());
     }
 
     @Test
     public void test_ResponseProp_Duplicate() {
-        OAuth2ResponseProperty responseProperty =
-            responseProperties.by(FlowStep.EXCHANGE_TOKEN, "access_token").duplicate("xxx");
-        assertNotSame(responseProperty, OAuth2ResponseProperty.ACCESS_TOKEN);
+        OAuth2ResponseProperty responseProperty = responseProperties.by(FlowStep.EXCHANGE_TOKEN, "access_token")
+                                                                    .duplicate("xxx");
+        assertNotSame(OAuth2ResponseProperty.ACCESS_TOKEN, responseProperty);
         assertFalse(responseProperty.isError());
         assertEquals("xxx", responseProperty.getValue());
     }
 
     @Test
     public void test_RequestProp_FilterBy_AccessResource() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.ACCESS_RESOURCE);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("access_token"));
+        List<OAuth2RequestProperty> by = requestProperties.by(FlowStep.ACCESS_RESOURCE);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("access_token"));
     }
 
     @Test

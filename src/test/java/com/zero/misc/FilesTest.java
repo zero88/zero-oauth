@@ -19,8 +19,7 @@ public class FilesTest {
 
     private Path parseFilePath(String filePath) {
         System.out.println("File: " + filePath);
-        String optimizePath =
-            filePath.replaceFirst("(?:file:/)([^/])", "/".equals(File.separator) ? "/$1" : "$1");
+        String optimizePath = filePath.replaceFirst("(?:file:/)([^/])", "/".equals(File.separator) ? "/$1" : "$1");
         try {
             return printInfo(Paths.get(optimizePath));
         } catch (InvalidPathException ex) {

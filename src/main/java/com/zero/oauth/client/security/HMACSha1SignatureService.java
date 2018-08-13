@@ -44,8 +44,7 @@ public final class HMACSha1SignatureService implements SignatureService {
         return SignatureMethod.HMAC_SHA1;
     }
 
-    private String doSign(String toSign, String keyString)
-        throws NoSuchAlgorithmException, InvalidKeyException {
+    private String doSign(String toSign, String keyString) throws NoSuchAlgorithmException, InvalidKeyException {
         final SecretKeySpec key = new SecretKeySpec(keyString.getBytes(StandardCharsets.UTF_8),
                                                     getSignatureMethod().getAlgorithm());
         final Mac mac = Mac.getInstance(getSignatureMethod().getAlgorithm());

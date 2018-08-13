@@ -38,8 +38,7 @@ public class ServiceRegistryTest {
     public void test_get_NewInnerClass_SecurityService_ByEnv() {
         System.setProperty("z.oauth.sec.algo.random_token",
                            MockSecurityService.InnerMockSecurityService.class.getName());
-        assertTrue(
-            ServiceRegistry.getSecurityService() instanceof MockSecurityService.InnerMockSecurityService);
+        assertTrue(ServiceRegistry.getSecurityService() instanceof MockSecurityService.InnerMockSecurityService);
     }
 
 }

@@ -26,8 +26,7 @@ class OAuth2PropertyModel extends PropertyModel implements OAuth2PropertyMatcher
     }
 
     @SuppressWarnings("unchecked")
-    public <T extends OAuth2PropertyModel> T declare(GrantType grantType, FlowStep step,
-                                                     Constraint constraint) {
+    public <T extends OAuth2PropertyModel> T declare(GrantType grantType, FlowStep step, Constraint constraint) {
         validate(grantType, step);
         Map<FlowStep, Constraint> flows = this.mapping.computeIfAbsent(grantType, g -> new HashMap<>());
         flows.put(step, constraint);

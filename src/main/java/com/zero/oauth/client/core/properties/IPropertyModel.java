@@ -22,8 +22,7 @@ public interface IPropertyModel {
     OAuthVersion getVersion();
 
     /**
-     * Property's name is mandatory and unique, that declares a key in HTTP Request/Response parameters/header
-     * or body.
+     * Property's name is mandatory and unique, that declares a key in HTTP Request/Response parameters/header or body.
      *
      * @return {@code property's name}
      */
@@ -50,14 +49,14 @@ public interface IPropertyModel {
      * #registerFunction(Function)}. Also, validate data depends on {@code Constraint}.
      *
      * @return {@code property's value}
-     * @throws OAuthParameterException If property is marked as {@link Constraint#REQUIRED} but {@code value}
-     *                                 is {@code null} or {@code empty}
+     * @throws OAuthParameterException If property is marked as {@link Constraint#REQUIRED} but {@code value} is {@code
+     *                                 null} or {@code empty}
      */
     Object serialize();
 
     /**
-     * Clone current instance with overriding property value. It is helper method to generate new {@code
-     * PropertyModel} instance from builtin {@code PropertyModel}.
+     * Clone current instance with overriding property value. It is helper method to generate new {@code PropertyModel}
+     * instance from builtin {@code PropertyModel}.
      *
      * @param <P>   Any type of {@code Property Model}
      * @param value Any value but have to implement {@link Object#toString()}

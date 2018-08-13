@@ -38,31 +38,30 @@ public class OAuth2DeviceCodePropTest {
 
     @Test
     public void testRequestParams_FilterBy_ExchangeToken() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.EXCHANGE_TOKEN);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("response_type", "client_id", "scope"));
+        List<OAuth2RequestProperty> by = requestProperties.by(FlowStep.EXCHANGE_TOKEN);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("response_type", "client_id", "scope"));
     }
 
     @Test
     public void testResponseParams_FilterBy_ExchangeToken() {
-        List<IPropertyModel> by = responseProperties.by(FlowStep.EXCHANGE_TOKEN);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names,
-                   hasItems("device_code", "user_code", "verification_url", "expires_in", "interval"));
+        List<OAuth2ResponseProperty> by = responseProperties.by(FlowStep.EXCHANGE_TOKEN);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("device_code", "user_code", "verification_url", "expires_in", "interval"));
     }
 
     @Test
     public void testRequestParams_FilterBy_Polling() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.POLLING);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("grant_type", "client_id", "client_secret", "code"));
+        List<OAuth2RequestProperty> by = requestProperties.by(FlowStep.POLLING);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("grant_type", "client_id", "client_secret", "code"));
     }
 
     @Test
     public void testResponseParams_FilterBy_Polling() {
-        List<IPropertyModel> by = responseProperties.by(FlowStep.POLLING);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("access_token", "refresh_token", "expires_in", "token_type"));
+        List<OAuth2ResponseProperty> by = responseProperties.by(FlowStep.POLLING);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("access_token", "refresh_token", "expires_in", "token_type"));
     }
 
     @Test
@@ -75,9 +74,9 @@ public class OAuth2DeviceCodePropTest {
 
     @Test
     public void test_RequestProp_FilterBy_AccessResource() {
-        List<IPropertyModel> by = requestProperties.by(FlowStep.ACCESS_RESOURCE);
-        List<String> param_names = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
-        assertThat(param_names, hasItems("access_token"));
+        List<OAuth2RequestProperty> by = requestProperties.by(FlowStep.ACCESS_RESOURCE);
+        List<String> paramNames = by.stream().map(IPropertyModel::getName).collect(Collectors.toList());
+        assertThat(paramNames, hasItems("access_token"));
     }
 
 }

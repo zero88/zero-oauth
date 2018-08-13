@@ -46,8 +46,8 @@ public final class Strings {
     }
 
     /**
-     * Checks that the specified string reference is not {@code blank}. This method is designed primarily for
-     * doing parameter validation in methods and constructors, as demonstrated below:
+     * Checks that the specified string reference is not {@code blank}. This method is designed primarily for doing
+     * parameter validation in methods and constructors, as demonstrated below:
      * <blockquote><pre>
      * public Foo(Bar bar) {
      *     this.bar = Strings.requireNotBlank(bar);
@@ -63,8 +63,8 @@ public final class Strings {
     }
 
     /**
-     * Checks that the specified string reference is not {@code blank}. This method is designed primarily for
-     * doing parameter validation in methods and constructors, as demonstrated below:
+     * Checks that the specified string reference is not {@code blank}. This method is designed primarily for doing
+     * parameter validation in methods and constructors, as demonstrated below:
      * <blockquote><pre>
      * public Foo(Bar bar) {
      *     this.bar = Strings.requireNotBlank(bar, "String cannot blank");
@@ -96,8 +96,7 @@ public final class Strings {
     }
 
     /**
-     * Checks that the specified string reference is not {@code blank} and its length greater than given
-     * input.
+     * Checks that the specified string reference is not {@code blank} and its length greater than given input.
      *
      * @param text      Given input
      * @param minLength Min length
