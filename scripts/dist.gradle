@@ -1,0 +1,11 @@
+task dist(type: Copy, group: 'distribution') {
+    into "$buildDir/distributions"
+    subprojects {
+        from tasks.withType(Jar)
+        from tasks.withType(Zip)
+        from tasks.withType(Tar)
+        from("${project.docsDir}") {
+            include "*.zip"
+        }
+    }
+}

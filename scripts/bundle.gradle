@@ -1,0 +1,42 @@
+tasks.withType(Jar) { // includes War and Ear
+    baseName = rootProject.name + '-' + project.name
+    doFirst {
+        def classPath, javaVersion
+        if (!configurations.runtime.isEmpty()) {
+            classPath = configurations.runtime.files.collect { it.getName() }.join(' ')
+        }
+        javaVersion = System.getProperty('java.version') + ' (' + System.getProperty('java.vendor') + ')'
+
+        println '- Project Name:     ' + baseName
+        println '- Project Title:    ' + project.title
+        println '- Project Version:  ' + project.version
+        println '- Semantic Version: ' + project.semanticVersion
+        println '- Build Number:     ' + project.buildNumber
+        println '- Java Version:     ' + javaVersion
+
+        manifest {
+            attributes(
+                (java.util.jar.Attributes.Name.MANIFEST_VERSION.toString()): '1.0',
+                (java.util.jar.Attributes.Name.IMPLEMENTATION_TITLE.toString()): "${title}",
+                (java.util.jar.Attributes.Name.IMPLEMENTATION_VENDOR.toString()): "${vendor}",
+                (java.util.jar.Attributes.Name.IMPLEMENTATION_VERSION.toString()): "${buildNumber}",
+                (java.util.jar.Attributes.Name.SIGNATURE_VERSION.toString()): "${buildHash}",
+                (java.util.jar.Attributes.Name.SPECIFICATION_TITLE.toString()): "${title}",
+                (java.util.jar.Attributes.Name.SPECIFICATION_VENDOR.toString()): "${vendor}",
+                (java.util.jar.Attributes.Name.SPECIFICATION_VERSION.toString()): "${version}-${semanticVersion}",
+                'Build-Date': new Date(),
+                'Build-By': "${buildBy}",
+                'Java-Version': "${javaVersion}",
+                'Class-Path': "${classPath}"
+            )
+        }
+    }
+}
+
+tasks.withType(Zip) {
+    baseName = rootProject.name + '-' + project.name
+}
+
+tasks.withType(Tar) {
+    baseName = rootProject.name + '-' + project.name
+}

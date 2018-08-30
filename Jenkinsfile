@@ -11,16 +11,15 @@ pipeline {
 
         stage("Build") {
             steps {
-                sh "gradle clean assemble javadoc"
+                sh "gradle clean assemble javadoc dist"
                 script {
                     VERSION = sh(script: "gradle properties | grep 'version:' | awk '{print \$2}'", returnStdout: true).trim()
                 }
             }
             post {
                 success {
-                    archiveArtifacts artifacts: "build/libs/*.jar", fingerprint: true
                     archiveArtifacts artifacts: "build/distributions/*", fingerprint: true
-                    zip archive: true, dir: "build/docs/javadoc", zipFile: "build/distributions/javadoc.zip"
+                    archiveArtifacts artifacts: "build/docs/javadoc/*", fingerprint: true
                 }
             }
         }

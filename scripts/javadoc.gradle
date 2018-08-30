@@ -1,0 +1,14 @@
+tasks.withType(Javadoc) {
+    title = project.title + " " + project.version + " API"
+    options.tags("apiNote:a:API Note:",
+        "implSpec:a:Implementation Requirements:",
+        "implNote:a:Implementation Note:")
+}
+
+task zipDoc(type: Zip, group: 'documentation') {
+    archiveName = "javadoc-" + rootProject.name + "-" + project.name + "-" + project.version + ".zip"
+    destinationDir = file("${project.docsDir}")
+    from "${project.docsDir}/javadoc"
+}
+
+zipDoc.dependsOn javadoc
