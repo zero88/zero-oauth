@@ -25,19 +25,19 @@ public class ServiceRegistryTest extends TestBase {
 
     @Test
     public void test_get_RollbackSecurityService_ByEnv() {
-        System.setProperty("z.oauth.sec.algo.random_token", "xxx");
+        System.setProperty("z.oauth.sec.algo.random.token", "xxx");
         assertTrue(ServiceRegistry.getSecurityService() instanceof PlainTextSecurityService);
     }
 
     @Test
     public void test_get_NewClass_SecurityService_ByEnv() {
-        System.setProperty("z.oauth.sec.algo.random_token", MockSecurityService.class.getName());
+        System.setProperty("z.oauth.sec.algo.random.token", MockSecurityService.class.getName());
         assertTrue(ServiceRegistry.getSecurityService() instanceof MockSecurityService);
     }
 
     @Test
     public void test_get_NewInnerClass_SecurityService_ByEnv() {
-        System.setProperty("z.oauth.sec.algo.random_token",
+        System.setProperty("z.oauth.sec.algo.random.token",
                            MockSecurityService.InnerMockSecurityService.class.getName());
         assertTrue(ServiceRegistry.getSecurityService() instanceof MockSecurityService.InnerMockSecurityService);
     }

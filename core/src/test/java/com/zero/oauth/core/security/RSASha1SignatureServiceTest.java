@@ -13,6 +13,7 @@ import com.zero.oauth.core.type.SignatureMethod;
 
 public class RSASha1SignatureServiceTest extends TestBase {
 
+    private static final String Z_OAUTH_SEC_ALGO_RSA_PRIVATE_KEY = "z.oauth.sec.algo.rsa.private.key";
     private SignatureService signatureService;
 
     /**
@@ -28,7 +29,7 @@ public class RSASha1SignatureServiceTest extends TestBase {
     public void setUp() {
         String fileName = this.getClass().getClassLoader().getResource("rsa_key.pk8").toString();
         System.out.println(fileName);
-        System.setProperty("z.oauth.sec.algo.rsa.private_key", fileName);
+        System.setProperty(Z_OAUTH_SEC_ALGO_RSA_PRIVATE_KEY, fileName);
         this.signatureService = new RSASha1SignatureService(SecurityService.loadRsaPrivateKey());
     }
 
@@ -57,7 +58,7 @@ public class RSASha1SignatureServiceTest extends TestBase {
 
     @Test(expected = RuntimeException.class)
     public void test_GetSignature_FileError() throws Throwable {
-        System.setProperty("z.oauth.sec.algo.rsa.private_key", "/tmp/xx");
+        System.setProperty(Z_OAUTH_SEC_ALGO_RSA_PRIVATE_KEY, "/tmp/xx");
         try {
             new RSASha1SignatureService(SecurityService.loadRsaPrivateKey());
         } catch (OAuthSecurityException ex) {
@@ -68,7 +69,7 @@ public class RSASha1SignatureServiceTest extends TestBase {
     @Test(expected = InvalidKeySpecException.class)
     public void test_GetSignature_KeyNotValid() throws Throwable {
         String filePath = this.getClass().getClassLoader().getResource("none_private_key.txt").toString();
-        System.setProperty("z.oauth.sec.algo.rsa.private_key", filePath);
+        System.setProperty(Z_OAUTH_SEC_ALGO_RSA_PRIVATE_KEY, filePath);
         try {
             new RSASha1SignatureService(SecurityService.loadRsaPrivateKey());
         } catch (OAuthSecurityException ex) {

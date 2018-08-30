@@ -40,7 +40,7 @@ public final class LoggerFactory {
      */
     public static void initialize(Logger logger) {
         if (Objects.nonNull(instance)) {
-            instance().getLogger().warn("Logger is already initialized. Skip...");
+            instance().getLogger().trace("Logger is already initialized. Skip...");
             return;
         }
         synchronized (LoggerFactory.class) {
