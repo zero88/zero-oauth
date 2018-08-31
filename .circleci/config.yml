@@ -33,14 +33,14 @@ jobs:
       # Download and cache dependencies
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "build.gradle" }}
+          - v2-dependencies-{{ checksum "build.gradle" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-oauth-apis-client
+          - v2-dependencies-oauth-apis-client
       - run: ./gradlew clean dist
       - save_cache:
           paths:
             - ~/.gradle
-          key: v1-dependencies-{{ checksum "build.gradle" }}
+          key: v2-dependencies-{{ checksum "build.gradle" }}
       - store_artifacts:
           path: ~/build/distributions
   test:
@@ -51,9 +51,9 @@ jobs:
       - checkout
       - restore_cache:
           keys:
-          - v1-dependencies-{{ checksum "build.gradle" }}
+          - v2-dependencies-{{ checksum "build.gradle" }}
           # fallback to using the latest cache if no exact match is found
-          - v1-dependencies-oauth-apis-client
+          - v2-dependencies-oauth-apis-client
       - run: ./gradlew test jacocoTestReport
       - run:
           name: Save test results
