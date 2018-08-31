@@ -4,7 +4,7 @@
 [![CircleCI](https://circleci.com/gh/zero-88/zero-oauth.svg?style=shield)](https://circleci.com/gh/zero-88/zero-oauth)
 [![Coverage](https://sonarcloud.io/api/project_badges/measure?project=zero-oauth&metric=coverage)](https://sonarcloud.io/component_measures?id=zero-oauth&metric=coverage)
 [![Quality Status](https://sonarcloud.io/api/project_badges/measure?project=zero-oauth&metric=alert_status)](https://sonarcloud.io/dashboard?id=zero-oauth)
-[![LOC](https://sonarcloud.io/api/project_badges/measure?project=zero-oauth&metric=alert_status)](https://sonarcloud.io/api/project_badges/measure?project=zero-oauth&metric=ncloc)
+[![LOC](https://sonarcloud.io/api/project_badges/measure?project=zero-oauth&metric=ncloc)](https://sonarcloud.io/api/project_badges/measure?project=zero-oauth&metric=ncloc)
 
 ## Overview
 
