@@ -41,7 +41,7 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                         sh "set +x"
-                        sh "gradle sonarqube -Dsonar.organization=zero-88-github -Dsonar.branch=${GIT_BRANCH} " +
+                        sh "gradle sonarqube -Dsonar.organization=zero-88-github -Dsonar.branch.name=${GIT_BRANCH} " +
                             "-Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_TOKEN}"
                     }
                 }

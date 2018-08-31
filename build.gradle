@@ -53,7 +53,8 @@ subprojects {
 
     sonarqube {
         properties {
-            property "sonar.sources", "src"
+            property "sonar.sources", project.sourceSets.main.allSource.srcDirs
+            property "sonar.tests", project.sourceSets.test.allSource.srcDirs
         }
     }
 }
