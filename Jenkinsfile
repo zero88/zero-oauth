@@ -11,7 +11,7 @@ pipeline {
 
         stage("Build") {
             steps {
-                sh "gradle clean assemble javadoc dist"
+                sh "gradle clean dist"
                 script {
                     VERSION = sh(script: "gradle properties | grep 'version:' | awk '{print \$2}'", returnStdout: true).trim()
                 }
@@ -19,7 +19,7 @@ pipeline {
             post {
                 success {
                     archiveArtifacts artifacts: "build/distributions/*", fingerprint: true
-                    archiveArtifacts artifacts: "build/docs/javadoc/*", fingerprint: true
+                    archiveArtifacts artifacts: "build/docs/*", fingerprint: true
                 }
             }
         }
@@ -31,7 +31,7 @@ pipeline {
             post {
                 always {
                     junit 'build/test-results/**/*.xml'
-                    zip archive: true, dir: "build/reports", zipFile: "build/distributions/test-reports.zip"
+                    zip archive: true, dir: "build/reports", zipFile: "build/reports/test-reports.zip"
                 }
             }
         }

@@ -1,14 +1,18 @@
-tasks.withType(Javadoc) {
-    title = project.title + " " + project.version + " API"
-    options.tags("apiNote:a:API Note:",
-        "implSpec:a:Implementation Requirements:",
-        "implNote:a:Implementation Note:")
+javadoc {
+    subprojects {
+        javadoc {
+            title = project.title + " " + project.version + " API"
+            options.tags("apiNote:a:API Note:",
+                "implSpec:a:Implementation Requirements:",
+                "implNote:a:Implementation Note:")
+        }
+        task zipDoc (type: Zip, group: "documentation", dependsOn: "javadoc") {
+            classifier = "javadoc"
+            baseName = rootProject.name + "-" + project.name
+            from project.tasks.javadoc.outputs
+            destinationDir = file("${project.docsDir}")
+        }
+    }
+    dependsOn(subprojects.tasks.zipDoc)
 }
 
-task zipDoc(type: Zip, group: 'documentation') {
-    archiveName = "javadoc-" + rootProject.name + "-" + project.name + "-" + project.version + ".zip"
-    destinationDir = file("${project.docsDir}")
-    from "${project.docsDir}/javadoc"
-}
-
-zipDoc.dependsOn javadoc

@@ -1,4 +1,4 @@
-tasks.withType(Jar) { // includes War and Ear
+jar { // includes War and Ear
     baseName = rootProject.name + '-' + project.name
     doFirst {
         def classPath, javaVersion
@@ -33,10 +33,10 @@ tasks.withType(Jar) { // includes War and Ear
     }
 }
 
-tasks.withType(Zip) {
+distZip {
     baseName = rootProject.name + '-' + project.name
 }
 
-tasks.withType(Tar) {
+distTar {
     baseName = rootProject.name + '-' + project.name
 }

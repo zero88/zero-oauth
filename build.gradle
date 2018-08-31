@@ -31,9 +31,7 @@ subprojects {
     apply plugin: "signing"
     apply plugin: "jacoco"
     apply plugin: "net.ltgt.apt"
-
     apply from: "$rootDir/scripts/bundle.gradle"
-    apply from: "$rootDir/scripts/javadoc.gradle"
     sourceCompatibility = 1.8
 
     dependencies {
@@ -60,5 +58,7 @@ subprojects {
     }
 }
 
-apply from: "scripts/jacoco.gradle"
+apply from: "scripts/verification.gradle"
+apply from: "scripts/javadoc.gradle"
 apply from: "scripts/dist.gradle"
+

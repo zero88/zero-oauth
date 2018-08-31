@@ -4,11 +4,9 @@ import org.junit.Before;
 
 public class LogbackLoggerTest {
 
-    private Logger logger;
-
     @Before
     public void setUp() {
-        this.logger = new Logger.LogbackLogger("test");
+        LoggerFactory.initialize(new Logger.LogbackLogger("test"));
     }
 
 }

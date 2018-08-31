@@ -1,0 +1,42 @@
+apply plugin: "java"
+apply plugin: "jacoco"
+
+task testReportMerge(type: TestReport, group: "verification") {
+    dependsOn(subprojects.tasks.test)
+    reportOn subprojects.tasks.test
+    destinationDir testReportDir
+}
+
+task testResultMerge(type: Copy, group: "verification") {
+    dependsOn(subprojects.tasks.test)
+    into project.testResultsDir
+    subprojects {
+        from tasks.test
+        include "**/*.xml"
+    }
+    includeEmptyDirs = false
+}
+
+test {
+    dependsOn(testResultMerge, testReportMerge)
+}
+
+task jacocoMerge(type: JacocoMerge, group: "verification") {
+    dependsOn(subprojects.tasks.jacocoTestReport)
+    mustRunAfter(subprojects.tasks.jacocoTestReport)
+    destinationFile = file("${buildDir}/jacoco/test.exec")
+    executionData = files(subprojects.tasks.jacocoTestReport.executionData).filter { f -> f.exists() }
+}
+
+jacocoTestReport {
+    dependsOn(jacocoMerge)
+    reports {
+        xml.enabled = true
+        html.enabled = true
+    }
+
+    additionalSourceDirs = files(subprojects.sourceSets.main.allSource.srcDirs)
+    sourceDirectories = files(subprojects.sourceSets.main.allSource.srcDirs)
+    classDirectories = files(subprojects.sourceSets.main.output)
+}
+

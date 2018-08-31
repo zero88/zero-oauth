@@ -9,7 +9,7 @@ public class EventBus {
     private static volatile EventBus instance;
     private final Map<Class<?>, List<Class<?>>> a = new HashMap<>();
 
-    public static EventBus getDefault() {
+    public static EventBus instance() {
         if (instance == null) {
             synchronized (EventBus.class) {
                 if (instance == null) {
