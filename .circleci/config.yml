@@ -36,7 +36,7 @@ jobs:
           - v1-dependencies-{{ checksum "build.gradle" }}
           # fallback to using the latest cache if no exact match is found
           - v1-dependencies-oauth-apis-client
-      - run: ./gradlew clean assemble
+      - run: ./gradlew clean dist
       - save_cache:
           paths:
             - ~/.gradle
@@ -59,7 +59,7 @@ jobs:
           name: Save test results
           command: |
             mkdir -p ~/junit/
-            find . -type f -regex ".*/build/test-results/.*xml" -exec cp {} ~/junit/ \;
+            find . -type f -regex ".*/build/test-results/*.xml" -exec cp {} ~/junit/ \;
           when: always
       - store_test_results:
           path: ~/junit
