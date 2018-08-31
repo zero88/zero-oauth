@@ -1,0 +1,33 @@
+task distJar(type: Copy, group: 'distribution') {
+    into project.libsDir
+    subprojects {
+        from tasks.withType(Jar)
+    }
+}
+
+task distArtifact(type: Copy, group: 'distribution') {
+    into project.distsDir
+    subprojects {
+        from tasks.distTar
+        from tasks.distZip
+    }
+}
+
+task distDoc(type: Copy, group: 'distribution') {
+    into project.docsDir
+    subprojects {
+        from tasks.zipDoc
+    }
+}
+
+jar {
+    dependsOn(distJar)
+}
+
+assemble {
+    dependsOn(distArtifact)
+}
+
+task dist(group: 'distribution') {
+    dependsOn(jar, distArtifact, distDoc)
+}

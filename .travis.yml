@@ -7,7 +7,7 @@ branches:
   - /^(feature|bugfix)\/.*$/
 before_install:
 - chmod +x gradlew
-script: ./gradlew check
+script: ./gradlew clean assemble javadoc
 jobs:
   include:
   - stage: test

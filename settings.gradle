@@ -7,4 +7,9 @@
  * in the user guide at https://docs.gradle.org/4.9/userguide/multi_project_builds.html
  */
 
-rootProject.name = 'oauth-apis-client'
+rootProject.name = 'zero-oauth'
+//include 'android'
+include 'core'
+include 'client'
+include 'loginpass'
+

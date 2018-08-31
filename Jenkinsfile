@@ -11,16 +11,15 @@ pipeline {
 
         stage("Build") {
             steps {
-                sh "gradle clean assemble javadoc"
+                sh "gradle clean dist"
                 script {
                     VERSION = sh(script: "gradle properties | grep 'version:' | awk '{print \$2}'", returnStdout: true).trim()
                 }
             }
             post {
                 success {
-                    archiveArtifacts artifacts: "build/libs/*.jar", fingerprint: true
                     archiveArtifacts artifacts: "build/distributions/*", fingerprint: true
-                    zip archive: true, dir: "build/docs/javadoc", zipFile: "build/distributions/javadoc.zip"
+                    archiveArtifacts artifacts: "build/docs/*", fingerprint: true
                 }
             }
         }
@@ -32,7 +31,7 @@ pipeline {
             post {
                 always {
                     junit 'build/test-results/**/*.xml'
-                    zip archive: true, dir: "build/reports", zipFile: "build/distributions/test-reports.zip"
+                    zip archive: true, dir: "build/reports", zipFile: "build/reports/test-reports.zip"
                 }
             }
         }
@@ -42,7 +41,8 @@ pipeline {
                 script {
                     withCredentials([string(credentialsId: 'SONAR_TOKEN', variable: 'SONAR_TOKEN')]) {
                         sh "set +x"
-                        sh "gradle sonarqube -Dsonar.organization=zero-88-github -Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_TOKEN}"
+                        sh "gradle sonarqube -Dsonar.organization=zero-88-github -Dsonar.branch.name=${GIT_BRANCH} " +
+                            "-Dsonar.host.url=https://sonarcloud.io -Dsonar.login=${SONAR_TOKEN}"
                     }
                 }
             }
