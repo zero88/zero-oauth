@@ -14,7 +14,13 @@ public interface OAuthApi {
     /**
      * Factory method to create {@code OAuth v1 API}.
      *
+     * @param clientId        Consumer key is required value, which you get from registration.
+     * @param clientSecret    Consumer Secrets required value, which you get from registration.
+     * @param requestTokenUrl Request Token endpoint for OAuth v1, it is required value.
+     * @param authorizeUrl    Endpoint for user authorization of OAuth v1, it is required value.
+     * @param accessTokenUrl  Access Token endpoint for OAuth v1, it is required value.
      * @return OAuth v1 API
+     * @throws IllegalArgumentException if any missing required value.
      * @see OAuth1Api
      */
     static OAuth1Api initV1(String clientId, String clientSecret, String requestTokenUrl, String authorizeUrl,
@@ -25,7 +31,13 @@ public interface OAuthApi {
     /**
      * Factory method to create OAuth v2 API.
      *
+     * @param clientId       Client ID is required value, which you get from client registration.
+     * @param clientSecret   Client Secret is required value, which you get from registration.
+     * @param authorizeUrl   Endpoint for user authorization of OAuth v2, it is required value.
+     * @param accessTokenUrl RAccess Token endpoint for OAuth v2, it is required value.
+     * @param grantType      Define client use which OAuth v2 grant type, it is required value.
      * @return OAuth v2 API
+     * @throws IllegalArgumentException if any missing required value.
      * @see OAuth2Api
      */
     static OAuth2Api initV2(String clientId, String clientSecret, String authorizeUrl, String accessTokenUrl,
@@ -93,9 +105,11 @@ public interface OAuthApi {
     String getApiBaseUrl();
 
     /**
-     * @param apiBaseUrl
-     * @param <T>
-     * @return
+     * Set API Base URL.
+     *
+     * @param apiBaseUrl API Base URL
+     * @param <T>        Implementation Type of {@link OAuthApi}
+     * @return OAuth API
      */
     <T extends OAuthApi> T apiBaseUrl(String apiBaseUrl);
 
@@ -131,4 +145,5 @@ public interface OAuthApi {
      * @return OAuth request properties
      */
     IRequestProperties getRequestProperties();
+
 }

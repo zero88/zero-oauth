@@ -18,4 +18,6 @@ public final class Constants {
     public static final String UUID_ALGO = "uuid";
     public static final String TIMESTAMP_ALGO = "timestamp";
 
+    public static final String CLIENT_ARTIFACT = "zero-oauth-client";
+
 }

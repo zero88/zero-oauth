@@ -1,5 +1,9 @@
 package com.zero.oauth.core.utils;
 
+import java.io.InputStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
+
 import com.zero.oauth.core.LoggerFactory;
 
 import lombok.AccessLevel;
@@ -123,8 +127,17 @@ public final class Strings {
         try {
             return Integer.parseInt(text);
         } catch (NumberFormatException ex) {
-            LoggerFactory.instance().getLogger().debug(ex, "Cannot parse {0} to int", text, ex);
+            LoggerFactory.instance().getLogger().debug(ex, "Cannot parse {0} to int", text);
             return fallback;
+        }
+    }
+
+    public static String convertToString(InputStream inputStream) {
+        try {
+            return FileUtils.convertToByteArray(inputStream).toString(StandardCharsets.UTF_8.name());
+        } catch (UnsupportedEncodingException ex) {
+            LoggerFactory.instance().getLogger().trace(ex, "Impossible");
+            return null;
         }
     }
 

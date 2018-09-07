@@ -4,8 +4,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
-import com.zero.oauth.client.http.HttpClientExecutor;
-import com.zero.oauth.core.Logger;
+import com.zero.oauth.client.http.HttpClient;
 import com.zero.oauth.core.properties.GenericResponseStore;
 
 import lombok.Getter;
@@ -13,9 +12,9 @@ import lombok.Getter;
 @Getter
 public class OAuth2Client extends AbstractOAuthClient {
 
-    OAuth2Client(OAuth2Api api, ICallbackHandler callback, Logger logger, HttpClientExecutor httpClientExecutor,
+    OAuth2Client(OAuth2Api api, boolean strict, ICallbackHandler callback, HttpClient httpClientExecutor,
                  boolean async) {
-        super(api, callback, logger, httpClientExecutor, async);
+        super(api, strict, callback, httpClientExecutor, async);
     }
 
     @SuppressWarnings("unchecked")

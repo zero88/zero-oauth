@@ -1,4 +1,4 @@
-# Zero OAuth library
+# Zero OAuth libraries
 
 [![Build Status](https://travis-ci.org/zero-88/zero-oauth.svg?branch=master)](https://travis-ci.org/zero-88/zero-oauth)
 [![CircleCI](https://circleci.com/gh/zero-88/zero-oauth.svg?style=shield)](https://circleci.com/gh/zero-88/zero-oauth)
@@ -8,19 +8,89 @@
 
 ## Overview
 
+Zero OAuth libraries is written in `Java` language, which includes: `OAuth client` and `OAuth server` that supports `OAuth v1`, `OAuth v2` and `OpenID Connect`.
+
+It is designed for micro-service, containerization, modularization and plugable.
+
 ## Specification
 
-- `OAuth1.0a` specification
-  - [ietf](https://tools.ietf.org/html/rfc5849)
-  - [oauth](https://oauth.net/1/)
-- `OAuth2.0` specification
-  - [ietf](https://tools.ietf.org/html/rfc6749)
-  - [oauth](https://oauth.net/2/)
+This libraries are followed these specifications:
 
-## Usecases
+- `RFC5849`: The OAuth 1.0 Protocol
+  - [IETF#RFC5849](https://tools.ietf.org/html/rfc5849)
+  - [OAuth1](https://oauth.net/1/)
+- `RFC6749`: The OAuth 2.0 Authorization Framework
+  - [IETF#rfc6749](https://tools.ietf.org/html/rfc6749)
+  - [OAuth2](https://oauth.net/2/)
 
-- Use directly by CLI -> open browser -> Mock Application server for callback url.
-- Use in Java client (robot) -> AUTH_CODE | IMPLICIT | CLIENT_CREDENTIALS -> open browser -> Mock application server
-- Use in Android without server -> IMPLICIT -> open browser
-- Integrate in existing server -> AUTH_CODE
-- Use as 3rd server to consume External API -> Docker
+## Implementation
+
+### Core Implmentation
+
+- [ ] [OAuth 1.0 Client](./client/README.md#OAuth1)
+- [ ] [OAuth 2.0 Client](./client/README.md#OAuth2)
+- [ ] [OpenID Connect Client](./client/README.md#OpenID)
+- [ ] [OAuth 1.0 Server](./server/README.md#OAuth1)
+- [ ] [OAuth 2.0 Server](./server/README.md#OAuth2)
+- [ ] [OpenID Connect Server](./server/README.md#OpenID)
+- [ ] Java 10+
+
+### Login Pass
+
+Loginpass contains lots of connections to [common services](./loginpass/README.md#Services), every connection has a `Profile` that is represented for user info. It supports `OAuth 1`, `OAuth 2` and `OpenID Connect`.
+The `Profile` is standardized with [OpenID Connect UserInfo claims](http://openid.net/specs/openid-connect-core-1_0.html#StandardClaims)
+
+### Framework Integrations
+
+Framework integrations with current specification implementations:
+
+<details>
+<summary> <a href="https://developer.android.com/">Android</a></summary>
+
+- [ ] OAuth 1/2 Client
+
+</details>
+
+<details>
+<summary> <a href="https://hc.apache.org/">Apache HTTP Client</a></summary>
+
+- [ ] OAuth 1/2 Client
+
+</details>
+
+<details>
+<summary> <a href="http://square.github.io/okhttp/">Ok HTTP Client</a></summary>
+
+- [ ] OAuth 1/2 Client
+
+</details>
+
+<details>
+<summary> <a href="https://vertx.io/">Vertx</a></summary>
+
+- [ ] OAuth 1/2 Client
+- [ ] OAuth 1/2 Server
+- [ ] OpenID Client
+- [ ] OpenID Server
+
+</details>
+
+<details>
+<summary> <a href="https://netty.io/">Netty</a></summary>
+
+- [ ] OAuth 1/2 Client
+- [ ] OAuth 1/2 Server
+- [ ] OpenID Client
+- [ ] OpenID Server
+
+</details>
+
+<details>
+<summary> <a href="https://spring.io/">Spring</a></summary>
+
+- [ ] OAuth 1/2 Client
+- [ ] OAuth 1/2 Server
+- [ ] OpenID Client
+- [ ] OpenID Server
+
+</details>

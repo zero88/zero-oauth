@@ -1,7 +1,6 @@
 package com.zero.oauth.core.properties;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 /**
@@ -31,10 +30,6 @@ public interface IResponseProperties<R extends IResponseProperty> extends IReque
      */
     default List<R> errors() {
         return this.properties().stream().filter(R::isError).collect(Collectors.toList());
-    }
-
-    default Map<String, Object> toMap() {
-        return this.properties().stream().collect(Collectors.toMap(IPropertyModel::getName, IPropertyModel::getValue));
     }
 
 }

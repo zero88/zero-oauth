@@ -20,10 +20,10 @@ import lombok.RequiredArgsConstructor;
 public final class JsonConverter implements PropertiesConverter {
 
     @Override
-    public <P extends IPropertyModel, T extends IRequestProperties<P>> String serialize(T requestProperties,
-                                                                                        FlowStep step) {
+    public <P extends IPropertyModel, R extends IRequestProperties<P>> String serialize(R requestProperties,
+                                                                                      FlowStep step) {
         Gson gson = new GsonBuilder().create();
-        Map<String, Object> map = requestProperties.by(step).stream().collect(
+        Map<java.lang.String, Object> map = requestProperties.by(step).stream().collect(
             Collectors.toMap(P::getName, P::serialize));
         return gson.toJson(map);
     }

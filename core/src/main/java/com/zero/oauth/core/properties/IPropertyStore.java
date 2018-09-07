@@ -1,6 +1,7 @@
 package com.zero.oauth.core.properties;
 
 import java.util.Collection;
+import java.util.Map;
 
 /**
  * Store all properties that used in one OAuth session.
@@ -69,5 +70,12 @@ public interface IPropertyStore<P extends IPropertyModel> {
      * @return List of all properties
      */
     Collection<P> properties();
+
+    /**
+     * All properties in store.
+     *
+     * @return Map of key-value properties
+     */
+    Map<String, Object> toMap();
 
 }

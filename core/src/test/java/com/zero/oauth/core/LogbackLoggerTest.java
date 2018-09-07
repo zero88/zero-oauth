@@ -6,7 +6,7 @@ public class LogbackLoggerTest {
 
     @Before
     public void setUp() {
-        LoggerFactory.initialize(new Logger.LogbackLogger("test"));
+        LoggerFactory.initialize("com.zero.oauth.core.test", Logger.LogbackLogger.class);
     }
 
 }

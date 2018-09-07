@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import java.io.InputStream;
+
 import org.junit.Test;
 
 import com.zero.oauth.core.TestBase;
@@ -99,6 +101,17 @@ public class StringsTest extends TestBase {
         assertEquals("123", Strings.toString(123));
         assertEquals("true", Strings.toString(Boolean.TRUE));
         assertEquals("xy", Strings.toString(" xy    "));
+    }
+
+    @Test
+    public void test_convert() {
+        InputStream is = StringsTest.class.getClassLoader().getResourceAsStream("test.properties");
+        assertEquals("z.oauth.test=lalala", Strings.convertToString(is).trim());
+    }
+
+    @Test(expected = NullPointerException.class)
+    public void test_convert_null() {
+        Strings.convertToString(null);
     }
 
 }

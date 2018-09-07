@@ -17,6 +17,7 @@ import com.zero.oauth.core.oauth2.OAuth2RequestProperties;
 import com.zero.oauth.core.type.FlowStep;
 import com.zero.oauth.core.type.GrantType;
 import com.zero.oauth.core.type.SignatureMethod;
+import com.zero.oauth.core.utils.Constants;
 
 public class HttpHeaderConverterTest extends TestBase {
 
@@ -43,9 +44,9 @@ public class HttpHeaderConverterTest extends TestBase {
         requestProperties.update("state", STATE);
         String headers = new HttpHeaderConverter().serialize(requestProperties, FlowStep.AUTHORIZE);
         System.out.println("Serialize: " + headers);
-        assertThat(Arrays.asList(headers.split("\\,")),
-                   hasItems("response_type=\"code\"", "client_id=\"" + CLIENT_ID + "\"", "state=\"" + STATE + "\"",
-                            "scope=\"" + SCOPE_ENCODE + "\"", "redirect_uri=\"" + REDIRECT_URI_ENCODE + "\""));
+        assertThat(Arrays.asList(headers.split(Constants.CARRIAGE_RETURN)),
+                   hasItems("response_type:\"code\"", "client_id:\"" + CLIENT_ID + "\"", "state:\"" + STATE + "\"",
+                            "scope:\"" + SCOPE_ENCODE + "\"", "redirect_uri:\"" + REDIRECT_URI_ENCODE + "\""));
     }
 
     @Test(expected = OAuthParameterException.class)
@@ -64,18 +65,19 @@ public class HttpHeaderConverterTest extends TestBase {
         requestProperties.update("oauth_nonce", NONCE);
         String headers = new HttpHeaderConverter().serialize(requestProperties, FlowStep.REQUEST);
         System.out.println("Serialize: " + headers);
-        assertThat(Arrays.asList(headers.split(",")), hasItems("oauth_consumer_key=\"" + CLIENT_ID + "\"",
-                                                               "oauth_callback=\"" + REDIRECT_URI_ENCODE + "\"",
-                                                               "oauth_signature_method=\"" + SignatureMethod.HMAC_SHA1 +
-                                                               "\"", "oauth_signature=\"" + SIGNATURE_ENCODE + "\"",
-                                                               "oauth_timestamp=\"" + TIMESTAMP + "\"",
-                                                               "oauth_nonce=\"" + NONCE + "\""));
+        assertThat(Arrays.asList(headers.split(Constants.CARRIAGE_RETURN)),
+                   hasItems("oauth_consumer_key:\"" + CLIENT_ID + "\"",
+                            "oauth_callback:\"" + REDIRECT_URI_ENCODE + "\"",
+                            "oauth_signature_method:\"" + SignatureMethod.HMAC_SHA1 + "\"",
+                            "oauth_signature:\"" + SIGNATURE_ENCODE + "\"", "oauth_timestamp:\"" + TIMESTAMP + "\"",
+                            "oauth_nonce:\"" + NONCE + "\""));
     }
 
     @Test
     public void test_ResponseProp_HeaderConvert_OAuth1() {
-        String headers = "oauth_token=\"" + TOKEN + "\"," + "oauth_token_secret=\"" + TOKEN_SECRET + "\"," +
-                         "oauth_callback_confirmed=\"" + TOKEN_CONFIRMED + "\"";
+        String headers = "oauth_token:\"" + TOKEN + "\"" + Constants.CARRIAGE_RETURN + "oauth_token_secret:\"" +
+                         TOKEN_SECRET + "\"" + Constants.CARRIAGE_RETURN + "oauth_callback_confirmed:\"" +
+                         TOKEN_CONFIRMED + "\"";
         System.out.println("Deserialize: " + headers);
         OAuth1ResponseProperties store = new HttpHeaderConverter().deserialize(new OAuth1ResponseProperties(), headers,
                                                                                FlowStep.REQUEST);

@@ -6,7 +6,15 @@ public class TestBase {
 
     @BeforeClass
     public static void setUpClass() {
-        LoggerFactory.initialize();
+        LoggerFactory.initialize("com.zero.oauth.test");
+    }
+
+    public interface ThrowableConsumer<T> {
+
+        default void apply(T o, Class<?> clazz, String methodName) throws Throwable {
+
+        }
+
     }
 
 }

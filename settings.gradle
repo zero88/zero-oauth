@@ -11,5 +11,8 @@ rootProject.name = 'zero-oauth'
 //include 'android'
 include 'core'
 include 'client'
+include 'client-okhttp'
+include 'client-apache'
 include 'loginpass'
+include 'server'
 

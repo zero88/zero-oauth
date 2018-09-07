@@ -1,12 +1,16 @@
 package com.zero.oauth.core.utils;
 
+import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Modifier;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
 import com.zero.oauth.core.LoggerFactory;
+import com.zero.oauth.core.exceptions.OAuthException;
 
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
@@ -30,6 +34,21 @@ public final class Reflections {
         return Reflections.getConstants(destClazz, destClazz);
     }
 
+    @SuppressWarnings("unchecked")
+    public static <T> T getConstantByName(Class<?> destClazz, String fieldName) {
+        try {
+            Field field = destClazz.getDeclaredField("methods");
+            int modifiers = field.getModifiers();
+            if (!Modifier.isPublic(modifiers) || !Modifier.isStatic(modifiers) || !Modifier.isFinal(modifiers)) {
+                return null;
+            }
+            return (T) field.get(null);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new OAuthException(
+                MessageFormat.format("Failed to get field constant {0} of {1}", fieldName, destClazz.getName()), e);
+        }
+    }
+
     /**
      * Get Constants with given type from specified class.
      *
@@ -44,7 +63,8 @@ public final class Reflections {
         List<P> consts = new ArrayList<>();
         Class<?> primitiveClass = getPrimitiveClass(Objects.requireNonNull(findClazz));
         for (Field f : Objects.requireNonNull(destClazz).getDeclaredFields()) {
-            if (!Modifier.isPublic(f.getModifiers()) || !Modifier.isStatic(f.getModifiers())) {
+            int modifiers = f.getModifiers();
+            if (!Modifier.isPublic(modifiers) || !Modifier.isStatic(modifiers) || !Modifier.isFinal(modifiers)) {
                 continue;
             }
             boolean primitive = f.getType().isPrimitive();
@@ -54,7 +74,7 @@ public final class Reflections {
             try {
                 consts.add((P) f.get(null));
             } catch (IllegalArgumentException | IllegalAccessException e) {
-                LoggerFactory.instance().getLogger().warn(e, "Failed to get field constant {0}", f.getName());
+                LoggerFactory.instance().getLogger().debug(e, "Failed to get field constant {0}", f.getName());
             }
         }
         return consts;
@@ -92,16 +112,15 @@ public final class Reflections {
     @SuppressWarnings("unchecked")
     public static <T> Class<T> findClass(String className, Class<T> parentClass) throws ClassNotFoundException {
         Objects.requireNonNull(parentClass);
-        String clazzName = Strings.requireNotBlank(className);
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
         if (classLoader == null) {
             classLoader = Reflections.class.getClassLoader();
         }
-        Class<?> clazz = classLoader.loadClass(clazzName);
+        Class<?> clazz = classLoader.loadClass(Strings.requireNotBlank(className));
         if (parentClass.isAssignableFrom(clazz)) {
             return (Class<T>) clazz;
         }
-        throw new RuntimeException("Class " + clazz.getName() + " is not child of class " + parentClass.getName());
+        throw new OAuthException("Class " + clazz.getName() + " is not child of class " + parentClass.getName());
     }
 
     /**
@@ -117,8 +136,33 @@ public final class Reflections {
             Class<T> clazz = findClass(className, parentClass);
             return clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | RuntimeException e) {
-            LoggerFactory.instance().getLogger().warn(e, "Failed to init instance of class name {0}", className);
+            LoggerFactory.instance().getLogger().warn(e, "Failed when init instance of class {0}", className);
             return null;
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public static <T> T initInstance(Class<T> clazz, Class[] argClasses, Object[] args) {
+        try {
+            Constructor constructor = Objects.requireNonNull(clazz).getDeclaredConstructor(argClasses);
+            constructor.setAccessible(true);
+            return (T) constructor.newInstance(args);
+        } catch (NoSuchMethodException | InstantiationException | IllegalAccessException | InvocationTargetException e) {
+            throw new OAuthException("Cannot init instance", e);
+        }
+    }
+
+    public static <T> void updateConstants(Class<?> destClazz, String fieldName, T value) {
+        try {
+            Field methodsField = destClazz.getDeclaredField(fieldName);
+            Field modifiersField = Field.class.getDeclaredField("modifiers");
+            modifiersField.setAccessible(true);
+            modifiersField.setInt(methodsField, methodsField.getModifiers() & ~Modifier.FINAL);
+            methodsField.setAccessible(true);
+            methodsField.set(null, value);
+        } catch (NoSuchFieldException | IllegalAccessException e) {
+            throw new OAuthException(
+                MessageFormat.format("Update failed on field {0} of class {1}", fieldName, destClazz.getName()), e);
         }
     }
 

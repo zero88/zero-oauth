@@ -33,7 +33,7 @@ public final class ServiceRegistry {
      * @param algorithm algorithm getName
      * @return security service
      */
-    static SecurityService getSecurityService(String algorithm) {
+    public static SecurityService getSecurityService(String algorithm) {
         SecurityService securityService = SECURITY_REGISTRY.get(
             Strings.isBlank(algorithm) ? Constants.TEXT_ALGO : algorithm);
         if (Objects.nonNull(securityService)) {

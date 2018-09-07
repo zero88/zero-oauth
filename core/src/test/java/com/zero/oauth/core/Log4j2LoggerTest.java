@@ -6,7 +6,7 @@ public class Log4j2LoggerTest {
 
     @Before
     public void setUp() {
-        LoggerFactory.initialize(new Logger.Log4j2Logger("test"));
+        LoggerFactory.initialize("com.zero.oauth.core.test", Logger.Log4j2Logger.class);
     }
 
 }

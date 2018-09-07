@@ -17,7 +17,7 @@ jar { // includes War and Ear
         manifest {
             attributes(
                 (java.util.jar.Attributes.Name.MANIFEST_VERSION.toString()): '1.0',
-                (java.util.jar.Attributes.Name.IMPLEMENTATION_TITLE.toString()): "${title}",
+                (java.util.jar.Attributes.Name.IMPLEMENTATION_TITLE.toString()): "${baseName}",
                 (java.util.jar.Attributes.Name.IMPLEMENTATION_VENDOR.toString()): "${vendor}",
                 (java.util.jar.Attributes.Name.IMPLEMENTATION_VERSION.toString()): "${buildNumber}",
                 (java.util.jar.Attributes.Name.SIGNATURE_VERSION.toString()): "${buildHash}",

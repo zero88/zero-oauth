@@ -1,6 +1,8 @@
 package com.zero.oauth.core.properties;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -9,6 +11,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import com.zero.oauth.core.type.HttpPlacement;
 import com.zero.oauth.core.utils.Strings;
 
 /**
@@ -18,19 +21,18 @@ public abstract class PropertyStore<P extends IPropertyModel> implements IProper
 
     private final Map<String, P> defaultProps = new HashMap<>();
     private final Map<String, P> actualProps = new HashMap<>();
+    private final EnumMap<HttpPlacement, List<P>> placementMap = new EnumMap<>(HttpPlacement.class);
 
     protected void init(List<P> defaultProps) {
-        defaultProps.forEach(property -> this.addMore(this.defaultProps, property));
-    }
-
-    private void addMore(Map<String, P> properties, P property) {
-        Objects.requireNonNull(property, "Property cannot be null");
-        Strings.requireNotBlank(property.getName(), "Property getName cannot be blank");
-        properties.put(property.getName(), property);
+        defaultProps.forEach(property -> {
+            this.addMore(this.defaultProps, property);
+            this.classifyPlacement(property);
+        });
     }
 
     public void add(P property) {
-        addMore(actualProps, property);
+        this.addMore(actualProps, property);
+        this.classifyPlacement(property);
     }
 
     /**
@@ -67,6 +69,24 @@ public abstract class PropertyStore<P extends IPropertyModel> implements IProper
         Map<String, P> properties = Stream.of(this.actualProps, this.defaultProps).map(Map::entrySet).flatMap(
             Collection::stream).collect(Collectors.toMap(Entry::getKey, Entry::getValue, (actual, prop) -> actual));
         return properties.values();
+    }
+
+    public Map<String, Object> toMap() {
+        return Stream.of(this.actualProps, this.defaultProps).map(Map::entrySet).flatMap(Collection::stream).collect(
+            Collectors.toMap(Entry::getKey, entry -> entry.getValue().getValue(), (actual, prop) -> actual));
+    }
+
+    private void addMore(Map<String, P> properties, P property) {
+        Objects.requireNonNull(property, "Property cannot be null");
+        Strings.requireNotBlank(property.getName(), "Property getName cannot be blank");
+        properties.put(property.getName(), property);
+    }
+
+    private void classifyPlacement(P property) {
+        property.getAvailablePlacements().forEach(placement -> {
+            this.placementMap.putIfAbsent(placement, new ArrayList<>());
+            this.placementMap.get(placement).add(property);
+        });
     }
 
 }

@@ -6,7 +6,7 @@ public class JdkLoggerTest {
 
     @Before
     public void setUp() {
-        LoggerFactory.initialize();
+        LoggerFactory.initialize("com.zero.oauth.core.test");
     }
 
 }

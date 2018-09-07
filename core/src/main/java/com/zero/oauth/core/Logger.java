@@ -113,7 +113,7 @@ public interface Logger {
 
         private final java.util.logging.Logger logger;
 
-        public JdkLogger(String name) {
+        JdkLogger(String name) {
             logger = java.util.logging.Logger.getLogger(name);
         }
 
@@ -150,7 +150,7 @@ public interface Logger {
 
         private final org.apache.logging.log4j.Logger logger;
 
-        public Log4j2Logger(String name) {
+        Log4j2Logger(String name) {
             logger = org.apache.logging.log4j.LogManager.getLogger(name);
         }
 
@@ -195,7 +195,7 @@ public interface Logger {
 
         private final org.slf4j.Logger logger;
 
-        public LogbackLogger(String name) {
+        LogbackLogger(String name) {
             logger = org.slf4j.LoggerFactory.getLogger(name);
         }
 

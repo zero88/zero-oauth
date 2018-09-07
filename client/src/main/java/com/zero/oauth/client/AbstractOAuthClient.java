@@ -1,9 +1,10 @@
 package com.zero.oauth.client;
 
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 
-import com.zero.oauth.client.http.HttpClientExecutor;
-import com.zero.oauth.core.Logger;
+import com.zero.oauth.client.http.HttpClient;
+import com.zero.oauth.client.http.HttpData;
 import com.zero.oauth.core.converter.HttpHeaderConverter;
 import com.zero.oauth.core.converter.HttpQueryConverter;
 import com.zero.oauth.core.converter.JsonConverter;
@@ -28,17 +29,17 @@ import lombok.Getter;
 abstract class AbstractOAuthClient implements OAuthClient, OAuthHttp {
 
     private final OAuthApi api;
+    private final boolean strict;
     private final ICallbackHandler callback;
-    private final Logger logger;
-    private final HttpClientExecutor httpClientExecutor;
+    private final HttpClient httpClientExecutor;
     private final ThreadLocal<Boolean> async;
     protected ThreadLocal<IRequestProperties> requestProperties;
 
-    AbstractOAuthClient(OAuthApi api, ICallbackHandler callback, Logger logger, HttpClientExecutor httpClientExecutor,
+    AbstractOAuthClient(OAuthApi api, boolean strict, ICallbackHandler callback, HttpClient httpClientExecutor,
                         boolean async) {
         this.api = api;
+        this.strict = strict;
         this.callback = callback;
-        this.logger = logger;
         this.httpClientExecutor = httpClientExecutor;
         this.async = ThreadLocal.withInitial(() -> async);
         this.requestProperties = ThreadLocal.withInitial(this.api::getRequestProperties);
@@ -102,13 +103,21 @@ abstract class AbstractOAuthClient implements OAuthClient, OAuthHttp {
     protected final <R extends IPropertyModel> GenericResponseStore request(String url, HttpMethod method,
                                                                             FlowStep flowStep,
                                                                             IRequestProperties<R> requestProperties) {
-        String body = new JsonConverter().serialize(requestProperties, flowStep);
-        String headers = new HttpHeaderConverter().serialize(requestProperties, flowStep);
-        String queries = new HttpQueryConverter().serialize(requestProperties, flowStep);
+        HttpData requestData = HttpData.builder().header(
+            new HttpHeaderConverter().serialize(requestProperties, flowStep)).strBody(
+            new JsonConverter().serialize(requestProperties, flowStep)).query(
+            new HttpQueryConverter().serialize(requestProperties, flowStep)).build();
+        HttpData responseData;
         if (this.async.get()) {
-            return this.httpClientExecutor.asyncExecute(url, method, headers, queries, body);
+            try {
+                responseData = (HttpData) this.httpClientExecutor.asyncExecute(url, method, requestData).get();
+            } catch (InterruptedException | ExecutionException e) {
+                e.printStackTrace();
+            }
+        } else {
+            responseData = this.httpClientExecutor.execute(url, method, requestData);
         }
-        return this.httpClientExecutor.execute(url, method, headers, queries, body);
+        return null;
     }
 
 }

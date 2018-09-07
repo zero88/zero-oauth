@@ -1,17 +1,10 @@
 package com.zero.oauth.client;
 
-import java.util.EnumMap;
-import java.util.Map;
-
-import com.zero.oauth.core.converter.HttpHeaderConverter;
-import com.zero.oauth.core.converter.HttpQueryConverter;
-import com.zero.oauth.core.converter.JsonConverter;
 import com.zero.oauth.core.exceptions.OAuthException;
 import com.zero.oauth.core.exceptions.OAuthSecurityException;
 import com.zero.oauth.core.properties.GenericResponseStore;
 import com.zero.oauth.core.properties.IResponseProperties;
 import com.zero.oauth.core.properties.IResponseProperty;
-import com.zero.oauth.core.type.HttpPlacement;
 import com.zero.oauth.core.type.OAuthVersion;
 
 /**
@@ -61,10 +54,11 @@ public interface ICallbackHandler {
      * @see IResponseProperties
      */
     default GenericResponseStore handleAuthorizationStep(String header, String query) {
-        EnumMap<HttpPlacement, Map<String, Object>> data = new EnumMap<>(HttpPlacement.class);
-        data.put(HttpPlacement.HEADER, new HttpHeaderConverter().deserialize(header));
-        data.put(HttpPlacement.URI_QUERY, new HttpQueryConverter().deserialize(query));
-        return new GenericResponseStore(getVersion(), data);
+        //        EnumMap<HttpPlacement, Map<String, Object>> data = new EnumMap<>(HttpPlacement.class);
+        //        data.put(HttpPlacement.HEADER, new HttpHeaderConverter().deserialize(header));
+        //        data.put(HttpPlacement.URI_QUERY, new HttpQueryConverter().deserialize(query));
+        //        return new GenericResponseStore(getVersion(), data);
+        return null;
     }
 
     /**
@@ -82,11 +76,12 @@ public interface ICallbackHandler {
      * @see IResponseProperties
      */
     default GenericResponseStore handleExchangeAccessToken(String header, String query, String body) {
-        EnumMap<HttpPlacement, Map<String, Object>> data = new EnumMap<>(HttpPlacement.class);
-        data.put(HttpPlacement.HEADER, new HttpHeaderConverter().deserialize(header));
-        data.put(HttpPlacement.URI_QUERY, new HttpQueryConverter().deserialize(query));
-        data.put(HttpPlacement.BODY, new JsonConverter().deserialize(body));
-        return new GenericResponseStore(getVersion(), data);
+        //        EnumMap<HttpPlacement, Map<String, Object>> data = new EnumMap<>(HttpPlacement.class);
+        //        data.put(HttpPlacement.HEADER, new HttpHeaderConverter().deserialize(header));
+        //        data.put(HttpPlacement.URI_QUERY, new HttpQueryConverter().deserialize(query));
+        //        data.put(HttpPlacement.BODY, new JsonConverter().deserialize(body));
+        //        return new GenericResponseStore(getVersion(), data);
+        return null;
     }
 
 }
