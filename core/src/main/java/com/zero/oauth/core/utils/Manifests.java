@@ -92,7 +92,7 @@ public final class Manifests {
         if (Strings.isBlank(implVersion) || Strings.isBlank(specVersion) || implVersion.equals(specVersion)) {
             return Strings.isBlank(implVersion) ? specVersion : implVersion;
         }
-        return MessageFormat.format("{1}-{2}", specVersion, implVersion);
+        return MessageFormat.format("{0}-{1}", specVersion, implVersion);
     }
 
 }

@@ -112,7 +112,7 @@ abstract class AbstractOAuthClient implements OAuthClient, OAuthHttp {
             try {
                 responseData = (HttpData) this.httpClientExecutor.asyncExecute(url, method, requestData).get();
             } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
+                throw new OAuthException(e);
             }
         } else {
             responseData = this.httpClientExecutor.execute(url, method, requestData);
