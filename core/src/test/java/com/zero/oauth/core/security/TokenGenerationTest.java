@@ -14,7 +14,7 @@ public class TokenGenerationTest extends TestBase {
         TokenGeneration tokenGeneration = new TokenGeneration();
         String token = tokenGeneration.apply(null);
         assertNotNull(token);
-        assertEquals(token, tokenGeneration.apply(null));
+        assertEquals(token, tokenGeneration.apply(token));
     }
 
     @Test
