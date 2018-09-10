@@ -45,8 +45,7 @@ abstract class OAuth1PropertyModel extends PropertyModel implements OAuth1Proper
      * Required value depends on OAuth flow step. It is not capable to use this method.
      *
      * @throws UnsupportedOperationException Raise exception
-     * @deprecated Use {@link OAuth1PropertyMatcher#declare(FlowStep)} or {@link OAuth1PropertyMatcher#declare(FlowStep,
-     *         Constraint)}
+     * @deprecated Use {@link #declare(FlowStep)}
      */
     @Override
     @Deprecated
@@ -59,8 +58,7 @@ abstract class OAuth1PropertyModel extends PropertyModel implements OAuth1Proper
      *
      * @param <T> Type of implementation of property model
      * @throws UnsupportedOperationException Raise exception
-     * @deprecated Use {@link OAuth1PropertyMatcher#declare(FlowStep)} or {@link OAuth1PropertyMatcher#declare(FlowStep,
-     *         Constraint)}
+     * @deprecated Use {@link #declare(FlowStep, Constraint)}
      */
     @Override
     @Deprecated

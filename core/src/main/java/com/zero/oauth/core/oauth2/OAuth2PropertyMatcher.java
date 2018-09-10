@@ -9,7 +9,7 @@ import com.zero.oauth.core.type.GrantType;
  *
  * @since 1.0.0
  */
-interface OAuth2PropertyMatcher extends IPropertyModel {
+public interface OAuth2PropertyMatcher extends IPropertyModel {
 
     /**
      * Declare required property belongs to given {@code GrantType} and {@code FlowStep}.

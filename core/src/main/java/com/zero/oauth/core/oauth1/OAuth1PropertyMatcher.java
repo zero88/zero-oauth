@@ -8,7 +8,7 @@ import com.zero.oauth.core.type.FlowStep;
  *
  * @since 1.0.0
  */
-interface OAuth1PropertyMatcher extends IPropertyModel {
+public interface OAuth1PropertyMatcher extends IPropertyModel {
 
     /**
      * Declare required property belongs to given {@code FlowStep}.

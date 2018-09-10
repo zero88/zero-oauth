@@ -72,7 +72,7 @@ abstract class OAuth2PropertyModel extends PropertyModel implements OAuth2Proper
      * Required value depends on grant type and step. It is not capable to use this method.
      *
      * @throws UnsupportedOperationException Raise exception
-     * @deprecated Use {@link OAuth2PropertyMatcher#declare(GrantType, FlowStep)}
+     * @deprecated Use {@link #declare(GrantType, FlowStep)}
      */
     @Override
     @Deprecated
@@ -84,7 +84,7 @@ abstract class OAuth2PropertyModel extends PropertyModel implements OAuth2Proper
      * Recommendation value depends on grant type and step. It is not capable to use this method.
      *
      * @throws UnsupportedOperationException Raise exception
-     * @deprecated Use {@link OAuth2PropertyMatcher#declare(GrantType, FlowStep, Constraint)}
+     * @deprecated Use {@link #declare(GrantType, FlowStep, Constraint)}
      */
     @Override
     @Deprecated

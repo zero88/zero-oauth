@@ -132,7 +132,8 @@ public final class FileUtils {
      *
      * @param inputStream  Given input stream
      * @param outputStream Given output stream
-     * @return outputStream
+     * @param <T>          Type of output stream
+     * @return Given Output Stream
      * @throws OAuthException if error when reading stream
      */
     public static <T extends OutputStream> T writeToOutputStream(InputStream inputStream, T outputStream) {
