@@ -181,8 +181,8 @@ public class JdkHttpClientTest extends TestBase {
         Assert.assertTrue(response.getStatus().isOk());
         Assert.assertEquals("OK", response.getStatus().getMessage());
         JSONAssert.assertEquals(
-            "{\"args\":{},\"data\":{},\"files\":{\"hello.txt\":\"data:application/octet-stream;base64,aGVsbG8NCg==\"}," +
-            "\"form\":{\"user\":\"test\"},\"headers\":{\"host\":\"postman-echo.com\",\"content-length\":\"320\"," +
+            "{\"args\":{},\"data\":{},\"files\":{\"hello.txt\":\"data:application/octet-stream;base64,aGVsbG8K\"}," +
+            "\"form\":{\"user\":\"test\"},\"headers\":{\"host\":\"postman-echo.com\",\"content-length\":\"319\"," +
             "\"accept\":\"text/html, image/gif, image/jpeg, *; q=.2, */*; q=.2\"," +
             "\"content-type\":\"multipart/form-data; boundary=--------------------------908611062647668001736400\"," +
             "\"user-agent\":\"JdkHttpClient\",\"x-forwarded-port\":\"443\",\"x-forwarded-proto\":\"https\"}," +

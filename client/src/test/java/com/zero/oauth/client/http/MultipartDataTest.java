@@ -62,12 +62,14 @@ public class MultipartDataTest extends TestBase {
         }
     }
 
-    @Test(expected = InvalidPathException.class)
-    public void test_add_file_url_wrong_syntax() throws Throwable {
+    @Test
+    public void test_add_file_url_wrong_syntax() {
         try {
             multipartData.addFile("", "https://postman-echo.com/post");
         } catch (OAuthException ex) {
-            throw ex.getCause();
+            Throwable cause = ex.getCause();
+            Assert.assertTrue(
+                isWin() ? cause instanceof InvalidPathException : cause instanceof FileNotFoundException);
         }
     }
 

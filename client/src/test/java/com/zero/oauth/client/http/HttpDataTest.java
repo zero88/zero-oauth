@@ -63,7 +63,7 @@ public class HttpDataTest extends TestBase {
         InputStream inputStream = HttpDataTest.class.getClassLoader().getResourceAsStream("hello.txt");
         HttpData httpData = HttpData.builder().streamBody(inputStream).build();
         Assert.assertNotNull(httpData.getStreamBody());
-        Assert.assertArrayEquals(new byte[] {104, 101, 108, 108, 111, 13, 10}, httpData.getBytes());
+        Assert.assertArrayEquals(new byte[] {104, 101, 108, 108, 111, 10}, httpData.getBytes());
     }
 
     @Test

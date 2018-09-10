@@ -5,10 +5,11 @@ import java.io.IOException;
 import org.junit.Before;
 import org.junit.Test;
 
+import com.zero.oauth.core.TestBase;
 import com.zero.oauth.core.type.GrantType;
 import com.zero.oauth.server.MockApplicationServer;
 
-public class OAuth2ClientTest {
+public class OAuth2ClientTest extends TestBase {
 
     private static final String OAUTH_CALLBACK_PATH = "/api/oauth/callback";
     private OAuthClient client;
