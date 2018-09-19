@@ -13,12 +13,15 @@ import java.net.UnknownHostException;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Objects;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import com.zero.oauth.core.exceptions.OAuthException;
+import com.zero.oauth.core.LoggerFactory;
+import com.zero.oauth.core.exceptions.OAuthHttpException;
 import com.zero.oauth.core.properties.HeaderProperty;
 import com.zero.oauth.core.type.HttpMethod;
 import com.zero.oauth.core.type.HttpPlacement;
@@ -39,6 +42,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class JdkHttpClient implements HttpClient {
 
+    private static final ExecutorService EXECUTOR_SERVICE = Executors.newFixedThreadPool(10);
     private final JdkHttpClientConfig config;
 
     public JdkHttpClient() {
@@ -52,7 +56,34 @@ public class JdkHttpClient implements HttpClient {
 
     @Override
     public Future<HttpData> asyncExecute(String url, HttpMethod method, HttpData requestData) {
-        return Executors.newSingleThreadExecutor().submit(() -> this.doExecute(url, method, requestData));
+        return EXECUTOR_SERVICE.submit(() -> this.doExecute(url, method, requestData));
+    }
+
+    @Override
+    public void asyncExecute(String url, HttpMethod method, HttpData requestData, HttpCallback callback) {
+        Objects.requireNonNull(callback, "HTTP Callback must be not null");
+        EXECUTOR_SERVICE.submit(() -> {
+            try {
+                callback.onSuccess(this.doExecute(url, method, requestData));
+            } catch (OAuthHttpException e) {
+                callback.onFailed(e);
+            }
+        });
+    }
+
+    @Override
+    public CompletableFuture<HttpData> asyncExecute(String url, HttpMethod method, HttpData requestData,
+                                                    boolean resultNullable) {
+        CompletableFuture<HttpData> future = CompletableFuture.supplyAsync(
+            () -> this.doExecute(url, method, requestData), EXECUTOR_SERVICE);
+        if (resultNullable) {
+            future.exceptionally(throwable -> {
+                LoggerFactory.instance().getLogger().error(throwable, "Error when making HTTP request");
+                return null;
+            });
+            return future;
+        }
+        return future;
     }
 
     private HttpData doExecute(String url, HttpMethod method, HttpData requestData) {
@@ -63,13 +94,13 @@ public class JdkHttpClient implements HttpClient {
                                                           : urlConn.openConnection(this.config.getProxy()));
             conn.setRequestMethod(method.name());
             conn.setInstanceFollowRedirects(this.getConfig().isFollowRedirect());
-            conn.setConnectTimeout(this.getConfig().getConnectTimeout() / 1000);
-            conn.setReadTimeout(this.getConfig().getReadTimeout() / 1000);
+            conn.setConnectTimeout(this.getConfig().getConnectTimeout() * 1000);
+            conn.setReadTimeout(this.getConfig().getReadTimeout() * 1000);
             addHeaders(requestData, conn);
             addBody(method, requestData, conn);
             return connect(conn);
         } catch (IOException e) {
-            throw new OAuthException("Failed when connect host", e);
+            throw new OAuthHttpException("Failed when connect host", e);
         }
     }
 
@@ -81,7 +112,7 @@ public class JdkHttpClient implements HttpClient {
             return HttpData.builder().streamBody(content).headerMap(parseResponseHeaders(conn)).status(httpStatus)
                            .build();
         } catch (UnknownHostException e) {
-            throw new OAuthException("The IP address of a host could not be determined.", e);
+            throw new OAuthHttpException("The IP address of a host could not be determined.", e);
         }
     }
 
@@ -141,7 +172,7 @@ public class JdkHttpClient implements HttpClient {
             writer.append(Constants.CARRIAGE_RETURN);
             writer.flush();
         } catch (IOException e) {
-            throw new OAuthException("Cannot write data into HTTP request", e);
+            throw new OAuthHttpException("Cannot write data into HTTP request", e);
         }
     }
 
@@ -169,7 +200,7 @@ public class JdkHttpClient implements HttpClient {
             writer.append(Constants.CARRIAGE_RETURN);
             writer.flush();
         } catch (IOException e) {
-            throw new OAuthException("Cannot write data into HTTP request", e);
+            throw new OAuthHttpException("Cannot write data into HTTP request", e);
         }
     }
 

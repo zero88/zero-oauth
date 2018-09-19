@@ -2,6 +2,7 @@ package com.zero.oauth.client.http;
 
 import java.io.IOException;
 import java.util.Map;
+import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.Future;
 
 import com.zero.oauth.core.properties.HeaderProperty;
@@ -28,9 +29,9 @@ public class OkHttpClientWrapper implements HttpClient {
     }
 
     @Override
-    public HttpData execute(String url, HttpMethod method, HttpData requestHttpData) {
-        Request request = buildRequest(url, method, requestHttpData.getHeaderMap(), requestHttpData.getStrBody(),
-                                       requestHttpData.getStrBody());
+    public HttpData execute(String url, HttpMethod method, HttpData requestData) {
+        Request request = buildRequest(url, method, requestData.getHeaderMap(), requestData.getStrBody(),
+                                       requestData.getStrBody());
         try (Response response = httpClient.newCall(request).execute()) {
             ResponseBody responseBody = response.body();
         } catch (IOException ex) {
@@ -40,9 +41,9 @@ public class OkHttpClientWrapper implements HttpClient {
     }
 
     @Override
-    public Future<HttpData> asyncExecute(String url, HttpMethod method, HttpData requestHttpData) {
-        Request request = buildRequest(url, method, requestHttpData.getHeaderMap(), requestHttpData.getStrBody(),
-                                       requestHttpData.getStrBody());
+    public Future<HttpData> asyncExecute(String url, HttpMethod method, HttpData requestData) {
+        Request request = buildRequest(url, method, requestData.getHeaderMap(), requestData.getStrBody(),
+                                       requestData.getStrBody());
         httpClient.newCall(request).enqueue(new Callback() {
             @Override
             public void onFailure(Call call, IOException e) {
@@ -54,6 +55,16 @@ public class OkHttpClientWrapper implements HttpClient {
 
             }
         });
+        return null;
+    }
+
+    @Override
+    public void asyncExecute(String url, HttpMethod method, HttpData requestData, HttpCallback callback) {
+
+    }
+
+    @Override
+    public CompletableFuture<HttpData> asyncExecute(String url, HttpMethod method, HttpData requestData, boolean resultNullable) {
         return null;
     }
 

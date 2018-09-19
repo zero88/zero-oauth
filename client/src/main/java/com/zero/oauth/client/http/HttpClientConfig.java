@@ -2,6 +2,9 @@ package com.zero.oauth.client.http;
 
 import java.net.Proxy;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+
 /**
  * HTTP Client configuration.
  *
@@ -14,6 +17,10 @@ public interface HttpClientConfig {
     String DEFAULT_USER_AGENT = null;
     boolean DEFAULT_FOLLOW_REDIRECT = true;
     Proxy DEFAULT_PROXY = null;
+
+    static HttpClientConfig defaultConfig() {
+        return new DefaultConfig();
+    }
 
     /**
      * Get HTTP client configuration.
@@ -80,6 +87,27 @@ public interface HttpClientConfig {
      */
     default Proxy getProxy() {
         return DEFAULT_PROXY;
+    }
+
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    class DefaultConfig implements HttpClientConfig {
+
+        /**
+         * @throws UnsupportedOperationException Unsupported
+         */
+        @Override
+        public <V> V getConfig(String key) {
+            throw new UnsupportedOperationException();
+        }
+
+        /**
+         * @throws UnsupportedOperationException Unsupported
+         */
+        @Override
+        public <V, C extends HttpClientConfig> C addConfig(String key, V config) {
+            throw new UnsupportedOperationException();
+        }
+
     }
 
 }

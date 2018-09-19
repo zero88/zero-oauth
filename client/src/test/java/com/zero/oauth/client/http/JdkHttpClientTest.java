@@ -1,7 +1,15 @@
 package com.zero.oauth.client.http;
 
 import java.io.InputStream;
+import java.net.ConnectException;
 import java.net.Proxy;
+import java.net.SocketTimeoutException;
+import java.net.UnknownHostException;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Future;
+import java.util.concurrent.TimeUnit;
 
 import org.json.JSONException;
 import org.junit.Assert;
@@ -11,12 +19,15 @@ import org.skyscreamer.jsonassert.JSONAssert;
 import org.skyscreamer.jsonassert.JSONCompareMode;
 
 import com.zero.oauth.core.TestBase;
+import com.zero.oauth.core.exceptions.OAuthHttpException;
 import com.zero.oauth.core.properties.HeaderProperty;
 import com.zero.oauth.core.type.HttpMethod;
 import com.zero.oauth.core.utils.Strings;
 
 public class JdkHttpClientTest extends TestBase {
 
+    private static final String POSTMAN_DELAY_3 = "https://postman-echo.com/delay/3";
+    private static final String POSTMAN_200 = "https://postman-echo.com/status/200";
     private static final String POSTMAN_GET = "https://postman-echo.com/get";
     private static final String POSTMAN_POST = "https://postman-echo.com/post";
     private static final String POSTMAN_PUT = "https://postman-echo.com/put";
@@ -29,6 +40,26 @@ public class JdkHttpClientTest extends TestBase {
         httpClient = new JdkHttpClient(
             new JdkHttpClientConfig().addConfig(JdkHttpClientConfig.USER_AGENT, "JdkHttpClient")
                                      .addConfig(JdkHttpClientConfig.PROXY, Proxy.NO_PROXY));
+    }
+
+    @Test
+    public void testDefaultConfig() {
+        HttpClientConfig defaultCfg = HttpClientConfig.defaultConfig();
+        Assert.assertNull(defaultCfg.getUserAgent());
+        Assert.assertNull(defaultCfg.getProxy());
+        Assert.assertTrue(defaultCfg.isFollowRedirect());
+        Assert.assertEquals(60, defaultCfg.getConnectTimeout());
+        Assert.assertEquals(0, defaultCfg.getReadTimeout());
+        try {
+            defaultCfg.addConfig("", "");
+        } catch (Exception ex) {
+            Assert.assertTrue(ex instanceof UnsupportedOperationException);
+        }
+        try {
+            defaultCfg.getConfig("");
+        } catch (Exception ex) {
+            Assert.assertTrue(ex instanceof UnsupportedOperationException);
+        }
     }
 
     @Test
@@ -190,6 +221,123 @@ public class JdkHttpClientTest extends TestBase {
         Assert.assertFalse(response.getHeaderMap().isEmpty());
         Assert.assertEquals("application/json; charset=utf-8",
                             response.getHeaderMap().get(HeaderProperty.CONTENT_TYPE.getName()));
+    }
+
+    @Test(expected = UnknownHostException.class)
+    public void test_unknown_host() throws Throwable {
+        try {
+            httpClient.execute("http://xxx", HttpMethod.GET, HttpData.builder().build());
+        } catch (OAuthHttpException e) {
+            throw e.getCause();
+        }
+    }
+
+    @Test(expected = ConnectException.class)
+    public void test_host_not_existed() throws Throwable {
+        try {
+            httpClient.execute("http://127.0.0.1:9999", HttpMethod.GET, HttpData.builder().build());
+        } catch (OAuthHttpException e) {
+            throw e.getCause();
+        }
+    }
+
+    @Test(expected = SocketTimeoutException.class)
+    public void test_read_timeout() throws Throwable {
+        try {
+            httpClient.getConfig().addConfig(JdkHttpClientConfig.READ_TIMEOUT, 1);
+            httpClient.execute(POSTMAN_DELAY_3, HttpMethod.GET, HttpData.builder().build());
+        } catch (OAuthHttpException e) {
+            throw e.getCause();
+        }
+    }
+
+    @Test
+    public void test_asyncFuture() throws InterruptedException, ExecutionException {
+        Future<HttpData> future = httpClient.asyncExecute(POSTMAN_200, HttpMethod.GET, HttpData.builder().build());
+        waitToDone(future);
+        HttpData httpData = future.get();
+        Assert.assertTrue(httpData.isResponse());
+        Assert.assertTrue(httpData.getStatus().isOk());
+        Assert.assertEquals(200, httpData.getStatus().getCode());
+    }
+
+    @Test(expected = ConnectException.class)
+    public void test_asyncFuture_Exception() throws Throwable {
+        Future<HttpData> future = httpClient.asyncExecute("http://127.0.0.1:9999", HttpMethod.GET,
+                                                          HttpData.builder().build());
+        waitToDone(future);
+        try {
+            future.get();
+        } catch (ExecutionException ex) {
+            if (ex.getCause() instanceof OAuthHttpException) {
+                throw ex.getCause().getCause();
+            }
+            throw ex;
+        }
+    }
+
+    @Test
+    public void test_asyncCallback() throws InterruptedException {
+        CountDownLatch lock = new CountDownLatch(1);
+        httpClient.asyncExecute(POSTMAN_200, HttpMethod.GET, HttpData.builder().build(), initCallback(lock, null));
+        Assert.assertTrue(lock.await(10, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void test_asyncCallback_TimeoutException() throws InterruptedException {
+        CountDownLatch lock = new CountDownLatch(1);
+        httpClient.getConfig().addConfig(JdkHttpClientConfig.READ_TIMEOUT, 1);
+        httpClient.asyncExecute(POSTMAN_DELAY_3, HttpMethod.GET, HttpData.builder().build(),
+                                initCallback(lock, SocketTimeoutException.class));
+        Assert.assertTrue(lock.await(5, TimeUnit.SECONDS));
+    }
+
+    @Test
+    public void test_asyncCompletable() throws InterruptedException, ExecutionException {
+        CompletableFuture<HttpData> future = httpClient.asyncExecute(POSTMAN_200, HttpMethod.GET,
+                                                                     HttpData.builder().build(), true);
+        waitToDone(future);
+        HttpData httpData = future.get();
+        Assert.assertTrue(httpData.isResponse());
+        Assert.assertTrue(httpData.getStatus().isOk());
+        Assert.assertEquals(200, httpData.getStatus().getCode());
+    }
+
+    @Test(expected = ExecutionException.class)
+    public void test_asyncCompletable_NotHandleException() throws Throwable {
+        CompletableFuture<HttpData> future = httpClient.asyncExecute("http://xxx", HttpMethod.GET,
+                                                                     HttpData.builder().build(), true);
+        waitToDone(future);
+        Assert.assertTrue(future.isDone());
+        Assert.assertTrue(future.isCompletedExceptionally());
+        future.thenAccept(Assert::assertNull);
+        future.get();
+    }
+
+    private void waitToDone(Future<HttpData> future) throws InterruptedException {
+        while (!future.isDone()) {
+            System.out.println("Task is still not done...");
+            TimeUnit.MILLISECONDS.sleep(200);
+        }
+    }
+
+    private HttpCallback initCallback(CountDownLatch lock, Class<? extends Exception> exceptionClass) {
+        return new HttpCallback() {
+            @Override
+            public void onSuccess(HttpData response) {
+                System.out.println("Callback success");
+                Assert.assertTrue(response.isResponse());
+                Assert.assertTrue(response.getStatus().isOk());
+                lock.countDown();
+            }
+
+            @Override
+            public void onFailed(OAuthHttpException exception) {
+                System.out.println("Callback failed");
+                Assert.assertEquals(exceptionClass, exception.getCause().getClass());
+                lock.countDown();
+            }
+        };
     }
 
 }
