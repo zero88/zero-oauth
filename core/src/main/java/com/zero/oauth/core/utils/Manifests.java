@@ -42,9 +42,8 @@ public final class Manifests {
      */
     public static String generateAppInfo(String attributeName, String appId) {
         Strings.requireNotBlank(appId);
-        Enumeration resources;
         try {
-            resources = Thread.currentThread().getContextClassLoader().getResources(JarFile.MANIFEST_NAME);
+            Enumeration resources = Thread.currentThread().getContextClassLoader().getResources(JarFile.MANIFEST_NAME);
             while (resources.hasMoreElements()) {
                 String appInfo = generateAppInfo(attributeName, appId, (URL) resources.nextElement());
                 if (Strings.isNotBlank(appInfo)) {
@@ -58,12 +57,8 @@ public final class Manifests {
     }
 
     private static String generateAppInfo(String attributeName, String appId, URL url) {
-        final String appInfo;
         try (InputStream is = url.openStream()) {
-            appInfo = generateAppInfo(attributeName, appId, is);
-            if (Strings.isNotBlank(appInfo)) {
-                return appInfo;
-            }
+            return generateAppInfo(attributeName, appId, is);
         } catch (IOException e) {
             LoggerFactory.instance().getLogger().trace(e, "Cannot read manifest {0}", url);
         }

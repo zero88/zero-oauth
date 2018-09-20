@@ -304,7 +304,7 @@ public class JdkHttpClientTest extends TestBase {
     }
 
     @Test(expected = ExecutionException.class)
-    public void test_asyncCompletable_NotHandleException() throws Throwable {
+    public void test_asyncCompletable_ClientHandleException() throws Throwable {
         CompletableFuture<HttpData> future = httpClient.asyncExecute("http://xxx", HttpMethod.GET,
                                                                      HttpData.builder().build(), true);
         waitToDone(future);
@@ -312,6 +312,19 @@ public class JdkHttpClientTest extends TestBase {
         Assert.assertTrue(future.isCompletedExceptionally());
         future.thenAccept(Assert::assertNull);
         future.get();
+    }
+
+    @Test
+    public void test_asyncCompletable_ManualHandleException() throws Throwable {
+        CompletableFuture<HttpData> future = httpClient.asyncExecute("http://xxx", HttpMethod.GET,
+                                                                     HttpData.builder().build(), false);
+        waitToDone(future);
+        Assert.assertTrue(future.isDone());
+        Assert.assertTrue(future.isCompletedExceptionally());
+        future.exceptionally(throwable -> {
+            Assert.assertTrue(throwable.getCause() instanceof OAuthHttpException);
+            return null;
+        });
     }
 
     private void waitToDone(Future<HttpData> future) throws InterruptedException {

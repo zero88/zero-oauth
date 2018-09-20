@@ -2,18 +2,23 @@ package com.zero.oauth.client.http;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.net.URL;
 import java.nio.file.InvalidPathException;
 
 import org.junit.Assert;
 import org.junit.Before;
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.TemporaryFolder;
 
 import com.zero.oauth.core.TestBase;
 import com.zero.oauth.core.exceptions.OAuthException;
 
 public class MultipartDataTest extends TestBase {
 
+    @Rule
+    public TemporaryFolder tempFolder = new TemporaryFolder();
     private MultipartData multipartData;
 
     @Before
@@ -68,8 +73,7 @@ public class MultipartDataTest extends TestBase {
             multipartData.addFile("", "https://postman-echo.com/post");
         } catch (OAuthException ex) {
             Throwable cause = ex.getCause();
-            Assert.assertTrue(
-                isWin() ? cause instanceof InvalidPathException : cause instanceof FileNotFoundException);
+            Assert.assertTrue(isWin() ? cause instanceof InvalidPathException : cause instanceof FileNotFoundException);
         }
     }
 
@@ -108,6 +112,20 @@ public class MultipartDataTest extends TestBase {
         multipartData.addFile("a1", "f1.txt",
                               this.getClass().getClassLoader().getResourceAsStream("none_private_key.txt"));
         Assert.assertNotNull(multipartData.getFiles().get("a1").get("f1.txt"));
+    }
+
+    @Test
+    public void test_add_file_url_string() throws IOException {
+        File file = tempFolder.newFile();
+        multipartData.addFile("test", file.getAbsolutePath());
+        Assert.assertNotNull(multipartData.getFiles().get("test").get(file.getName()));
+    }
+
+    @Test
+    public void test_add_file() throws IOException {
+        File file = tempFolder.newFile();
+        multipartData.addFile("test", file);
+        Assert.assertNotNull(multipartData.getFiles().get("test").get(file.getName()));
     }
 
     @Test

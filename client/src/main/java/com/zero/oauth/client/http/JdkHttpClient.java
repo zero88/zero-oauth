@@ -77,11 +77,10 @@ public class JdkHttpClient implements HttpClient {
         CompletableFuture<HttpData> future = CompletableFuture.supplyAsync(
             () -> this.doExecute(url, method, requestData), EXECUTOR_SERVICE);
         if (resultNullable) {
-            future.exceptionally(throwable -> {
+            return future.exceptionally(throwable -> {
                 LoggerFactory.instance().getLogger().error(throwable, "Error when making HTTP request");
                 return null;
             });
-            return future;
         }
         return future;
     }

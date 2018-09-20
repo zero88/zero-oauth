@@ -4,7 +4,7 @@ library identifier: 'notifications@master', retriever: modernSCM(
 
 pipeline {
     agent {
-        docker "gradle:4.8.1-jdk8"
+        docker "gradle:jdk8-alpine"
     }
 
     stages {
