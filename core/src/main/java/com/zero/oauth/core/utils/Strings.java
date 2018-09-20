@@ -127,7 +127,7 @@ public final class Strings {
         try {
             return Integer.parseInt(text);
         } catch (NumberFormatException ex) {
-            LoggerFactory.instance().getLogger().debug(ex, "Cannot parse {0} to int", text);
+            LoggerFactory.logger().debug(ex, "Cannot parse {0} to int", text);
             return fallback;
         }
     }
@@ -136,7 +136,7 @@ public final class Strings {
         try {
             return FileUtils.convertToByteArray(inputStream).toString(StandardCharsets.UTF_8.name());
         } catch (UnsupportedEncodingException ex) {
-            LoggerFactory.instance().getLogger().trace(ex, "Impossible");
+            LoggerFactory.logger().trace(ex, "Impossible");
             return null;
         }
     }

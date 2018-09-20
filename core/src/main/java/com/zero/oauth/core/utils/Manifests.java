@@ -51,7 +51,7 @@ public final class Manifests {
                 }
             }
         } catch (IOException e) {
-            LoggerFactory.instance().getLogger().debug(e, "Cannot load resources");
+            LoggerFactory.logger().debug(e, "Cannot load resources");
         }
         return null;
     }
@@ -60,7 +60,7 @@ public final class Manifests {
         try (InputStream is = url.openStream()) {
             return generateAppInfo(attributeName, appId, is);
         } catch (IOException e) {
-            LoggerFactory.instance().getLogger().trace(e, "Cannot read manifest {0}", url);
+            LoggerFactory.logger().trace(e, "Cannot read manifest {0}", url);
         }
         return null;
     }

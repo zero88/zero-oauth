@@ -303,15 +303,15 @@ public class JdkHttpClientTest extends TestBase {
         Assert.assertEquals(200, httpData.getStatus().getCode());
     }
 
-    @Test(expected = ExecutionException.class)
+    @Test
     public void test_asyncCompletable_ClientHandleException() throws Throwable {
         CompletableFuture<HttpData> future = httpClient.asyncExecute("http://xxx", HttpMethod.GET,
                                                                      HttpData.builder().build(), true);
         waitToDone(future);
         Assert.assertTrue(future.isDone());
-        Assert.assertTrue(future.isCompletedExceptionally());
+        Assert.assertFalse(future.isCompletedExceptionally());
         future.thenAccept(Assert::assertNull);
-        future.get();
+        Assert.assertNull(future.get());
     }
 
     @Test

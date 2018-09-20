@@ -101,8 +101,8 @@ public abstract class PropertyModel implements IPropertyModel {
                 throw new OAuthParameterException("Missing required of property getName: " + this.getName());
             }
             if (this.isRecommendation()) {
-                LoggerFactory.instance().getLogger().warn(
-                    "It is recommendation to add property '{}' when sending OAuth request. " +
+                LoggerFactory.logger().warn(
+                    "It is recommendation to add property '{0}' when sending OAuth request. " +
                     "Check REST APIs docs for more details.", this.getName());
             }
         }

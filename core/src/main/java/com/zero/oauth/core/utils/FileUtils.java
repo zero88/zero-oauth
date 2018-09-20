@@ -74,7 +74,7 @@ public final class FileUtils {
         try {
             return Paths.get(URI.create(filePath));
         } catch (IllegalArgumentException | FileSystemNotFoundException | SecurityException ex) {
-            LoggerFactory.instance().getLogger().warn(ex, "Invalid parse URI: {0}. Try to parse plain text", strPath);
+            LoggerFactory.logger().warn(ex, "Invalid parse URI: {0}. Try to parse plain text", strPath);
             try {
                 return Paths.get(strPath);
             } catch (InvalidPathException ex1) {
@@ -166,7 +166,7 @@ public final class FileUtils {
         try {
             stream.close();
         } catch (IOException e) {
-            LoggerFactory.instance().getLogger().trace(e, "Cannot close stream");
+            LoggerFactory.logger().trace(e, "Cannot close stream");
         }
     }
 

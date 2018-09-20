@@ -10,6 +10,9 @@ import static java.util.logging.Level.WARNING;
 import java.text.MessageFormat;
 import java.util.logging.Level;
 
+import lombok.AccessLevel;
+import lombok.Getter;
+
 /**
  * This is a proxy to plug the {@code application logger} into {@code OAuth} library.
  */
@@ -111,10 +114,16 @@ public interface Logger {
 
     class JdkLogger implements Logger {
 
+        @Getter(value = AccessLevel.PACKAGE)
         private final java.util.logging.Logger logger;
 
         JdkLogger(String name) {
             logger = java.util.logging.Logger.getLogger(name);
+        }
+
+        @Override
+        public String getName() {
+            return logger.getName();
         }
 
         @Override
@@ -148,10 +157,20 @@ public interface Logger {
 
     class Log4j2Logger implements Logger {
 
+        @Getter(value = AccessLevel.PACKAGE)
         private final org.apache.logging.log4j.Logger logger;
 
         Log4j2Logger(String name) {
             logger = org.apache.logging.log4j.LogManager.getLogger(name);
+        }
+
+        private String normalize(String msgPattern) {
+            return msgPattern.replaceAll("\\{\\d+\\}", "{}");
+        }
+
+        @Override
+        public String getName() {
+            return logger.getName();
         }
 
         @Override
@@ -161,7 +180,7 @@ public interface Logger {
 
         @Override
         public void log(Level level, String msgPattern, Object... params) {
-            logger.log(this.mapLevel(level), msgPattern, params);
+            logger.log(this.mapLevel(level), normalize(msgPattern), params);
         }
 
         @Override
@@ -171,7 +190,8 @@ public interface Logger {
 
         @Override
         public void log(Level level, Throwable throwable, String msgPattern, Object... params) {
-            logger.log(this.mapLevel(level), msgPattern, params);
+            logger.log(this.mapLevel(level),
+                       new org.apache.logging.log4j.message.ParameterizedMessageFactory().newMessage(normalize(msgPattern), params), throwable);
         }
 
         @SuppressWarnings("unchecked")
@@ -193,10 +213,16 @@ public interface Logger {
 
     class LogbackLogger implements Logger {
 
+        @Getter(value = AccessLevel.PACKAGE)
         private final org.slf4j.Logger logger;
 
         LogbackLogger(String name) {
             logger = org.slf4j.LoggerFactory.getLogger(name);
+        }
+
+        @Override
+        public String getName() {
+            return logger.getName();
         }
 
         @Override
@@ -206,12 +232,12 @@ public interface Logger {
 
         @Override
         public void log(Level level, String msgPattern, Object... params) {
-            this.log(level, null, msgPattern, new Object[] {});
+            this.log(level, null, msgPattern, params);
         }
 
         @Override
         public void log(Level level, Throwable throwable, String msg) {
-            this.log(level, null, msg, new Object[] {});
+            this.log(level, throwable, msg, new Object[] {});
         }
 
         @Override

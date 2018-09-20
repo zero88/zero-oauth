@@ -78,7 +78,7 @@ public class JdkHttpClient implements HttpClient {
             () -> this.doExecute(url, method, requestData), EXECUTOR_SERVICE);
         if (resultNullable) {
             return future.exceptionally(throwable -> {
-                LoggerFactory.instance().getLogger().error(throwable, "Error when making HTTP request");
+                LoggerFactory.logger().error(throwable, "Error when making HTTP request");
                 return null;
             });
         }

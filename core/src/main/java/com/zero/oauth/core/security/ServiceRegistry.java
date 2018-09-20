@@ -57,7 +57,7 @@ public final class ServiceRegistry {
         }
         SecurityService instance = Reflections.getClassInstance(algo, SecurityService.class);
         if (Objects.isNull(instance)) {
-            LoggerFactory.instance().getLogger().warn("Not found algorithm. Rollback to default algorithm: `text`");
+            LoggerFactory.logger().warn("Not found algorithm. Rollback to default algorithm: `text`");
             return getSecurityService("text");
         }
         SECURITY_REGISTRY.put(algo, instance);

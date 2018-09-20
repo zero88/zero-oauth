@@ -74,7 +74,7 @@ public final class Reflections {
             try {
                 consts.add((P) f.get(null));
             } catch (IllegalArgumentException | IllegalAccessException e) {
-                LoggerFactory.instance().getLogger().debug(e, "Failed to get field constant {0}", f.getName());
+                LoggerFactory.logger().debug(e, "Failed to get field constant {0}", f.getName());
             }
         }
         return consts;
@@ -91,7 +91,7 @@ public final class Reflections {
                 return (Class<?>) primitiveClazz;
             }
         } catch (IllegalAccessException | NoSuchFieldException e) {
-            LoggerFactory.instance().getLogger().trace(e, "Try casting primitive class from class {0}",
+            LoggerFactory.logger().trace(e, "Try casting primitive class from class {0}",
                                                        findClazz.getName());
         }
         return null;
@@ -136,7 +136,7 @@ public final class Reflections {
             Class<T> clazz = findClass(className, parentClass);
             return clazz.newInstance();
         } catch (InstantiationException | IllegalAccessException | ClassNotFoundException | RuntimeException e) {
-            LoggerFactory.instance().getLogger().warn(e, "Failed when init instance of class {0}", className);
+            LoggerFactory.logger().warn(e, "Failed when init instance of class {0}", className);
             return null;
         }
     }

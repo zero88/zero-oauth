@@ -9,20 +9,41 @@ import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 
 /**
- * Logger Factory
+ * Logger Factory.
+ *
+ * @since 1.0.0
  */
-@Getter
+@Getter(value = AccessLevel.PRIVATE)
 @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public final class LoggerFactory {
 
     private static volatile LoggerFactory instance;
     private final Logger logger;
 
+    /**
+     * Get singleton {@code LoggerFactory}
+     *
+     * @return LoggerFactory
+     * @throws IllegalStateException if not yet initialize factory
+     * @see #initialize(Logger)
+     * @see #initialize(String, Class)
+     * @see #initialize(Logger)
+     */
     public static LoggerFactory instance() {
         if (Objects.isNull(instance)) {
             throw new IllegalStateException("Must be initialize first");
         }
         return instance;
+    }
+
+    /**
+     * Shortcut method to get logger instance that held by {@code LoggerFactory} singleton object.
+     *
+     * @return logger
+     * @see #instance()
+     */
+    public static Logger logger() {
+        return LoggerFactory.instance().getLogger();
     }
 
     /**
@@ -64,6 +85,10 @@ public final class LoggerFactory {
                 instance = new LoggerFactory(logger);
             }
         }
+    }
+
+    static synchronized void destroy() {
+        instance = null;
     }
 
 }

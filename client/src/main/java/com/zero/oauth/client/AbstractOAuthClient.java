@@ -103,20 +103,20 @@ abstract class AbstractOAuthClient implements OAuthClient, OAuthHttp {
     protected final <R extends IPropertyModel> GenericResponseStore request(String url, HttpMethod method,
                                                                             FlowStep flowStep,
                                                                             IRequestProperties<R> requestProperties) {
-        HttpData requestData = HttpData.builder().header(
-            new HttpHeaderConverter().serialize(requestProperties, flowStep)).strBody(
-            new JsonConverter().serialize(requestProperties, flowStep)).query(
-            new HttpQueryConverter().serialize(requestProperties, flowStep)).build();
-        HttpData responseData;
-        if (this.async.get()) {
-            try {
-                responseData = (HttpData) this.httpClientExecutor.asyncExecute(url, method, requestData).get();
-            } catch (InterruptedException | ExecutionException e) {
-                throw new OAuthException(e);
-            }
-        } else {
-            responseData = this.httpClientExecutor.execute(url, method, requestData);
-        }
+//        HttpData requestData = HttpData.builder().header(
+//            new HttpHeaderConverter().serialize(requestProperties, flowStep)).strBody(
+//            new JsonConverter().serialize(requestProperties, flowStep)).query(
+//            new HttpQueryConverter().serialize(requestProperties, flowStep)).build();
+//        HttpData responseData;
+//        if (this.async.get()) {
+//            try {
+//                responseData = (HttpData) this.httpClientExecutor.asyncExecute(url, method, requestData).get();
+//            } catch (InterruptedException | ExecutionException e) {
+//                throw new OAuthException(e);
+//            }
+//        } else {
+//            responseData = this.httpClientExecutor.execute(url, method, requestData);
+//        }
         return null;
     }
 

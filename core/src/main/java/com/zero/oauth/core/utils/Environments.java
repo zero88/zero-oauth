@@ -43,7 +43,7 @@ public final class Environments {
                 return env;
             }
         } catch (SecurityException ex) {
-            LoggerFactory.instance().getLogger().warn("Security error when accessing environment variable", ex);
+            LoggerFactory.logger().warn("Security error when accessing environment variable", ex);
         }
         String propertyName = envName.toLowerCase(Locale.ENGLISH).replaceAll("_", ".");
         String property = System.getProperty(propertyName);
@@ -67,14 +67,14 @@ public final class Environments {
             }
             InputStream stream = Environments.class.getClassLoader().getResourceAsStream(file);
             if (Objects.isNull(stream)) {
-                LoggerFactory.instance().getLogger().warn("Cannot load resource with getName {}", file);
+                LoggerFactory.logger().warn("Cannot load resource with getName {}", file);
                 return null;
             }
             Properties properties = new Properties();
             properties.load(stream);
             return properties.getProperty(propertyName);
         } catch (SecurityException | IOException ex) {
-            LoggerFactory.instance().getLogger().warn(ex, "Error when reading property file {}", file);
+            LoggerFactory.logger().warn(ex, "Error when reading property file {}", file);
             return null;
         }
     }

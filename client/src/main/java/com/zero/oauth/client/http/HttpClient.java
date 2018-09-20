@@ -69,8 +69,7 @@ public interface HttpClient {
      * @param method         HTTP Method
      * @param requestData    HTTP Request Data
      * @param resultNullable If any error occurs when executing, with {@code resultNullable = true}, HTTP client will
-     *                       log error and return {@code null} for {@code consumer}; if try to use {@link
-     *                       CompletableFuture#get()}, it will throws {@link ExecutionException}
+     *                       log error and return {@code null} for {@code consumer}.
      * @return Future of Response HTTP Data
      * @see HttpMethod
      * @see HttpData
