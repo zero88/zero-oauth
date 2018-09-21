@@ -1,14 +1,20 @@
 package com.zero.oauth.core;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 public class TestBase {
 
-    private static String OS = System.getProperty("os.name").toLowerCase();
+    private static final String OS = System.getProperty("os.name").toLowerCase();
 
     @BeforeClass
     public static void setUpClass() {
         LoggerFactory.initialize("com.zero.oauth.test");
+    }
+
+    @AfterClass
+    public static void teardownClass() {
+        LoggerFactory.destroy();
     }
 
     public static boolean isWin() {
