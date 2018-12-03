@@ -60,7 +60,8 @@ pipeline {
 
     post {
         always {
-            emailNotifications VERSION
+            sh "apk add git"
+            emailNotifications(VERSION)
         }
     }
 }
